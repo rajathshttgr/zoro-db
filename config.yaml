@@ -1,0 +1,9 @@
+storage:
+  storage_path: "../../.storage"
+  snapshot_path: "../../.snapshot"
+
+logging:
+  level: "info"
+
+network:
+  http_port: 6344
