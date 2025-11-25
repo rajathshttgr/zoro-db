@@ -18,6 +18,9 @@
 
 ## To do:
 
+- [x] just work on functional write and read
+      allow unlimited collections, 10 points per segment
+
 - [x] set collection <collection_name>
 - [ ] get collection <collection_id>
 - [ ] del collection <collection_id>
@@ -29,3 +32,12 @@
 - [ ] Read Database Version
 
 - [ ] Run vector similarity search [collection_id, input_vector] returns point id which match input vector.
+
+//delete later
+std::string status = "active";
+int points_count = 5416;
+int segments_count = 1;
+
+    //config
+    int size = 512;
+    std::string distance = "Dot";

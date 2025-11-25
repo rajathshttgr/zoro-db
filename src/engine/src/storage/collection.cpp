@@ -6,15 +6,18 @@
 
 namespace fs = std::filesystem;
 
-// to do: write logics as per requirements and replace existing
-std::string Collection::Create(const std::string& name, const std::string& storageRoot) {
-    // Generate a simple collection ID (improve later)
-    std::string id = name;  
+Collection::Collection(const std::string& rootPath):storageRoot(rootPath){}
 
+std::string Collection::Create(const std::string& collection_id) {
+
+    std::string id = collection_id;
     fs::path colPath = fs::path(storageRoot) / id;
 
-    if (fs::exists(colPath)) {
-        throw std::runtime_error("Collection already exists!");
+    int ext = 1;
+    while (fs::exists(colPath)) {
+        id = collection_id + "_" + std::to_string(ext);
+        colPath = fs::path(storageRoot) / id;
+        ext++;
     }
 
     // Create directory
@@ -22,9 +25,8 @@ std::string Collection::Create(const std::string& name, const std::string& stora
 
     // Create config.json
     nlohmann::json cfg = {
-        {"name", name},
-        {"id", id},
-        {"dimension", 128} // default for now
+        {"name", id},
+        {"dimension", 128} 
     };
 
     std::ofstream(colPath / "config.json") << cfg.dump(4);
@@ -34,7 +36,19 @@ std::string Collection::Create(const std::string& name, const std::string& stora
     std::ofstream(colPath / "payload.bin");
     fs::create_directories(colPath / "wal");
 
-    std::cout << "Created new collection: " << id << "\n";
+    //std::cout << "Created new collection: " << id << "\n";
 
     return id;
+}
+
+
+std::string Collection::GetInfo(const std::string& collection_id){
+
+    fs::path colPath = fs::path(storageRoot) / collection_id;
+
+    if(fs::exists(colPath)){
+        return "active";
+    }
+
+    return "unavailable";
 }

@@ -11,12 +11,13 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(engine_tests
     test_version.cpp
+    test_collection.cpp
 )
 
 target_link_libraries(engine_tests
     PRIVATE
-    gtest_main
-    engine
+        engine
+        gtest_main
 )
 
 include(GoogleTest)

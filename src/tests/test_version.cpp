@@ -6,6 +6,6 @@ TEST(VersionTest, NonEmptyString) {
     EXPECT_FALSE(v.empty());
 }
 
-// TEST(VersionTest, StartsWithV) {
-//     EXPECT_TRUE(version_info().starts_with("v"));
-// }
+TEST(VersionTest, StartsWithV) {
+    EXPECT_TRUE(version_info().starts_with("v"));
+}

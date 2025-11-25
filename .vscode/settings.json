@@ -61,6 +61,14 @@
     "thread": "cpp",
     "typeinfo": "cpp",
     "valarray": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "charconv": "cpp",
+    "chrono": "cpp",
+    "cstring": "cpp",
+    "forward_list": "cpp",
+    "unordered_set": "cpp",
+    "format": "cpp",
+    "span": "cpp",
+    "ranges": "cpp"
   }
 }
