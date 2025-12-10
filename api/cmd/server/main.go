@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"zoro-api/internal/handlers"
 )
@@ -14,10 +13,7 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
-	router.POST("/collections/create", handlers.CreateCollectionHandler)
-	router.GET("/collections", handlers.ListCollections)
-
-	router.POST("/vectors/add", handlers.AddVectors)
+	router.POST("/init", handlers.InitEngineHandler)
 
 	router.POST("/search", handlers.Search)
 

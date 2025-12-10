@@ -5,9 +5,10 @@ This folder contains a minimal C++ engine scaffold for ZORO. It builds a shared 
 ## Build
 
 ```bash
-mkdir -p build && cd build
+rm -rf build
+mkdir build && cd build
 cmake ..
-cmake --build .
+make
 ```
 
 The build will produce `libzoro.so` in the build directory (or library path depending on your platform).

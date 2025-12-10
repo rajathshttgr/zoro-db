@@ -1,55 +1,13 @@
-# ZORO — Vector Database
+# how project built?
 
-This is the backend server for **ZORO**, a single-node vector database implemented in Go.  
-The project uses **Air** for hot-reload during development.
+go mod init zoro-api
 
----
+go get -u github.com/gin-gonic/gin
 
-## Requirements
+go run main.go - go run cmd/server/main.go
 
-- Go 1.23+
-- Air (live reload)
-
-Install Air:
-
-```bash
 go install github.com/air-verse/air@latest
-```
 
----
+air init
 
-## Run the Server (Development)
-
-From the `api/` folder:
-
-```bash
 air
-```
-
-Air will automatically:
-
-- Watch file changes
-- Rebuild the app
-- Restart the server
-
----
-
-## Run Without Air (Production)
-
-```bash
-go build -o zoro-server ./cmd/server
-./zoro-server
-```
-
----
-
-## Project Structure
-
-```
-api/
- ├── cmd/server/main.go    # Entry point
- ├── internal/             # Core logic
- ├── .air.toml             # Air config
- ├── go.mod
- └── tmp/                  # Auto-generated (ignored)
-```

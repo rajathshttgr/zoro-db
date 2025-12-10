@@ -31,3 +31,8 @@ tmp/
 # OS files
 .DS_Store
 Thumbs.db
+
+# TODO file
+TODO
+
+/api_x
