@@ -1,4 +1,4 @@
-#include "../include/CollectionMeta.h"
+#include "CollectionMeta.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
 

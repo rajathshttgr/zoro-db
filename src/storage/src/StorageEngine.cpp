@@ -1,7 +1,7 @@
-#include "../include/StorageEngine.h"
-#include "../include/Catalog.h"
-#include "../include/CollectionMeta.h"
-#include "../include/FileUtils.h"
+#include "StorageEngine.h"
+#include "Catalog.h"
+#include "CollectionMeta.h"
+#include "FileUtils.h"
 #include <filesystem>
 
 namespace fs=std::filesystem;

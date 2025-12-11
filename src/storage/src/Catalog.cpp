@@ -1,4 +1,4 @@
-#include "../include/Catalog.h"
+#include "Catalog.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
 
