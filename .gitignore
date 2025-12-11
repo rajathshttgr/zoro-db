@@ -1,3 +1,2 @@
-/build/
-/.storage/
-/.snapshots/
+build/
+.env
