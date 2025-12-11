@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/storage_tests.dir/tests/test_StorageEngine.cpp.o -o storage_tests  libstorage.a lib/libgtest.a lib/libgtest_main.a lib/libgtest.a 
