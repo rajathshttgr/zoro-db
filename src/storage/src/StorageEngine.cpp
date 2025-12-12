@@ -20,7 +20,7 @@ bool StorageEngine::CreateCollection(const std::string& name){
     fs::create_directories(path);
 
     Catalog catalog(root_path_);
-    catalog.AddCollection(name);
+    catalog.AddCollection(name, path);
 
     CollectionMeta meta(path);
     meta.InitDefault();
