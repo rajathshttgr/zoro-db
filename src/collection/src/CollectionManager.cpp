@@ -16,7 +16,7 @@ bool CollectionManager::CreateCollection(const std::string& name, int dimension)
     zoro::storage::CollectionMeta meta(info->path);
     meta.SetDimensions(dimension);
 
-    return false;
+    return true;
 }
 
 bool CollectionManager::DeleteCollection(const std::string& name){

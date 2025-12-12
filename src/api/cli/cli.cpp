@@ -2,6 +2,9 @@
 #include <iostream>
 #include <sstream>
 
+const std::string GREEN = "\033[32m";
+const std::string RESET = "\033[0m";
+
 
 namespace zoro::cli {
 
@@ -39,7 +42,7 @@ void Cli::Run() {
     std::cout << "Zoro-DB CLI\n";
 
     while (true) {
-        std::cout << "zoro> ";
+        std::cout << "\n" << GREEN << "zoro>" << RESET << " ";
         if (!std::getline(std::cin, input)) break;
 
         if (input == "exit") break;
