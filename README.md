@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Zoro-DB</h1>
-  <h3>A Vector Search Engine Implemented from scratch</h3>
+  <h3>A Vector Search Engine Built From Scratch in C++</h3>
 </div>
 <div align="center">
 
