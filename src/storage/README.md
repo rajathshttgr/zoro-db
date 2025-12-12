@@ -37,7 +37,3 @@ Or run the test binary directly:
 ```bash
 ./storage_tests
 ```
-
-## TODO
-
-- [ ] Add Tests for all files

@@ -14,13 +14,13 @@ Catalog::Catalog(const std::string& root):path_(root+"/catalog.json"){
     }
 }
 
-bool Catalog::AddCollection(const std::string& name){
+bool Catalog::AddCollection(const std::string& name, const std::string& collection_path){
     std::ifstream in(path_);
     nlohmann::json j;
     in>>j;
 
     if(j.contains(name)) return false;
-    j[name]={};
+    j[name]={collection_path};
 
     std::ofstream out(path_);
     out<<j.dump(4);

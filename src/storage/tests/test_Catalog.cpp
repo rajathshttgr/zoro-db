@@ -8,6 +8,7 @@ class CatalogTest:
 public::testing::Test{
 protected:
     std::string testRoot = "catalog_test";
+    std::string collectionRoot=testRoot+"/collections";
 
     void SetUp() override{
         std::filesystem::remove_all(testRoot);
@@ -23,8 +24,8 @@ protected:
 TEST_F(CatalogTest, AddAndListCollections){
     Catalog c(testRoot);
 
-    ASSERT_TRUE(c.AddCollection("users"));
-    ASSERT_TRUE(c.AddCollection("orders"));
+    ASSERT_TRUE(c.AddCollection("users",collectionRoot+"/users"));
+    ASSERT_TRUE(c.AddCollection("orders",collectionRoot+"/orders"));
 
     auto list=c.ListCollections();
 
@@ -37,7 +38,7 @@ TEST_F(CatalogTest, AddAndListCollections){
 TEST_F(CatalogTest, RemoveCollection){
     Catalog c(testRoot);
 
-    c.AddCollection("users");
+    c.AddCollection("users",collectionRoot+"/users");
     ASSERT_TRUE(c.RemoveCollection("users"));
 
     ASSERT_FALSE(c.RemoveCollection("users"));
