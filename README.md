@@ -1,5 +1,5 @@
 <div align="center">
-  <h1><a href="">Zoro-DB</a></h1>
+  <h1>Zoro-DB</h1>
   <h3>A Vector Search Engine Implemented from scratch</h3>
 </div>
 
