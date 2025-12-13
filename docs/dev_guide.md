@@ -1,21 +1,27 @@
 ## Building and Running Docker Locally
 
-### 1. Build the Docker Image
+### Build the Docker Image
 
-Run the following command from your project root:
-
-```bash
-docker build -t zoro-db-local .
-```
-
-Verify that the binary executes successfully by checking the build logs.
-
-### 2. Run the Container Interactively
-
-Since this is a CLI application, start it with interactive mode:
+From your project root, execute:
 
 ```bash
-docker run -it zoro-db-local
+docker build -t zoro-db .
 ```
 
-This allows you to interact with the application directly in your terminal.
+Check the build logs to confirm successful compilation.
+
+### Run the REST API
+
+Start the container with the REST API (default for production):
+
+```bash
+docker run -p 9000:9000 zoro-db
+```
+
+### Run the CLI
+
+For development and testing, use the CLI:
+
+```bash
+docker run -it zoro-db /app/zoro-db
+```

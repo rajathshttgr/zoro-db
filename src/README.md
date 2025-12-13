@@ -16,21 +16,22 @@
 chmod +x build.sh
 ```
 
-**2. Run the build script:**
+**2. CLI Mode**
 
 ```bash
 ./build.sh
 ```
 
-The script will:
+**3. REST API Mode**
 
-- Configure the build directory
-- Compile the source code
-- Generate the binary (`zoro`)
-- Launch the CLI
+```bash
+./build.sh rest
+```
 
-## TODO
+Access the API at `http://localhost:8080`
 
-- [ ] Expose REST API
-- [ ] Add WAL & Snapshots Backup
-- [ ] Add Hot Cache
+## Roadmap
+
+- [x] REST API
+- [ ] WAL & Snapshots
+- [ ] Hot Cache
