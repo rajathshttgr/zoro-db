@@ -1,6 +1,6 @@
 #include "config.h"
 #include "storage/include/StorageEngine.h"
-#include "api/cli/CollectionService.h"
+#include "api/CollectionService.h"
 #include "api/cli/cli.h"
 #include <iostream>
 
