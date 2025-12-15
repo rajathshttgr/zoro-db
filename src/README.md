@@ -28,10 +28,4 @@ chmod +x build.sh
 ./build.sh rest
 ```
 
-Access the API at `http://localhost:8080`
-
-## Roadmap
-
-- [x] REST API
-- [ ] WAL & Snapshots
-- [ ] Hot Cache
+Access the API at `http://localhost:6464`

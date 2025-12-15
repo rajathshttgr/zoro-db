@@ -27,10 +27,16 @@ func main() {
 
     r := gin.Default()
 
+    r.GET("/", func(c *gin.Context) {
+        c.JSON(200, gin.H{
+            "message": "Welcome to Zoro DB API",
+        })
+    })
+    
     r.POST("/collections", CreateCollection)
     r.DELETE("/collections/:name", DeleteCollection)
     r.GET("/collections", ListCollections)
 
-    log.Println("Listening on :8080")
-    r.Run(":8080")
+    log.Println("Listening on :6464")
+    r.Run(":6464")
 }

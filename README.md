@@ -21,10 +21,10 @@ Launch the Zoro-DB REST API with persistent local storage:
 
 ```bash
 docker pull ghcr.io/rajathshttgr/zoro-db:dev
-docker run --pull=always -d -p 9000:9000 -v $(pwd)/storage:/storage ghcr.io/rajathshttgr/zoro-db:dev
+docker run --pull=always -d -p 6464:6464 -v $(pwd)/storage:/storage ghcr.io/rajathshttgr/zoro-db:dev
 ```
 
-Access the API at `http://localhost:9000`
+Access the API at `http://localhost:6464`
 
 ### Use the CLI (Optional)
 

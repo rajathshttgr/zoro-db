@@ -6,6 +6,7 @@ CollectionService::CollectionService(zoro::core::CollectionManager* manager)
     : manager_(manager) {}
 
 bool CollectionService::CreateCollection(const std::string& name, int dimension, std::string& err) {
+    
     if (name.empty()) {
         err = "Collection name cannot be empty.";
         return false;

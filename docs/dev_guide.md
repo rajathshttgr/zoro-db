@@ -15,7 +15,7 @@ Check the build logs to confirm successful compilation.
 Start the container with the REST API (default for production):
 
 ```bash
-docker run -p 9000:9000 zoro-db
+docker run -p 6464:6464 zoro-db
 ```
 
 ### Run the CLI

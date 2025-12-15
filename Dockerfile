@@ -51,5 +51,5 @@ RUN ldconfig
 RUN mkdir /storage
 VOLUME ["/storage"]
 
-EXPOSE 9000
+EXPOSE 6464
 CMD ["/app/zoro-rest"]

@@ -1,4 +1,5 @@
 build/
 .env
 .data/
+data/
 TODO.md
