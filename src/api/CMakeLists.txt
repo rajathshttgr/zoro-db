@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(zoro_api LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Core API
@@ -20,12 +21,20 @@ target_link_libraries(zoro_core
 )
 
 # CLI wrapper
-add_library(zoro_cli STATIC
+file(GLOB CLI_SOURCES
     cli/cli.cpp
+    cli/src/*.cpp 
 )
+
+add_library(zoro_cli STATIC
+    ${CLI_SOURCES}
+)
+
 
 target_include_directories(zoro_cli PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/cli
+    ${CMAKE_CURRENT_SOURCE_DIR}/cli/include
 )
 
 target_link_libraries(zoro_cli
