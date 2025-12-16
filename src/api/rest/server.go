@@ -2,7 +2,7 @@ package main
 
 /*
 #cgo LDFLAGS: -L../../build/api -lzoro
-#include "../c_api/zoro_c_api.h"
+#include "c_api/zoro_c_api.h"
 */
 import "C"
 

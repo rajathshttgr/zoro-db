@@ -44,7 +44,7 @@ target_link_libraries(zoro_cli
 
 # C API 
 add_library(zoro SHARED
-    c_api/zoro_c_api.cpp
+    rest/c_api/zoro_c_api.cpp
 )
 
 target_include_directories(zoro PUBLIC

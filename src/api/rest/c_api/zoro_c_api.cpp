@@ -1,9 +1,9 @@
 #include "zoro_c_api.h"
 
-#include "../CollectionService.h"
-#include "../../storage/include/StorageEngine.h"
-#include "../../collection/include/CollectionManager.h"
-#include "../../config.h"
+#include "../../CollectionService.h"
+#include "../../../storage/include/StorageEngine.h"
+#include "../../../collection/include/CollectionManager.h"
+#include "../../../config.h"
 
 #include <memory>
 #include <cstring>
