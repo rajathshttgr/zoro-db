@@ -5,6 +5,7 @@
 
 const std::string GREEN = "\033[32m";
 const std::string RESET = "\033[0m";
+const std::string BOLD  = "\033[1m";
 
 namespace zoro::cli {
 
@@ -16,7 +17,7 @@ void Cli::Run() {
     PrintGreetings();
 
     while (true) {
-        std::cout << "\n" << GREEN << ">>" << RESET << " ";
+        std::cout << BOLD << GREEN << "zoro" << RESET << "> ";
         if (!std::getline(std::cin, input)) break;
 
         if (input == "exit") break;
@@ -37,7 +38,7 @@ void Cli::HandleCommand(const std::string& input) {
 
     if(cmd=="help" || cmd=="--help") PrintHelp();
     else if(cmd=="version" || cmd=="--version") GetVersion();
-    else if(cmd=="ping") Ping();
+    else if(cmd=="ping" || cmd=="PING") Ping();
     else if(cmd=="health") Health();
     else if (cmd == "collection") CmdCollection(tokens);
     else if (cmd == "points") CmdPoints(tokens);
