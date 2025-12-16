@@ -9,36 +9,27 @@ namespace zoro::cli {
 
 
 void PrintGreetings() {
+    const std::string BOLD  = "\033[1m";
+    const std::string RESET = "\033[0m";
 
     const char* title[] = {
-        " ____  ___  _ __ ___ ",
-        "|_  / / _ \\| '__/ _ \\",
-        " / / | (_) | | | (_) |",
-        "/___| \\___/|_|  \\___/ ", 
-        "                     ",
+        "███████╗ ██████╗ ██████╗  ██████╗",
+        "╚══███╔╝██╔═══██╗██╔══██╗██╔═══██╗",
+        "  ███╔╝ ██║   ██║██████╔╝██║   ██║",
+        " ███╔╝  ██║   ██║██╔══██╗██║   ██║",
+        "███████╗╚██████╔╝██║  ██║╚██████╔╝",
+        "╚══════╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝",
     };
-    
-    int lines = sizeof(title) / sizeof(title[0]);
 
-    for (int i = 0; i < lines; ++i) {
-        std::cout << title[i];
-        
-        if (i == 3) {
-            std::cout << " " << version;
-        }
-        
-        std::cout << std::endl;
+    std::cout << "\n";
+    for (auto line : title) {
+        std::cout << BOLD << line << RESET << "\n";
     }
 
-    std::cout << "ZoroDB —  a tiny Vector Search Engine\n\n";
-
-    std::cout << "Get started:\n";
-    std::cout << "  " << std::left << std::setw(15) << "zoro --help"<< "Show all commands\n";
-    std::cout << "  " << std::left << std::setw(15) << "zoro init"<< "Initialize a new database\n\n";
-
-    std::cout << "Docs & examples:\n";
-    std::cout << "  https://github.com/rajathshttgr/zoro-db\n";
+    std::cout << "\nZoroDB — a tiny vector search engine\n";
+    std::cout << "Type 'help' for commands, 'exit' to quit\n\n";
 }
+
 
 void GetVersion(){
     std::cout<<version<<std::endl;
