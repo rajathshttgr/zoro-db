@@ -13,23 +13,24 @@
 
 ---
 
-## Getting Started with Docker
+## Getting Started
 
-### Start the REST API Server
+### Run the REST API Server
 
-Launch the Zoro-DB REST API with persistent local storage:
+Start Zoro-DB with Docker:
 
 ```bash
-docker pull ghcr.io/rajathshttgr/zoro-db:dev
-docker run --pull=always -d -p 6464:6464 -v $(pwd)/storage:/storage ghcr.io/rajathshttgr/zoro-db:dev
+docker run -p 6464:6464 ghcr.io/rajathshttgr/zoro-db:dev
 ```
 
 Access the API at `http://localhost:6464`
 
 ### Use the CLI (Optional)
 
-For development and debugging, run the CLI tool:
+For development or debugging, you can also run the CLI:
 
 ```bash
 docker run -it ghcr.io/rajathshttgr/zoro-db:dev /app/zoro-db
 ```
+
+For instructions on persistent storage, detached mode, or other advanced options, please refer to the [Developer Guide](docs/DEVELOPER_GUIDE.md).
