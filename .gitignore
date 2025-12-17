@@ -3,3 +3,5 @@ build/
 .data/
 data/
 TODO.md
+/.storage
+/.zoro-data
