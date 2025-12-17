@@ -12,8 +12,9 @@
    - Checking Container Status
    - Removing Containers and Volumes
 4. Port Conflicts
-5. Using the CLI
-6. Notes
+5. Pulling the Latest Image
+6. Using the CLI
+7. Notes
 
 ---
 
@@ -142,13 +143,30 @@ kill -9 <PID>
 
 ---
 
+## Pulling the Latest Image
+
+Always pull the latest image before running containers:
+
+```
+docker pull ghcr.io/rajathshttgr/zoro-db:dev
+```
+
+To automatically pull the latest image every time you run a container:
+
+```
+docker run -d -p 6464:6464 --name zoro-db --pull always ghcr.io/rajathshttgr/zoro-db:dev
+```
+
+- `--pull always` → Always pull the latest image before starting the container.
+
+---
+
 ## Using the CLI
 
 For debugging or development:
 
 ```
 docker run -it --rm ghcr.io/rajathshttgr/zoro-db:dev /app/zoro-db
-
 ```
 
 - `--rm` → Automatically remove container after exit.
@@ -160,4 +178,5 @@ docker run -it --rm ghcr.io/rajathshttgr/zoro-db:dev /app/zoro-db
 - Use persistent storage in production or long-term testing.
 - Detached mode is recommended for background services.
 - Always check port availability before running containers.
+- Pull the latest image regularly to get updates and bug fixes.
 - CLI usage is optional and mostly for debugging.
