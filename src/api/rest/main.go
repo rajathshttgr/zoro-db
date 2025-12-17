@@ -1,42 +1,32 @@
 package main
 
-/*
-#cgo LDFLAGS: -L../../build/api -lzoro
-#include "c_api/zoro_c_api.h"
-*/
-import "C"
-
 import (
     "log"
-    "unsafe"
-
-    "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
+	"zoro/api/api"
+    "zoro/api/utils"
+    "zoro/api/core"
 )
 
 func main() {
-    errBuf := make([]byte, 256)
 
-    ok := C.zoro_init(
-        C.CString("/tmp/zoro-data"),
-        (*C.char)(unsafe.Pointer(&errBuf[0])),
-    )
+    utils.PrintBanner()
 
-    if !ok {
-        log.Fatalf("zoro_init failed: %s", cString(errBuf))
-    }
-
-    r := gin.Default()
-
-    r.GET("/", func(c *gin.Context) {
-        c.JSON(200, gin.H{
-            "message": "Welcome to Zoro DB API",
-        })
-    })
+	if err := core.InitFromEnv(); err != nil {
+		log.Fatal("failed to init core:", err)
+	}
+	
+	defer core.Shutdown()
     
-    r.POST("/collections", CreateCollection)
-    r.DELETE("/collections/:name", DeleteCollection)
-    r.GET("/collections", ListCollections)
+	r := gin.Default()
+
+	r.GET("/", func(c *gin.Context) {
+		c.String(200, "Welcome to Zoro-DB REST API!")
+	})
+
+    api.RegisterRoutes(r)
 
     log.Println("Listening on :6464")
-    r.Run(":6464")
+	r.Run(":6464") 
+    
 }

@@ -67,7 +67,7 @@ void Cli::CmdCollectionCreate(const std::vector<std::string>& tokens) {
     }
 
     while (!IsValidDistance(distance)) {
-        std::cout << "--distance (dot | cosine | euclidean): ";
+        std::cout << "--distance (dot | cosine | euclid): ";
         std::getline(std::cin, distance);
     }
 

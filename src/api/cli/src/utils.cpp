@@ -47,7 +47,7 @@ bool IsNumber(const std::string& s) {
 
 bool IsValidDistance(const std::string& s) {
     static const std::unordered_set<std::string> valid{
-        "dot", "cosine", "euclidean"
+        "dot", "cosine", "euclid"
     };
     return valid.count(s) > 0;
 }
