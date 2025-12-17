@@ -3,9 +3,6 @@ FROM ubuntu:22.04 AS builder
 ENV DEBIAN_FRONTEND=noninteractive
 ENV GO_VERSION=1.22.3
 
-ENV ZORO_DATA_PATH=/storage
-ENV GIN_MODE=release
-
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
@@ -38,6 +35,9 @@ RUN go build -o /app/zoro-rest
 FROM ubuntu:22.04
 
 WORKDIR /app
+
+ENV ZORO_DATA_PATH=/storage
+ENV GIN_MODE=release
 
 RUN apt-get update && apt-get install -y \
     libstdc++6 \
