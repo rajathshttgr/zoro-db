@@ -15,7 +15,7 @@ inline std::string getDataPath() {
     if (env_path && std::string(env_path).size() > 0)
         return std::string(env_path);
 
-    return "../.data";  
+    return "/storage"; 
 }
 
 } 

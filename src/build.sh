@@ -4,6 +4,11 @@ set -e
 MODE=${1:-cli}   
 BUILD_DIR="build"
 
+ROOT_DIR=$(cd "$(dirname "$0")/.." && pwd)
+
+export ZORO_DATA_PATH="$ROOT_DIR/.zoro-data"
+mkdir -p "$ZORO_DATA_PATH"
+
 echo "Build mode: $MODE"
 
 # Build C++ core
