@@ -1,4 +1,5 @@
 #include "config.h"
+#include "wal/include/wal_writer.h"
 #include "storage/include/StorageEngine.h"
 #include "api/CollectionService.h"
 #include "api/cli/cli.h"
@@ -7,7 +8,8 @@
 int main() {
     std::string dataPath = zoro::config::getDataPath();
 
-    zoro::storage::StorageEngine storage(dataPath);
+    zoro::wal::WALWriter wal(dataPath);
+    zoro::storage::StorageEngine storage(dataPath, &wal);
     zoro::core::CollectionManager manager(&storage);
     zoro::api::CollectionService service(&manager);
     zoro::cli::Cli cli(&service);

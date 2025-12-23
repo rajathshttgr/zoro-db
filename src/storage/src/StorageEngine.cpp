@@ -3,17 +3,32 @@
 #include "CollectionMeta.h"
 #include "FileUtils.h"
 #include <filesystem>
+#include <vector>
+#include <cstdint>
+#include <cstring> 
 
 namespace fs=std::filesystem;
 
 namespace zoro::storage {
 
-StorageEngine::StorageEngine(const std::string& root_path):root_path_(root_path), collection_root_(root_path+"/collections") {
+StorageEngine::StorageEngine(const std::string& root_path, zoro::wal::WALWriter* wal)
+    : root_path_(root_path), collection_root_(root_path+"/collections"), wal_(wal) {
     fs::create_directories(root_path_);
     fs::create_directories(collection_root_);
 }
 
+
 bool StorageEngine::CreateCollection(const std::string& name){
+
+    std::vector<float> vec = {0.12f, 0.44f, 0.23f, 0.23f, 0.24f, 0.36f, 0.67f};
+    std::vector<uint8_t> payload(sizeof(float) * vec.size());
+    std::memcpy(payload.data(), vec.data(), payload.size());
+
+    // Append to WAL
+    if (wal_) {
+        wal_->append(OpType::CREATE_COLLECTION, 100, payload);
+    }
+
     if(CollectionExists(name)) return false;
 
     std::string path=collection_root_+"/"+name;
