@@ -61,10 +61,25 @@ void Cli::CmdCollectionCreate(const std::vector<std::string>& tokens) {
 
     while (dimension < 1 || dimension > 9999) {
         std::cout << "--dimension (1–9999): ";
+
         std::string line;
         std::getline(std::cin, line);
-        dimension = std::stoi(line);
+
+        if (!IsNumber(line)) {
+            std::cout << "Invalid dimension. Please enter a number.\n";
+            continue;
+        }
+
+        int value = std::stoi(line);
+
+        if (value < 1 || value > 9999) {
+            std::cout << "Dimension out of range.\n";
+            continue;
+        }
+
+        dimension = value;
     }
+
 
     while (!IsValidDistance(distance)) {
         std::cout << "--distance (dot | cosine | euclid): ";
