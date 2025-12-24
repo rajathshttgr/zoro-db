@@ -19,7 +19,7 @@ Catalog::Catalog(const std::string& root):path_(root+"/catalog.json"){
     }
 }
 
-bool Catalog::AddCollection(const std::string& name, int& out_coll_id)
+bool Catalog::AddCollection(const std::string& name, int& out_coll_id, int& dimension, std::string& distance)
 {
     std::ifstream in(path_);
     nlohmann::json j;
@@ -35,7 +35,10 @@ bool Catalog::AddCollection(const std::string& name, int& out_coll_id)
 
     collections[name] = {
         { "id", curr_id },
-        { "created_at", CurrentTimestampUTC() }
+        { "dimension",dimension},
+        { "distance",distance},
+        { "created_at", CurrentTimestampUTC() },
+        { "status", "active"} // demo status
     };
 
     out_coll_id = curr_id;
@@ -74,17 +77,54 @@ bool Catalog::CollectionExists(const std::string& name) const
     return j["collections"].contains(name);
 }
 
-std::vector<std::string> Catalog::ListCollections() const
-{
+std::optional<CollectionInfo> Catalog::GetCollectionInfo(const std::string& name) const{
     std::ifstream in(path_);
-    nlohmann::json j;
+    json j;
     in >> j;
 
-    std::vector<std::string> names;
-    for (auto& el : j["collections"].items()) {
-        names.push_back(el.key());
+    const auto& collections = j["collections"];
+
+    if (!collections.contains(name))
+        return std::nullopt;
+
+    const auto& c = collections[name];
+
+    CollectionInfo info;
+    info.coll_name = name;
+    info.id = c.at("id").get<int>();
+    info.dimension = c.at("dimension").get<int>();
+    info.distance = c.at("distance").get<std::string>();
+    info.status = c.at("status").get<std::string>();
+    info.created_at = c.at("created_at").get<std::string>();
+
+    return info;
+}
+
+
+std::vector<CollectionInfo> Catalog::ListCollections() const
+{
+    std::ifstream in(path_);
+    json j;
+    in >> j;
+
+    const auto& collections = j["collections"];
+
+    std::vector<CollectionInfo> collection_list;
+    collection_list.reserve(collections.size());
+
+    for (const auto& [name, c] : collections.items()) {
+        CollectionInfo info;
+        info.coll_name = name;
+        info.id = c.at("id").get<int>();
+        info.dimension = c.at("dimension").get<int>();
+        info.distance = c.at("distance").get<std::string>();
+        info.status = c.at("status").get<std::string>();
+        info.created_at = c.at("created_at").get<std::string>();
+
+        collection_list.push_back(std::move(info));
     }
-    return names;
+
+    return collection_list;
 }
 
 
