@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include "../../wal/include/wal_writer.h"
 
 namespace zoro::storage{
 
@@ -12,9 +13,9 @@ struct CollectionInfo {
 
 class StorageEngine {
 public:
-    explicit StorageEngine(const std::string& root_path);
+    explicit StorageEngine(const std::string& root_path,zoro::wal::WALWriter* wal);
 
-    bool CreateCollection(const std::string& name);
+    bool CreateCollection(const std::string& name, int dimension,std::string distance);
     bool DeleteCollection(const std::string& name);
     bool CollectionExists(const std::string& name) const;
     std::optional<CollectionInfo> GetCollectionInfo(const std::string& name) const;
@@ -23,6 +24,7 @@ public:
 private:
     std::string root_path_;
     std::string collection_root_;
+    zoro::wal::WALWriter* wal_;
 };
 
 }

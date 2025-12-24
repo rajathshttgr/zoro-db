@@ -5,14 +5,15 @@ namespace zoro::core{
 
 CollectionManager::CollectionManager(zoro::storage::StorageEngine* storage):storage_(storage){};
 
-bool CollectionManager::CreateCollection(const std::string& name, int dimension){
+bool CollectionManager::CreateCollection(const std::string& name, int dimension,const std::string& distance){
     if(storage_->CollectionExists(name)) return false;
 
-    if(!storage_->CreateCollection(name)) return false;
+    if(!storage_->CreateCollection(name,dimension,distance)) return false;
 
     auto info=storage_->GetCollectionInfo(name);
     if(!info) return false;
 
+    // mostly this operation is optional, it overwrites default initialization
     zoro::storage::CollectionMeta meta(info->path);
     meta.SetDimensions(dimension);
 

@@ -5,7 +5,7 @@ namespace zoro::api {
 CollectionService::CollectionService(zoro::core::CollectionManager* manager)
     : manager_(manager) {}
 
-bool CollectionService::CreateCollection(const std::string& name, int dimension, std::string& err) {
+bool CollectionService::CreateCollection(const std::string& name, int dimension, const std::string& distance, std::string& err) {
     
     if (name.empty()) {
         err = "Collection name cannot be empty.";
@@ -16,7 +16,9 @@ bool CollectionService::CreateCollection(const std::string& name, int dimension,
         return false;
     }
 
-    if (!manager_->CreateCollection(name, dimension)) {
+    // add distance enum validation
+
+    if (!manager_->CreateCollection(name, dimension, distance)) {
         err = "Failed to create collection (already exists or storage error).";
         return false;
     }

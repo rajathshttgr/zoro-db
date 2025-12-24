@@ -10,7 +10,7 @@ namespace zoro::core{
 class CollectionManager{
 public:
     explicit CollectionManager(zoro::storage::StorageEngine* storage);
-    bool CreateCollection(const std::string& name, int dimension);
+    bool CreateCollection(const std::string& name, int dimension,const std::string& distance);
     bool DeleteCollection(const std::string& name);
 
     std::vector<std::string> ListCollections() const;

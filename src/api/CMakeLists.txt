@@ -55,4 +55,5 @@ target_link_libraries(zoro
     zoro_core
     storage
     collection
+    wal
 )

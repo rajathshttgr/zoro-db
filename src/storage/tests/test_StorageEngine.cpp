@@ -20,7 +20,7 @@ protected:
 TEST_F(StorageEngineTest,CreateCollection){
     StorageEngine engine(testRoot);
 
-    ASSERT_TRUE(engine.CreateCollection("users"));
+    ASSERT_TRUE(engine.CreateCollection("users",100));
 
     ASSERT_TRUE(engine.CollectionExists("users"));
 }
@@ -28,15 +28,15 @@ TEST_F(StorageEngineTest,CreateCollection){
 TEST_F(StorageEngineTest, CreateCollectionTwiceFails){
     StorageEngine engine(testRoot);
 
-    engine.CreateCollection("users");
+    engine.CreateCollection("users",100);
 
-    ASSERT_FALSE(engine.CreateCollection("users"));
+    ASSERT_FALSE(engine.CreateCollection("users",100));
 }
 
 TEST_F(StorageEngineTest, DeleteCollection){
     StorageEngine engine(testRoot);
 
-    engine.CreateCollection("users");
+    engine.CreateCollection("users",100);
     ASSERT_TRUE(engine.CollectionExists("users"));
 
     ASSERT_TRUE(engine.DeleteCollection("users"));
@@ -46,8 +46,8 @@ TEST_F(StorageEngineTest, DeleteCollection){
 TEST_F(StorageEngineTest, ListCollections){
     StorageEngine engine(testRoot);
 
-    engine.CreateCollection("a");
-    engine.CreateCollection("b");
+    engine.CreateCollection("a",100);
+    engine.CreateCollection("b",100);
 
     auto list =engine.ListCollections();
     ASSERT_EQ(list.size(),2);

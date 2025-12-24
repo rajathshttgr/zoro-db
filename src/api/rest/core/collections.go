@@ -12,10 +12,11 @@ import (
 	"unsafe"
 )
 
-func CreateCollection(name string, dimension int) error {
+func CreateCollection(name string, dimension int, distance string) error {
 	// Convert Go string → C string
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
+	cDistance := C.CString(distance)
 
 	// Allocate C error buffer
 	errBuf := C.malloc(256)
@@ -24,6 +25,7 @@ func CreateCollection(name string, dimension int) error {
 	ok := C.zoro_create_collection(
 		cName,
 		C.int(dimension),
+		cDistance,
 		(*C.char)(errBuf),
 	)
 

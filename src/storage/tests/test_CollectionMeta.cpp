@@ -24,7 +24,7 @@ protected:
 TEST_F(CollectionMetaTest, InitDefaultCreatesMetaFile){
     CollectionMeta meta(path);
 
-    meta.InitDefault();
+    meta.InitDefault(); //tests need to be updated immidately
 
     ASSERT_TRUE(FileUtils::Exists(path+"/meta.json"));
 }

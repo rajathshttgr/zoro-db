@@ -3,11 +3,13 @@
 #include "../../CollectionService.h"
 #include "../../../storage/include/StorageEngine.h"
 #include "../../../collection/include/CollectionManager.h"
+#include "../../../wal/include/wal_writer.h"
 #include "../../../config.h"
 
 #include <memory>
 #include <cstring>
 
+static std::unique_ptr<zoro::wal::WALWriter> g_wal;
 static std::unique_ptr<zoro::storage::StorageEngine> g_storage;
 static std::unique_ptr<zoro::core::CollectionManager> g_manager;
 static std::unique_ptr<zoro::api::CollectionService> g_service;
@@ -16,7 +18,8 @@ extern "C" {
 
 bool zoro_init(const char* data_path, char* err) {
     try {
-        g_storage = std::make_unique<zoro::storage::StorageEngine>(data_path);
+        g_wal = std::make_unique<zoro::wal::WALWriter>(data_path);
+        g_storage = std::make_unique<zoro::storage::StorageEngine>(data_path, g_wal.get());
         g_manager = std::make_unique<zoro::core::CollectionManager>(g_storage.get());
         g_service = std::make_unique<zoro::api::CollectionService>(g_manager.get());
         return true;
@@ -32,9 +35,9 @@ void zoro_shutdown() {
     g_storage.reset();
 }
 
-bool zoro_create_collection(const char* name, int dimension, char* err) {
+bool zoro_create_collection(const char* name, int dimension, const char* distance, char* err) {
     std::string error;
-    if (!g_service->CreateCollection(name, dimension, error)) {
+    if (!g_service->CreateCollection(name, dimension, distance, error)) {
         std::strcpy(err, error.c_str());
         return false;
     }
