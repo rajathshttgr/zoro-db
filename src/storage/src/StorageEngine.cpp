@@ -13,7 +13,7 @@ namespace fs=std::filesystem;
 namespace zoro::storage {
 
 StorageEngine::StorageEngine(const std::string& root_path, zoro::wal::WALWriter* wal)
-    : root_path_(root_path), collection_root_(root_path+"/collections"), wal_(wal) {
+    : root_path_(root_path), collection_root_(root_path+"/collections"), wal_(wal), catalog_(root_path) {
     fs::create_directories(root_path_);
     fs::create_directories(collection_root_);
 }
@@ -27,11 +27,9 @@ bool StorageEngine::CreateCollection(const std::string& collection_name, int dim
     DistType dist_enum = DistTypeFromString(distance);
     std::string dist_str = DistTypeToString(dist_enum);
 
-    Catalog catalog(root_path_);
-
     // update catalog and get coll_id (call by reference update)
     int coll_id;
-    if (!catalog.AddCollection(collection_name, coll_id))
+    if (!catalog_.AddCollection(collection_name, coll_id, dimension, distance))
         return false;
 
     // Append to WAL
@@ -51,42 +49,36 @@ bool StorageEngine::CreateCollection(const std::string& collection_name, int dim
 bool StorageEngine::DeleteCollection(const std::string& name){
     if(!CollectionExists(name)) return false;
 
+    //this cannot be undone
     std::string path=collection_root_+"/"+name;
     fs::remove_all(path);
 
-    Catalog catalog(root_path_);
-    catalog.RemoveCollection(name);
+    catalog_.RemoveCollection(name);
 
     return true;
 }
 
 
 bool StorageEngine::CollectionExists(const std::string& name) const{
-     return fs::exists(collection_root_+"/"+name);
+     return catalog_.CollectionExists(name);
 }
 
 
 std::optional<CollectionInfo> StorageEngine::GetCollectionInfo(const std::string& name) const{
-    if(!CollectionExists(name)) return std::nullopt;
+    auto info_opt = catalog_.GetCollectionInfo(name);
 
-    CollectionInfo info;
-    info.name=name;
-    info.path=collection_root_+"/"+name;
-    return info;
+    if (!info_opt) {
+    return std::nullopt;
+    }
+
+    return info_opt;
 }
 
 
 std::vector<CollectionInfo> StorageEngine::ListCollections() const{
-    std::vector<CollectionInfo> collections;
-
-    for(auto& entry: fs::directory_iterator(collection_root_)){
-        if(entry.is_directory()){
-            CollectionInfo info;
-            info.name=entry.path().filename().string();
-            info.path=entry.path().string();
-            collections.push_back(info);
-        }
-    }
+    
+    auto collections = catalog_.ListCollections();
+    
     return collections;
 }
 

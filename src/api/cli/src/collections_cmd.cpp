@@ -86,13 +86,12 @@ void Cli::CmdCollectionCreate(const std::vector<std::string>& tokens) {
         std::getline(std::cin, distance);
     }
 
-    // TODO: create collection
     if (!service_->CreateCollection(collection_name, dimension, distance, err)) {
         std::cout << "Error: " << err << "\n";
         return;
     }
 
-    std::cout << "Collection created.\n";
+    std::cout << "Collection '"<<collection_name<<"' created successfully.\n";
 }
 
 
@@ -116,9 +115,9 @@ void Cli::CmdCollectionDelete(const std::vector<std::string>& tokens){
 
 
 void Cli::CmdCollectionList(const std::vector<std::string>& tokens){
-    std::vector<std::string> list = service_->ListCollections();
+    std::vector<zoro::storage::CollectionInfo> collection_list = service_->ListCollections();
 
-    if(list.empty()){
+    if(collection_list.empty()){
         std::cout << "No collections found in DB" << std::endl;
         return;
     }
@@ -128,15 +127,15 @@ void Cli::CmdCollectionList(const std::vector<std::string>& tokens){
     std::cout<<"\n";
     PrintTableRow({"Collection Name", "Distance", "Dimension"}, widths, true);
 
-    for (const auto& collection : list) {
-        //TODO: replaace dummy data by fetching distance and dimension data
-        PrintTableRow({collection, "cosine", "178"}, widths);
+    for (const auto& collection : collection_list) {
+        //TODO: show all meta data atleast in REST API
+        PrintTableRow({collection.coll_name, collection.distance, std::to_string(collection.dimension)}, widths);
     }
 }
 
 
-void Cli::CmdCollectionInfo(const std::vector<std::string>& tokens){
-
+void Cli::CmdCollectionInfo(const std::vector<std::string>& tokens)
+{
     if (tokens.size() < 3) {
         ShowWarning(tokens[0]);
         return;
@@ -145,7 +144,22 @@ void Cli::CmdCollectionInfo(const std::vector<std::string>& tokens){
     std::string collection_name = tokens[2];
     std::string err;
 
-    // TODO: display collection info like distance, dimension, shardings, status, health
+    auto info_opt = service_->LoadCollection(collection_name, err);
+
+    if (!info_opt.has_value()) {
+        //show error
+        return;
+    }
+
+    const auto& info = *info_opt;   // unwrap once
+    
+    std::cout << "\n";
+    PrintCmd("coll_id", std::to_string(info.id));
+    PrintCmd("coll_name", info.coll_name);
+    PrintCmd("dimension", std::to_string(info.dimension));
+    PrintCmd("distance", info.distance);
+    PrintCmd("created_at", info.created_at);
+    PrintCmd("status", info.status);
 
 }
 

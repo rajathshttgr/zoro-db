@@ -34,11 +34,11 @@ bool CollectionService::DeleteCollection(const std::string& name, std::string& e
     return true;
 }
 
-std::vector<std::string> CollectionService::ListCollections() const {
+std::vector<zoro::storage::CollectionInfo> CollectionService::ListCollections() const {
     return manager_->ListCollections();
 }
 
-std::optional<zoro::core::Collection>
+std::optional<zoro::storage::CollectionInfo>
 CollectionService::LoadCollection(const std::string& name, std::string& err) {
     auto result = manager_->LoadCollection(name);
     if (!result.has_value()) {

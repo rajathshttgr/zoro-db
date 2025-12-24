@@ -1,15 +1,12 @@
 #pragma once
+#include "struct.h"
+#include "Catalog.h"
 #include <string>
 #include <vector>
 #include <optional>
 #include "../../wal/include/wal_writer.h"
 
 namespace zoro::storage{
-
-struct CollectionInfo {
-    std::string name;
-    std::string path;
-};
 
 class StorageEngine {
 public:
@@ -24,6 +21,7 @@ public:
 private:
     std::string root_path_;
     std::string collection_root_;
+    Catalog catalog_; 
     zoro::wal::WALWriter* wal_;
 };
 
