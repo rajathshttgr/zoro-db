@@ -8,7 +8,7 @@ extern "C" {
 bool zoro_init(const char* data_path, char* err);
 void zoro_shutdown();
 
-bool zoro_create_collection(const char* name, int dimension, char* err);
+bool zoro_create_collection(const char* name, int dimension, const char* distance, char* err);
 bool zoro_delete_collection(const char* name, char* err);
 
 #ifdef __cplusplus

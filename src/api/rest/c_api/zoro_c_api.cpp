@@ -35,9 +35,9 @@ void zoro_shutdown() {
     g_storage.reset();
 }
 
-bool zoro_create_collection(const char* name, int dimension, char* err) {
+bool zoro_create_collection(const char* name, int dimension, const char* distance, char* err) {
     std::string error;
-    if (!g_service->CreateCollection(name, dimension, error)) {
+    if (!g_service->CreateCollection(name, dimension, distance, error)) {
         std::strcpy(err, error.c_str());
         return false;
     }

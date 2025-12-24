@@ -12,5 +12,5 @@ func CreateCollection(
 	// - check name conflicts
 	// - default configs
 
-	return core.CreateCollection(name, dimension)
+	return core.CreateCollection(name, dimension, distance)
 }

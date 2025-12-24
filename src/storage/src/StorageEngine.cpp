@@ -2,6 +2,7 @@
 #include "Catalog.h"
 #include "CollectionMeta.h"
 #include "FileUtils.h"
+#include "Distance_utils.h"
 #include <filesystem>
 #include <vector>
 #include <cstdint>
@@ -18,27 +19,31 @@ StorageEngine::StorageEngine(const std::string& root_path, zoro::wal::WALWriter*
 }
 
 
-bool StorageEngine::CreateCollection(const std::string& name){
+bool StorageEngine::CreateCollection(const std::string& collection_name, int dimension, std::string distance){
 
-    std::vector<float> vec = {0.12f, 0.44f, 0.23f, 0.23f, 0.24f, 0.36f, 0.67f};
-    std::vector<uint8_t> payload(sizeof(float) * vec.size());
-    std::memcpy(payload.data(), vec.data(), payload.size());
+    if(CollectionExists(collection_name)) return false;
+    if(dimension==0) return false;
+
+    DistType dist_enum = DistTypeFromString(distance);
+    std::string dist_str = DistTypeToString(dist_enum);
+
+    Catalog catalog(root_path_);
+
+    // update catalog and get coll_id (call by reference update)
+    int coll_id;
+    if (!catalog.AddCollection(collection_name, coll_id))
+        return false;
 
     // Append to WAL
     if (wal_) {
-        wal_->append(OpType::CREATE_COLLECTION, 100, payload);
+        wal_->append_create_collection(collection_name, dimension, dist_enum);
     }
 
-    if(CollectionExists(name)) return false;
-
-    std::string path=collection_root_+"/"+name;
+    std::string path=collection_root_+"/"+collection_name;
     fs::create_directories(path);
 
-    Catalog catalog(root_path_);
-    catalog.AddCollection(name, path);
-
     CollectionMeta meta(path);
-    meta.InitDefault();
+    meta.InitDefault(dimension,dist_str,coll_id,collection_name);
 
     return true;
 }

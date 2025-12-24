@@ -14,9 +14,8 @@ struct CollectionInfo {
 class StorageEngine {
 public:
     explicit StorageEngine(const std::string& root_path,zoro::wal::WALWriter* wal);
-    // explicit StorageEngine(zoro::wal::WALWriter* wal);
 
-    bool CreateCollection(const std::string& name);
+    bool CreateCollection(const std::string& name, int dimension,std::string distance);
     bool DeleteCollection(const std::string& name);
     bool CollectionExists(const std::string& name) const;
     std::optional<CollectionInfo> GetCollectionInfo(const std::string& name) const;

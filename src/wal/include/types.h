@@ -8,4 +8,13 @@ enum class OpType: uint8_t{
     DELETE_POINT=4,
 };
 
+enum class DistType: uint8_t{
+    DOT=1,
+    COSINE=2,
+    EUCLID=3
+};
+
+
 const uint32_t MAX_ENTRIES_PER_FILE=100;
+
+const uint32_t INVALID_COLLECTION_ID = 0;

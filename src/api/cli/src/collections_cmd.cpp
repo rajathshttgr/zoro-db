@@ -72,7 +72,7 @@ void Cli::CmdCollectionCreate(const std::vector<std::string>& tokens) {
     }
 
     // TODO: create collection
-    if (!service_->CreateCollection(collection_name, dimension, err)) {
+    if (!service_->CreateCollection(collection_name, dimension, distance, err)) {
         std::cout << "Error: " << err << "\n";
         return;
     }

@@ -10,7 +10,7 @@ class CollectionService {
 public:
     explicit CollectionService(zoro::core::CollectionManager* manager);
 
-    bool CreateCollection(const std::string& name, int dimension, std::string& err);
+    bool CreateCollection(const std::string& name, int dimension,const std::string& distance, std::string& err);
     bool DeleteCollection(const std::string& name, std::string& err);
     std::vector<std::string> ListCollections() const;
     std::optional<zoro::core::Collection> LoadCollection(const std::string& name, std::string& err);
