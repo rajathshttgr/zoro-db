@@ -35,3 +35,24 @@ func CreateCollection(name string, dimension int, distance string) error {
 
 	return nil
 }
+
+
+func DeleteCollection(collection_name string) error{
+	// convert Go string to C string
+	cCollectionName:= C.CString(collection_name)
+
+	// Allocate C error buffer
+	errBuf := C.malloc(256)
+	defer C.free(errBuf)
+
+	ok := C.zoro_delete_collection(
+		cCollectionName,
+		(*C.char)(errBuf),
+	)
+
+	if !ok {
+		return errors.New(C.GoString((*C.char)(errBuf)))
+	}
+
+	return nil
+}

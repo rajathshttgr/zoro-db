@@ -29,26 +29,53 @@ func CreateCollection(c *gin.Context) {
 		return
 	}
 
-	latency := time.Since(start).Milliseconds()
+	latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
-	// data mocked for now
+	// default config values
 	sharding := 1
-	status := "ACTIVE"
+	status := "active"
 
-	c.JSON(http.StatusOK, gin.H{
-		"collection_name": req.CollectionName,
-		"dimension":       req.Dimension,
-		"distance":        req.Distance,
-		"sharding":        sharding,
-		"status":          status,
-		"latency_ms":      latency,
-	})
+	resp := dto.CollectionResponseLayout{
+	Result: dto.CreateCollectionResult{
+		Status:         status,
+		CollectionName: req.CollectionName,
+		Dimension:      req.Dimension,
+		Distance:       req.Distance,
+		Sharding:       sharding,
+	},
+	Time: latency,
+	}
+
+	c.JSON(http.StatusOK, resp)
+
 }
 
+
+
 func DeleteCollection(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "collection created successfully",
-	})
+	start := time.Now()
+
+	collectionName := c.Param("collection_name")
+
+	if err := services.DeleteCollection( collectionName); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+
+	// default status
+	status := "deleted"
+
+	resp := dto.CollectionResponseLayout{
+	Result: dto.DeleteCollectionResult{
+		Status:         status,
+		CollectionName: collectionName,
+	},
+	Time: latency,
+	}
+
+	c.JSON(http.StatusOK, resp)
 }
 
 

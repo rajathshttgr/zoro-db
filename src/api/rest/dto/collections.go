@@ -11,10 +11,20 @@ type CreateCollectionRequest struct {
     Distance        string `json:"distance" binding:"required"`
 }
 
-type CreateCollectionResponse struct {
+type CollectionResponseLayout struct {
+	Result any     `json:"result"`
+	Time   float64 `json:"time"`
+}
+
+type CreateCollectionResult struct {
+	Status         string `json:"status"`
 	CollectionName string `json:"collection_name"`
 	Dimension      int    `json:"dimension"`
 	Distance       string `json:"distance"`
-	Status         string `json:"status"`
+	Sharding       int    `json:"sharding"`
 }
 
+type DeleteCollectionResult struct {
+	Status         string `json:"status"`
+	CollectionName string `json:"collection_name"`
+}
