@@ -1,14 +1,5 @@
 # Storage Module
 
-The **Storage** component of _zoro-db_ implements low-level storage operations including:
-
-- Catalog management
-- Collection metadata
-- File utilities
-- Core StorageEngine
-
----
-
 ## Build (Module-Level)
 
 ```bash
@@ -37,3 +28,12 @@ Or run the test binary directly:
 ```bash
 ./storage_tests
 ```
+
+## TODO
+
+- [x] Catalog management
+- [x] Collection metadata
+- [x] File utilities
+- [x] Core StorageEngine
+- [ ] Shards Management
+- [ ] Upsert Points

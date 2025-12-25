@@ -28,3 +28,7 @@ Or run the test binary directly:
 ```bash
 ./core_tests
 ```
+
+## TODO
+
+- [ ] Input Validations

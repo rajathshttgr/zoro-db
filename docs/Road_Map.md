@@ -1,12 +1,15 @@
 # RoadMap / TODO
 
 - [x] REST API Implimentaion
-- [x] Docker Image Deployment
 - [ ] gRPC Implimentation
-- [ ] WAL & Snapshots
+- [x] WAL
+- [ ] WAL + Snapshots
 - [ ] Hot Cache
 - [ ] Sharding
 - [ ] Indexing Brutforce
 - [ ] Indexing FAISS
 - [ ] Distributed Read
 - [ ] Distributed Write
+- [ ] DB Migration
+- [ ] Client Library
+- [ ] Web interface
