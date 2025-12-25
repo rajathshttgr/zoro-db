@@ -26,8 +26,8 @@ POST /collections
 
 ```json
 {
-  "name": "products",
-  "dimension": 768,
+  "collection_name": "products",
+  "dimension": 1536,
   "distance": "cosine"
 }
 ```
@@ -36,12 +36,14 @@ POST /collections
 
 ```json
 {
-  "status": "success",
-  "collection": {
-    "name": "products",
-    "dimension": 768,
-    "distance": "cosine"
-  }
+  "result": {
+    "status": "active",
+    "collection_name": "products",
+    "dimension": 1536,
+    "distance": "cosine",
+    "sharding": 1
+  },
+  "time": 4.223004
 }
 ```
 
@@ -61,8 +63,11 @@ DELETE /collections/{collection_name}
 
 ```json
 {
-  "status": "success",
-  "message": "Collection deleted"
+  "result": {
+    "status": "deleted",
+    "collection_name": "products"
+  },
+  "time": 2.176595
 }
 ```
 
