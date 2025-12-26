@@ -1,17 +1,17 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "../CollectionService.h"
+#include "../../services/include/CollectionService.h"
 
 namespace zoro::cli {
 
 class Cli {
 public:
-    explicit Cli(zoro::api::CollectionService* service);
+    explicit Cli(zoro::services::CollectionService* service);
     void Run();
 
 private:
-    zoro::api::CollectionService* service_; 
+    zoro::services::CollectionService* service_; 
 
     void HandleCommand(const std::string& input);
     void ShowWarning(std::string target);

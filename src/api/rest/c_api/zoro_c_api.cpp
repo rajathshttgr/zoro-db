@@ -1,6 +1,6 @@
 #include "zoro_c_api.h"
 
-#include "../../CollectionService.h"
+#include "../../../services/include/CollectionService.h"
 #include "../../../storage/include/StorageEngine.h"
 #include "../../../collection/include/CollectionManager.h"
 #include "../../../wal/include/wal_writer.h"
@@ -12,7 +12,7 @@
 static std::unique_ptr<zoro::wal::WALWriter> g_wal;
 static std::unique_ptr<zoro::storage::StorageEngine> g_storage;
 static std::unique_ptr<zoro::core::CollectionManager> g_manager;
-static std::unique_ptr<zoro::api::CollectionService> g_service;
+static std::unique_ptr<zoro::services::CollectionService> g_service;
 
 extern "C" {
 
@@ -21,7 +21,7 @@ bool zoro_init(const char* data_path, char* err) {
         g_wal = std::make_unique<zoro::wal::WALWriter>(data_path);
         g_storage = std::make_unique<zoro::storage::StorageEngine>(data_path, g_wal.get());
         g_manager = std::make_unique<zoro::core::CollectionManager>(g_storage.get());
-        g_service = std::make_unique<zoro::api::CollectionService>(g_manager.get());
+        g_service = std::make_unique<zoro::services::CollectionService>(g_manager.get());
         return true;
     } catch (const std::exception& e) {
         std::strcpy(err, e.what());

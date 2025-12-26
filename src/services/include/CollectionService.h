@@ -2,10 +2,10 @@
 #include <string>
 #include <vector>
 #include <optional>
-#include "../collection/include/CollectionManager.h"
-#include "../storage/include/struct.h"
+#include "../../collection/include/CollectionManager.h"
+#include "../../storage/include/struct.h"
 
-namespace zoro::api {
+namespace zoro::services {
 
 class CollectionService {
 public:

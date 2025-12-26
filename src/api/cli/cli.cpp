@@ -9,7 +9,7 @@ const std::string BOLD  = "\033[1m";
 
 namespace zoro::cli {
 
-Cli::Cli(zoro::api::CollectionService* service)
+Cli::Cli(zoro::services::CollectionService* service)
     : service_(service) {}
 
 void Cli::Run() {

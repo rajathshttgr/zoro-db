@@ -6,20 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Core API
-add_library(zoro_core STATIC
-    CollectionService.cpp
-)
-
-target_include_directories(zoro_core PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-target_link_libraries(zoro_core
-    storage
-    collection
-)
-
 # CLI wrapper
 file(GLOB CLI_SOURCES
     cli/cli.cpp
@@ -38,9 +24,8 @@ target_include_directories(zoro_cli PUBLIC
 )
 
 target_link_libraries(zoro_cli
-    zoro_core
+    zoro_services
 )
-
 
 # C API 
 add_library(zoro SHARED
@@ -52,8 +37,8 @@ target_include_directories(zoro PUBLIC
 )
 
 target_link_libraries(zoro
-    zoro_core
-    storage
+    zoro_services
     collection
+    storage
     wal
 )
