@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"time"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"zoro/api/dto"
@@ -57,7 +58,7 @@ func DeleteCollection(c *gin.Context) {
 
 	collectionName := c.Param("collection_name")
 
-	if err := services.DeleteCollection( collectionName); err != nil {
+	if err := services.DeleteCollection(collectionName); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -80,14 +81,65 @@ func DeleteCollection(c *gin.Context) {
 
 
 func GetCollections(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "collection created successfully",
-	})
+    start := time.Now()
+
+    collections, err := services.ListCollections()
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+    result := make([]dto.CollectionInfoResult, 0, len(collections))
+
+    for _, col := range collections {
+        result = append(result, dto.CollectionInfoResult{
+            CollectionName: col.Name,
+            Dimension:      strconv.Itoa(col.Dimension),
+            Distance:       col.Distance,
+            PointsCount:    0,            // TODO: compute later
+            Status:         col.Status,
+        })
+    }
+
+    latency := float64(time.Since(start).Nanoseconds()) / 1e6
+
+    resp := dto.CollectionResponseLayout{
+        Result: result,
+        Time:   latency,
+    }
+
+    c.JSON(http.StatusOK, resp)
 }
 
+
 func GetCollectionInfo(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "collection created successfully",
-	})
+	start := time.Now()
+
+	collectionName := c.Param("collection_name")
+
+    collection, err := services.GetCollectionInfo(collectionName)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+
+	resp := dto.CollectionResponseLayout{
+	Result: dto.CollectionInfoResult{
+		CollectionName: collection.Name,
+		Dimension:      strconv.Itoa(collection.Dimension),
+		Distance:       collection.Distance,
+		PointsCount:    0,            // TODO: compute later
+		Status:         collection.Status,
+	},
+	Time: latency,
+	}
+
+    c.JSON(http.StatusOK, resp)
 }
 

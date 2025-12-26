@@ -28,3 +28,11 @@ type DeleteCollectionResult struct {
 	Status         string `json:"status"`
 	CollectionName string `json:"collection_name"`
 }
+
+type CollectionInfoResult struct {
+    CollectionName string `json:"collection_name"`
+    Dimension      string `json:"dimension"`
+    Distance       string `json:"distance"`
+    PointsCount    int    `json:"points_count"`
+    Status         string `json:"status"`
+}

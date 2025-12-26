@@ -78,3 +78,12 @@ func CreateCollection(
 func DeleteCollection(collectionName string) error {
 	return core.DeleteCollection(collectionName)
 }
+
+
+func ListCollections() ([]core.CollectionInfo, error) {
+    return core.ListCollections()
+}
+
+func GetCollectionInfo(collectionName string) (*core.CollectionInfo, error){
+	return core.GetCollectionInfo(collectionName)
+}

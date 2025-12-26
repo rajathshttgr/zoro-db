@@ -29,4 +29,7 @@ Or run the test binary directly:
 ./wal_tests
 ```
 
-## Project Status
+## TODO
+
+- [x] Write logs
+- [ ] Read / Replay logs

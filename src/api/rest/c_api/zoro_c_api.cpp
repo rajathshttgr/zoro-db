@@ -53,4 +53,86 @@ bool zoro_delete_collection(const char* name, char* err) {
     return true;
 }
 
+bool zoro_list_collections(
+    zoro_collection_info_t** out_collections,
+    int* out_count,
+    char* err
+) {
+    try {
+        auto list = g_service->ListCollections();
+        int count = static_cast<int>(list.size());
+
+        auto* result = new zoro_collection_info_t[count];
+
+        for (int i = 0; i < count; i++) {
+            result[i].id = list[i].id;
+            result[i].dimension = list[i].dimension;
+
+            result[i].name = strdup(list[i].coll_name.c_str());
+            result[i].distance = strdup(list[i].distance.c_str());
+            result[i].status = strdup(list[i].status.c_str());
+            result[i].created_at = strdup(list[i].created_at.c_str());
+        }
+
+        *out_collections = result;
+        *out_count = count;
+        return true;
+
+    } catch (const std::exception& e) {
+        std::strcpy(err, e.what());
+        return false;
+    }
+}
+
+
+void zoro_free_collections(
+    zoro_collection_info_t* collections,
+    int count
+) {
+    if (!collections) return;
+
+    for (int i = 0; i < count; i++) {
+        free((void*)collections[i].name);
+        free((void*)collections[i].distance);
+        free((void*)collections[i].status);
+        free((void*)collections[i].created_at);
+    }
+
+    delete[] collections;
+}
+
+
+bool zoro_get_collection(
+    const char* name,
+    zoro_collection_info_t* out_info,
+    char* err
+) {
+    std::string error;
+    auto info = g_service->LoadCollection(name, error);
+
+    if (!info) {
+        std::strcpy(err, error.c_str());
+        return false;
+    }
+
+    out_info->id = info->id;
+    out_info->dimension = info->dimension;
+    out_info->name = strdup(info->coll_name.c_str());
+    out_info->distance = strdup(info->distance.c_str());
+    out_info->status = strdup(info->status.c_str());
+    out_info->created_at = strdup(info->created_at.c_str());
+
+    return true;
+}
+
+void zoro_free_collection(zoro_collection_info_t* info) {
+    if (!info) return;
+
+    free((void*)info->name);
+    free((void*)info->distance);
+    free((void*)info->status);
+    free((void*)info->created_at);
+}
+
+
 }
