@@ -33,7 +33,7 @@ For development or debugging, you can also run the CLI:
 docker run -it ghcr.io/rajathshttgr/zoro-db:dev /app/zoro-db
 ```
 
-For instructions on persistent storage, detached mode, or other advanced options, please refer to the [Developer Guide](docs/DEVELOPER_GUIDE.md).
+For instructions on persistent storage, detached mode, or other advanced options, please refer to the [DEVELOPER_GUIDE](docs/DEVELOPER_GUIDE.md).
 
 ## Usage
 
@@ -80,22 +80,22 @@ curl -X GET http://localhost:6464/collections
         "collection_name": "products",
         "distance": "cosine",
         "dimension" 156,
-        "point_count": 10,
-        "status": "Active"
+        "points_count": 10,
+        "status": "active"
       },
       {
         "collection_name": "movies",
         "distance": "dot",
         "dimension" 156,
-        "point_count": 10,
-        "status": "Active"
+        "points_count": 10,
+        "status": "active"
       }
   ],
   "time": 5.539202
 }
 ```
 
-For detailed endpoint specifications, request/response schemas, and APIs that are still evolving, see the [API Documentation](docs/API_DOCS.md). An official client library is in progress for easier and safer integration.
+For detailed endpoint specifications, request/response schemas, and APIs that are still evolving, see the [API DOCUMENTATION](docs/API_DOCS.md). An official client library is in progress for easier and safer integration.
 
 ## Contributing
 

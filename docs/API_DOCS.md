@@ -91,20 +91,20 @@ GET /collections
 {
   "collections_count": 2,
   "collections": [
-      {
-        "collection_name": "products",
-        "distance": "cosine",
-        "dimension" 1536,
-        "point_count": 10,
-        "status": "Active"
-      },
-      {
-        "collection_name": "movies",
-        "distance": "dot",
-        "dimension" 1536,
-        "point_count": 10,
-        "status": "Active"
-      }
+    {
+      "collection_name": "products",
+      "distance": "cosine",
+      "dimension": 1536,
+      "point_count": 10,
+      "status": "Active"
+    },
+    {
+      "collection_name": "movies",
+      "distance": "dot",
+      "dimension": 1536,
+      "point_count": 10,
+      "status": "Active"
+    }
   ],
   "time": 5.539202
 }
