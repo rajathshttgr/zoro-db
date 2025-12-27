@@ -39,10 +39,12 @@ bool WALWriter::append_create_collection(const std::string& name, uint32_t dim, 
     return append_central(OpType::CREATE_COLLECTION, INVALID_COLLECTION_ID, payload);
 }
 
-// bool WALWriter::append_delete_collection(uint32_t coll_id){
-//     //logic
-//     return append_central(DELETE_COLLECTION, coll_id, payload);
-// }
+bool WALWriter::append_delete_collection(uint32_t coll_id){
+    //logic
+    std::vector<uint8_t> payload;
+
+    return append_central(OpType::DELETE_COLLECTION, coll_id, payload);
+}
 
 // bool WALWriter::append_upsert_point(uint32_t coll_id, uint64_t point_id, const std::vector<float>& vector, const std::vector<uint8_t>& payload){
 //     //logic

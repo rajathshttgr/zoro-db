@@ -25,7 +25,7 @@ public:
     ~WALWriter();
 
     bool append_create_collection(const std::string& name, uint32_t dim, DistType distance);
-    // bool append_delete_collection(uint32_t coll_id);
+    bool append_delete_collection(uint32_t coll_id);
     // bool append_upsert_point(uint32_t coll_id, uint64_t point_id, const std::vector<float>& vector, const std::vector<uint8_t>& payload);
     // bool append_delete_point(uint32_t coll_id, uint64_t point_id);
 
