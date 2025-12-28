@@ -33,7 +33,7 @@ if(WAL_BUILD_TESTS)
 
     file(GLOB WAL_TEST_FILES tests/*.cpp)
 
-    add_executable(wal_tests ${STORAGE_TEST_FILES})
+    add_executable(wal_tests ${WAL_TEST_FILES})
 
     target_link_libraries(wal_tests PRIVATE
         wal
