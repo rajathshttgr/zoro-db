@@ -23,23 +23,33 @@ WALWriter::~WALWriter(){
 }
 
 
-bool WALWriter::append_create_collection(const std::string& name, uint32_t dim, DistType distance){
-    // upper layers will validate these fields, these conditions only for formality
-    if (name.empty()) return false;
-    if (dim == 0) return false;
+bool WALWriter::log_create_collection(
+    uint32_t coll_id,
+    const std::string& name,
+    uint32_t dim,
+    DistType distance
+) {
+    if (name.empty() || dim == 0) {
+        return false;
+    }
 
-    //serialization
     std::vector<uint8_t> payload;
     payload.reserve(2 + name.size() + 4 + 1);
+
     append_u16(payload, static_cast<uint16_t>(name.size()));
     append_bytes(payload, name.data(), name.size());
     append_u32(payload, dim);
     append_u8(payload, static_cast<uint8_t>(distance));
 
-    return append_central(OpType::CREATE_COLLECTION, INVALID_COLLECTION_ID, payload);
+    return append_central(
+        OpType::CREATE_COLLECTION,
+        coll_id,
+        payload
+    );
 }
 
-bool WALWriter::append_delete_collection(uint32_t coll_id){
+
+bool WALWriter::log_delete_collection(uint32_t coll_id){
     //logic
     std::vector<uint8_t> payload;
 
@@ -57,21 +67,33 @@ bool WALWriter::append_delete_collection(uint32_t coll_id){
 // }
 
 
-bool WALWriter::append_central(OpType type, uint32_t coll_id, const std::vector<uint8_t>& binary_payload){
-    if(entries_in_current_file>=MAX_ENTRIES_PER_FILE){
+
+
+
+bool WALWriter::append_central(
+    OpType type,
+    uint32_t coll_id,
+    const std::vector<uint8_t>& binary_payload
+) {
+    if (entries_in_current_file >= MAX_ENTRIES_PER_FILE) {
         open_next_file();
     }
+
     LogRecord record;
-    record.header.lsn=current_lsn++;
-    record.header.type=type;
-    record.header.collection_id=coll_id;
-    record.header.payload_size=static_cast<uint32_t>(binary_payload.size());
-    record.payload=binary_payload;
-    // calculate crc checksum and update
-    record.header.crc32 = calculate_crc(record.header, record.payload);
+    record.header.lsn = current_lsn++;
+    record.header.type = type;
+    record.header.collection_id = coll_id;
+    record.header.payload_size =
+        static_cast<uint32_t>(binary_payload.size());
+    record.payload = binary_payload;
+
+    record.header.crc32 =
+        calculate_crc(record.header, record.payload);
 
     return write_to_disk(record);
 }
 
 
 }
+
+

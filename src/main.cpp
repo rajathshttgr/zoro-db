@@ -9,7 +9,7 @@ int main() {
     std::string dataPath = zoro::config::getDataPath();
 
     zoro::wal::WALWriter wal(dataPath);
-    zoro::storage::StorageEngine storage(dataPath, &wal);
+    zoro::storage::StorageEngine storage(dataPath,wal);
     zoro::core::CollectionManager manager(&storage);
     zoro::services::CollectionService service(&manager);
     zoro::cli::Cli cli(&service);

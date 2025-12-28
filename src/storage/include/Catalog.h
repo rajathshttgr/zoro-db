@@ -12,6 +12,7 @@ public:
 
     bool AddCollection(const std::string& name, int& coll_id, int& dimension, std::string& distance);
     bool CollectionExists(const std::string& name) const;
+    int GetCollectionId(const std::string& name);
     std::optional<CollectionInfo>  GetCollectionInfo(const std::string& name) const;
     bool RemoveCollection(const std::string& name);
     std::vector<CollectionInfo> ListCollections() const;
