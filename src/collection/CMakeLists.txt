@@ -14,6 +14,8 @@ add_library(collection STATIC
     ${COLLECTION_HEADERS}
 )
 
+target_link_libraries(collection PUBLIC storage)
+
 target_include_directories(collection PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

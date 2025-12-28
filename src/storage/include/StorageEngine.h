@@ -4,13 +4,13 @@
 #include <string>
 #include <vector>
 #include <optional>
-#include "../../wal/include/wal_writer.h"
+#include "../../wal/include/wal.h"
 
 namespace zoro::storage{
 
 class StorageEngine {
 public:
-    explicit StorageEngine(const std::string& root_path,zoro::wal::WALWriter* wal);
+    explicit StorageEngine(const std::string& root_path,zoro::wal::WAL& wal);
 
     bool CreateCollection(const std::string& name, int dimension,std::string distance);
     bool DeleteCollection(const std::string& name);
@@ -18,11 +18,13 @@ public:
     std::optional<CollectionInfo> GetCollectionInfo(const std::string& name) const;
     std::vector<CollectionInfo> ListCollections() const;
 
+    bool UpsertPoints(const std::string coll_name);
+
 private:
     std::string root_path_;
     std::string collection_root_;
     Catalog catalog_; 
-    zoro::wal::WALWriter* wal_;
+    zoro::wal::WAL& wal_;
 };
 
 }

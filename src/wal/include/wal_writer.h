@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include "struct.h"
+#include "wal.h" 
 #include <string>
 #include <fstream>
 #include <filesystem>
@@ -11,7 +12,7 @@ namespace fs=std::filesystem;
 
 namespace zoro::wal{
 
-class WALWriter{
+class WALWriter: public WAL{
 private:
     std::string root_path_;
     std::string wal_root_;
@@ -24,8 +25,10 @@ public:
     explicit WALWriter(const std::string& root_path);
     ~WALWriter();
 
-    bool append_create_collection(const std::string& name, uint32_t dim, DistType distance);
-    bool append_delete_collection(uint32_t coll_id);
+    bool log_create_collection(uint32_t coll_id, const std::string& name, uint32_t dim, DistType distance) override;
+
+    bool log_delete_collection(uint32_t coll_id) override;
+    
     // bool append_upsert_point(uint32_t coll_id, uint64_t point_id, const std::vector<float>& vector, const std::vector<uint8_t>& payload);
     // bool append_delete_point(uint32_t coll_id, uint64_t point_id);
 

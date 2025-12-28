@@ -8,6 +8,9 @@ namespace zoro::storage{
 using json = nlohmann::json;
 
 Catalog::Catalog(const std::string& root):path_(root+"/catalog.json"){
+
+    std::filesystem::create_directories(root); 
+
     if (!std::filesystem::exists(path_) || std::filesystem::file_size(path_) == 0)
     {
         json j;
@@ -76,11 +79,29 @@ bool Catalog::RemoveCollection(const std::string& name)
 
 bool Catalog::CollectionExists(const std::string& name) const
 {
+    if (!std::filesystem::exists(path_) || std::filesystem::file_size(path_) == 0)
+        return false;
+
     std::ifstream in(path_);
     nlohmann::json j;
     in >> j;
 
     return j["collections"].contains(name);
+}
+
+int Catalog::GetCollectionId(const std::string& name){
+    std::ifstream in(path_);
+    json j;
+    in >> j;
+
+    const auto& collections = j["collections"];
+
+    if (!collections.contains(name))
+        return -1;
+
+    const auto& c = collections[name];
+
+    return c.at("id").get<int>();
 }
 
 std::optional<CollectionInfo> Catalog::GetCollectionInfo(const std::string& name) const{
