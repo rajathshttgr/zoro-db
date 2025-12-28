@@ -31,6 +31,12 @@ bool Catalog::AddCollection(const std::string& name, int& out_coll_id, int& dime
     if (collections.contains(name))
         return false;
 
+    if(name.length()==0)
+        return false;
+
+    if(dimension<1 || dimension>9999)
+        return false;
+
     int curr_id = j["current_coll_id"];
 
     collections[name] = {
