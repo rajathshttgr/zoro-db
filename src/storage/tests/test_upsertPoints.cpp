@@ -22,7 +22,17 @@ protected:
 TEST_F(PointsUpsertTest, UpsertCollectionPoints){
     StorageEngine engine(test_root, wal);
 
-    ASSERT_TRUE(engine.CreateCollection("users", 100, "dot"));
+    ASSERT_TRUE(engine.CreateCollection("users", 10, "dot"));
 
-    ASSERT_TRUE(engine.UpsertPoints("users"));
+    std::vector<float> vectors = {
+        0.2f, 0.3f, 0.34f, 0.23f, 0.67f,
+        0.2f, 0.3f, 0.34f, 0.23f, 0.67f
+    };
+
+    zoro::storage::json payload = {
+        {"key", "value1"},
+        {"key2", "value2"}
+    };
+
+    ASSERT_TRUE(engine.UpsertPoints("users", 910, vectors, payload));
 }

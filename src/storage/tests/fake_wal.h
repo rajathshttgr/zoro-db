@@ -1,4 +1,7 @@
 #include "../../wal/include/wal.h"
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 class FakeWAL : public zoro::wal::WAL {
 public:
@@ -19,4 +22,12 @@ public:
         delete_calls++;
         return true;
     }
+
+    bool log_upsert_point(uint32_t, uint64_t, const std::vector<float>&, const json&) override{
+        return true;
+    }
+    bool log_delete_point(uint32_t, uint64_t){
+        return true;
+    }
+
 };

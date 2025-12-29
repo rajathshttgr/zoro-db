@@ -4,9 +4,12 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include <nlohmann/json.hpp>
 #include "../../wal/include/wal.h"
 
 namespace zoro::storage{
+
+using json = nlohmann::json;
 
 class StorageEngine {
 public:
@@ -18,7 +21,7 @@ public:
     std::optional<CollectionInfo> GetCollectionInfo(const std::string& name) const;
     std::vector<CollectionInfo> ListCollections() const;
 
-    bool UpsertPoints(const std::string coll_name);
+    bool UpsertPoints(const std::string& coll_name, int id, const std::vector<float> &vectors, const json& payload);
 
 private:
     std::string root_path_;

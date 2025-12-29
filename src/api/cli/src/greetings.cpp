@@ -28,6 +28,8 @@ void PrintGreetings() {
 
     std::cout << "\nZoroDB — a tiny vector search engine\n";
     std::cout << "Type 'help' for commands, 'exit' to quit\n\n";
+
+    std::cout << "[Note] CLI version might be lagging, please use the REST API for now\n\n";
 }
 
 
