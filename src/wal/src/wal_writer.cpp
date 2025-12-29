@@ -50,23 +50,24 @@ bool WALWriter::log_create_collection(
 
 
 bool WALWriter::log_delete_collection(uint32_t coll_id){
-    //logic
+    //payload logic
     std::vector<uint8_t> payload;
 
     return append_central(OpType::DELETE_COLLECTION, coll_id, payload);
 }
 
-// bool WALWriter::append_upsert_point(uint32_t coll_id, uint64_t point_id, const std::vector<float>& vector, const std::vector<uint8_t>& payload){
-//     //logic
-//     return append_central(UPSERT_POINT, coll_id, payload);
-// }
+bool WALWriter::log_upsert_point(uint32_t coll_id, uint64_t point_id, const std::vector<float>& vector, const json& payload){
 
-// bool WALWriter::append_delete_point(uint32_t coll_id, uint64_t point_id){
-//     //logic
-//     return append_central(DELETE_POINT, coll_id, payload);
-// }
+    // payload logic
+    return append_central(OpType::UPSERT_POINT, coll_id, payload);
+}
 
+bool WALWriter::log_delete_point(uint32_t coll_id, uint64_t point_id){
 
+    // payload logic
+    std::vector<uint8_t> payload;
+    return append_central(OpType::DELETE_POINT, coll_id, payload);
+}
 
 
 

@@ -7,8 +7,10 @@
 #include <fstream>
 #include <filesystem>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 namespace fs=std::filesystem;
+using json = nlohmann::json;
 
 namespace zoro::wal{
 
@@ -29,8 +31,8 @@ public:
 
     bool log_delete_collection(uint32_t coll_id) override;
     
-    // bool append_upsert_point(uint32_t coll_id, uint64_t point_id, const std::vector<float>& vector, const std::vector<uint8_t>& payload);
-    // bool append_delete_point(uint32_t coll_id, uint64_t point_id);
+    bool log_upsert_point(uint32_t coll_id, uint64_t point_id, const std::vector<float>& vector, const json& payload);
+    bool log_delete_point(uint32_t coll_id, uint64_t point_id);
 
 private:
     bool append_central(OpType type, uint32_t coll_id, const std::vector<uint8_t>& binary_payload);

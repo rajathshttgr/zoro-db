@@ -36,3 +36,17 @@ type CollectionInfoResult struct {
     PointsCount    int    `json:"points_count"`
     Status         string `json:"status"`
 }
+
+
+type UpsertPointsRequest struct {
+	Vectors [][]float32       `json:"vectors" binding:"required"`
+	Ids     []string          `json:"ids" binding:"required"`
+	Payload []map[string]any  `json:"payload"`
+}
+
+
+type UpsertPointsResult struct {
+	Status         string `json:"status"`
+	CollectionName string `json:"collection_name"`
+	Upserted       int    `json:"upserted"`
+}
