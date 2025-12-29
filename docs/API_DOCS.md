@@ -157,15 +157,12 @@ POST /collections/{collection_name}/points
 
 ```json
 {
-  "points": [
-    {
-      "id": "p1",
-      "vector": [0.12, 0.98, 0.33],
-      "payload": {
-        "category": "electronics"
-      }
-    }
-  ]
+  "ids": ["p1", "p2"],
+  "vectors": [
+    [0.12, 0.34, 0.53, 0.63, 0.23],
+    [0.91, 0.11, 0.42, 0.77, 0.08]
+  ],
+  "payload": [{ "color": "red" }, { "color": "blue" }]
 }
 ```
 
@@ -173,8 +170,11 @@ POST /collections/{collection_name}/points
 
 ```json
 {
-  "status": "success",
-  "upserted": 1
+  "result": {
+    "status": "success",
+    "upserted": 2
+  },
+  "time": 0.543257
 }
 ```
 
@@ -202,8 +202,11 @@ DELETE /collections/{collection_name}/points
 
 ```json
 {
-  "status": "success",
-  "deleted": 2
+  "result": {
+    "status": "success",
+    "deleted": 2
+  },
+  "time": 0.543257
 }
 ```
 
