@@ -32,8 +32,9 @@ func UpsertPoint(c *gin.Context) {
 		return
 	}
 
-	// default config values
+	// default config values, update as necessary
 	status := "success"
+	pointsUpserted := len(req.Ids)
 
 	latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
@@ -42,7 +43,7 @@ func UpsertPoint(c *gin.Context) {
 	Result: dto.UpsertPointsResult{
 		Status:         status,
 		CollectionName: collectionName,
-		Upserted:       1,
+		Upserted:       pointsUpserted,
 	},
 	Time: latency,
 	}
