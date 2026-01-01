@@ -14,15 +14,16 @@ protected:
         std::filesystem::remove_all(test_root);
     }
 
-    // void TearDown() override {
-    //     std::filesystem::remove_all(test_root);
-    // }
+    void TearDown() override {
+        std::filesystem::remove_all(test_root);
+    }
 };
 
 TEST_F(PointsUpsertTest, UpsertCollectionPoints){
     StorageEngine engine(test_root, wal);
 
     ASSERT_TRUE(engine.CreateCollection("users", 10, "dot"));
+    ASSERT_TRUE(engine.CreateCollection("products", 10, "dot"));
 
     std::vector<float> vectors = {
         0.2f, 0.3f, 0.34f, 0.23f, 0.67f,

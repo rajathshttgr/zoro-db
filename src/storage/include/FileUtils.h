@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <fstream>
+#include <cstdint>
 
 namespace zoro::storage{
 
@@ -11,5 +11,8 @@ public:
     static bool WriteText(const std::string& path, const std::string& content);
     static bool WriteBinary(const std::string& path, const char* data, size_t size);
     static std::string ReadText(const std::string& path);
+
+    static uint64_t appendBinaryData(const std::string& path,const char* data, uint64_t size_bytes);
+    static bool updateIndexFile(const std::string& path, uint32_t id, uint64_t offset, uint32_t length, uint8_t flag = 1);
 };
 }
