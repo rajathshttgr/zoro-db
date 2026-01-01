@@ -11,6 +11,9 @@ public:
     std::string GetDistance() const;
     void SetDimensions(int dims);
     int GetDimensions() const;
+    void IncrementPointsCount(int count=1);
+    void DecrementPointsCount(int count=1);
+    int GetPointsCount() const;
 
 private:
     std::string meta_path_;

@@ -13,17 +13,26 @@ namespace zoro::storage {
         std::string coll_path=collection_root_+"/"+coll_name;
         CollectionMeta metaInfo(coll_path);
         int coll_id=metaInfo.GetCollectionId();
-        int dimension=metaInfo.GetDimensions();
-        std::string distance=metaInfo.GetDistance();
 
-        // add validations in prev layer
-        if(vectors.size()!=dimension) return false;
+      
+
+        metaInfo.IncrementPointsCount(18);
+
+        if(metaInfo.GetPointsCount()==0) return false;
 
         // Append to WAL
         if (!wal_.log_upsert_point(coll_id, point_id, vectors, payload)) {
             return false;
         }
 
+
+        // vectors.idx
+        // vectors.bin
+        // payload.idx
+        // payload.bin
+
+
+        // dummy implementation, if pushed update immidiately
         if (FileUtils::CreateFileIfNotExists(coll_path + "/vectors.bin")) {
 
             std::ofstream ofs(
@@ -48,13 +57,16 @@ namespace zoro::storage {
             return ofs.good();
         }
 
-        return true;
 
-        // vector binary entry format
-        // [uint32 coll_id_length]
-        // [coll_id bytes]
-        // [uint32 vector_count]
-        // [float][float][float]...
+        // after success
+        metaInfo.IncrementPointsCount(18); // increment points count
+        //wal acknowledgement 
+
+
+
+
+
+        return true;
 
         // parse input
             // inputs collection_name, vectors, payload, point id

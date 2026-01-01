@@ -14,9 +14,9 @@ protected:
         std::filesystem::remove_all(test_root);
     }
 
-    void TearDown() override {
-        std::filesystem::remove_all(test_root);
-    }
+    // void TearDown() override {
+    //     std::filesystem::remove_all(test_root);
+    // }
 };
 
 TEST_F(PointsUpsertTest, UpsertCollectionPoints){
@@ -34,5 +34,6 @@ TEST_F(PointsUpsertTest, UpsertCollectionPoints){
         {"key2", "value2"}
     };
 
+    ASSERT_TRUE(engine.UpsertPoints("users", 910, vectors, payload));
     ASSERT_TRUE(engine.UpsertPoints("users", 910, vectors, payload));
 }
