@@ -1,4 +1,5 @@
 #pragma once
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,6 +13,15 @@ typedef struct {
     const char* status;
     const char* created_at;
 } zoro_collection_info_t;
+
+typedef struct {
+    int id;
+    const float* vector;
+    size_t vector_len;
+    const char* payload;  
+} zoro_point_t;
+
+
 
 #ifdef __cplusplus
 }

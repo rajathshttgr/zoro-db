@@ -14,7 +14,7 @@ namespace zoro::storage {
         CollectionMeta metaInfo(coll_path);
         int coll_id=metaInfo.GetCollectionId();
 
-        // Append to WAL
+        // Append to WAL 
         if (!wal_.log_upsert_point(coll_id, point_id, vectors, payload)) {
             return false;
         }
@@ -41,6 +41,47 @@ namespace zoro::storage {
 
         return true;
 
+    }
+
+
+    bool StorageEngine::DeletePoints(const std::string &coll_name, int point_id){
+
+        if(!StorageEngine::CollectionExists(coll_name)){
+            return false;
+        }
+
+        std::string coll_path=collection_root_+"/"+coll_name;
+        CollectionMeta metaInfo(coll_path);
+        int coll_id=metaInfo.GetCollectionId();
+
+        // Append to WAL
+        if (!wal_.log_delete_point(coll_id, point_id)) {
+            return false;
+        }
+        
+
+        if(!FileUtils::updateIndexFile(coll_path+"/vectors.idx", point_id, std::numeric_limits<uint64_t>::max(), std::numeric_limits<uint32_t>::max(), 0)) {
+            return false;
+        }
+
+        if(!FileUtils::updateIndexFile(coll_path+"/payload.idx", point_id,std::numeric_limits<uint64_t>::max(), std::numeric_limits<uint32_t>::max(), 0)) {
+            return false;
+        }
+
+        metaInfo.DecrementPointsCount();
+
+        return true;
+    }
+
+
+    int StorageEngine::CountPoints(const std::string &coll_name){
+        if(!StorageEngine::CollectionExists(coll_name)){
+            return false;
+        }
+        std::string coll_path=collection_root_+"/"+coll_name;
+        CollectionMeta metaInfo(coll_path);
+        int points_count=metaInfo.GetPointsCount();
+        return points_count;
     }
 
 }

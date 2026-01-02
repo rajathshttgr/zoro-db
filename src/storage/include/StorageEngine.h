@@ -22,6 +22,8 @@ public:
     std::vector<CollectionInfo> ListCollections() const;
 
     bool UpsertPoints(const std::string& coll_name, int id, const std::vector<float> &vectors, const json& payload);
+    bool DeletePoints(const std::string &coll_name, int point_id);
+    int CountPoints(const std::string &coll_name);
 
 private:
     std::string root_path_;

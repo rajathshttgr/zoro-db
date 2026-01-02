@@ -31,6 +31,24 @@ bool zoro_get_collection(
 
 void zoro_free_collection(zoro_collection_info_t* info);
 
+bool zoro_upsert_points(
+    const char* collection_name,
+    const zoro_point_t* points,
+    size_t point_count,  
+    char* err,
+    size_t err_len
+);
+
+bool zoro_delete_points(
+    const char* collection_name,
+    const int* point_ids,
+    size_t point_count,  
+    char* err,
+    size_t err_len
+);
+
+int zoro_count_points(const char* name, char* err);
+
 #ifdef __cplusplus
 }
 #endif
