@@ -28,7 +28,7 @@ POST /collections
 
 ```json
 {
-  "collection_name": "products",
+  "collection_name": "test",
   "dimension": 1536,
   "distance": "cosine"
 }
@@ -40,7 +40,7 @@ POST /collections
 {
   "result": {
     "status": "active",
-    "collection_name": "products",
+    "collection_name": "test",
     "dimension": 1536,
     "distance": "cosine",
     "sharding": 1
@@ -67,7 +67,7 @@ DELETE /collections/{collection_name}
 {
   "result": {
     "status": "deleted",
-    "collection_name": "products"
+    "collection_name": "test"
   },
   "time": 2.176595
 }
@@ -92,18 +92,16 @@ GET /collections
   "collections_count": 2,
   "collections": [
     {
-      "collection_name": "products",
+      "collection_name": "test",
       "distance": "cosine",
       "dimension": 1536,
-      "point_count": 10,
-      "status": "Active"
+      "status": "active"
     },
     {
       "collection_name": "movies",
       "distance": "dot",
       "dimension": 1536,
-      "point_count": 10,
-      "status": "Active"
+      "status": "active"
     }
   ],
   "time": 5.539202
@@ -128,7 +126,7 @@ GET /collections/{collection_name}
 {
   "result": {
     "coll_id": 100,
-    "collection_name": "products",
+    "collection_name": "test",
     "dimension": 156,
     "distance": "cosine",
     "shards_count": 1,
@@ -157,12 +155,15 @@ POST /collections/{collection_name}/points
 
 ```json
 {
-  "ids": ["p1", "p2"],
   "vectors": [
-    [0.12, 0.34, 0.53, 0.63, 0.23],
-    [0.91, 0.11, 0.42, 0.77, 0.08]
+    [0.12, 0.34, 0.53, 0.63, 0.23, 0.91, 0.11, 0.42, 0.77, 0.08],
+    [0.91, 0.11, 0.42, 0.77, 0.08, 0.12, 0.34, 0.53, 0.63, 0.23]
   ],
-  "payload": [{ "color": "red" }, { "color": "blue" }]
+  "ids": [12, 24],
+  "payload": [
+    { "document": "How to reset a forgotten password" },
+    { "document": "Best movies to watch this weekend" }
+  ]
 }
 ```
 
@@ -172,6 +173,7 @@ POST /collections/{collection_name}/points
 {
   "result": {
     "status": "success",
+    "collection_name": "test",
     "upserted": 2
   },
   "time": 0.543257
@@ -194,7 +196,7 @@ DELETE /collections/{collection_name}/points
 
 ```json
 {
-  "ids": ["p1", "p2"]
+  "ids": [12, 24]
 }
 ```
 
@@ -204,9 +206,10 @@ DELETE /collections/{collection_name}/points
 {
   "result": {
     "status": "success",
+    "collection_name": "test",
     "deleted": 2
   },
-  "time": 0.543257
+  "time": 36
 }
 ```
 
@@ -226,7 +229,12 @@ GET /collections/{collection_name}/points/count
 
 ```json
 {
-  "count": 12450
+  "result": {
+    "collection_name": "test",
+    "points_count": 2,
+    "status": "success"
+  },
+  "time": 0.447415
 }
 ```
 
@@ -247,7 +255,7 @@ POST /collections/{collection_name}/points/search
 ```json
 {
   "vector": [0.11, 0.97, 0.3],
-  "limit": 5
+  "limit": 2
 }
 ```
 
@@ -255,15 +263,19 @@ POST /collections/{collection_name}/points/search
 
 ```json
 {
-  "results": [
+  "result": [
     {
-      "id": "p123",
-      "score": 0.92,
-      "payload": {
-        "category": "electronics"
-      }
+      "id": 12,
+      "score": 0.86,
+      "payload": { "document": "How to reset a forgotten password" }
+    },
+    {
+      "id": 28,
+      "score": 0.62,
+      "payload": { "document": "forgot my password" }
     }
-  ]
+  ],
+  "time": 5.539202
 }
 ```
 
