@@ -134,5 +134,101 @@ void zoro_free_collection(zoro_collection_info_t* info) {
     free((void*)info->created_at);
 }
 
+int zoro_count_points(const char* name, char* err){
+    try {
+        int count = g_service->CountPointsService(name);
+        return count;
+    } catch (const std::exception& e) {
+        std::strcpy(err, e.what());
+        return -1;
+    }
+}
 
+
+bool zoro_upsert_points(
+    const char* collection_name,
+    const zoro_point_t* points,
+    size_t point_count,  
+    char* err,
+    size_t err_len
+) {
+    try {
+        std::vector<int> ids;
+        std::vector<std::vector<float>> vectors;
+        std::vector<nlohmann::json> payloads;
+
+        ids.reserve(point_count);
+        vectors.reserve(point_count);
+        payloads.reserve(point_count);
+
+
+        for (size_t i = 0; i < point_count; ++i) {
+            const zoro_point_t& p = points[i];
+
+            ids.push_back(p.id);
+
+            if (!p.vector || p.vector_len == 0) {
+                throw std::runtime_error("empty vector");
+            }
+
+            vectors.emplace_back(
+                p.vector,
+                p.vector + p.vector_len
+            );
+
+            // payload (JSON)
+            if (p.payload && std::strlen(p.payload) > 0) {
+                payloads.emplace_back(
+                    nlohmann::json::parse(p.payload)
+                );
+            } else {
+                payloads.emplace_back(nlohmann::json::object());
+            }
+        }
+
+        return g_service->UpsertPointsService(
+            collection_name,
+            ids,
+            vectors,
+            payloads
+        );
+
+    }catch (const std::exception& e) {
+        if (err && err_len > 0) {
+            strncpy(err, e.what(), err_len - 1);
+            err[err_len - 1] = '\0';
+        }
+        return false;
+    }
+}
+
+
+bool zoro_delete_points(
+    const char* collection_name,
+    const int* point_ids,
+    size_t point_count,  
+    char* err,
+    size_t err_len
+) {
+    try {
+        std::vector<int> ids;
+        ids.reserve(point_count);
+
+        for (size_t i = 0; i < point_count; ++i) {
+            ids.push_back(point_ids[i]);
+        }
+
+        return g_service->DeletePointsService(
+            collection_name,
+            ids
+        );
+
+    }catch (const std::exception& e) {
+        if (err && err_len > 0) {
+            strncpy(err, e.what(), err_len - 1);
+            err[err_len - 1] = '\0';
+        }
+        return false;
+    }
+}
 }

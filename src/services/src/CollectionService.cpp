@@ -48,4 +48,18 @@ CollectionService::LoadCollection(const std::string& name, std::string& err) {
     return result;
 }
 
+
+
+bool CollectionService::UpsertPointsService(const std::string& coll_name, const std::vector<int>& point_id, const std::vector<std::vector<float>> &vectors, const std::vector<nlohmann::json>& payload) {
+    return manager_->UpsertPoints(coll_name, point_id, vectors, payload);
+}
+
+bool CollectionService::DeletePointsService(const std::string &coll_name, const std::vector<int> point_id) {
+    return manager_->DeletePoints(coll_name, point_id);
+}
+
+int CollectionService::CountPointsService(const std::string &coll_name) {
+    return manager_->CountPoints(coll_name);
+}
+
 }

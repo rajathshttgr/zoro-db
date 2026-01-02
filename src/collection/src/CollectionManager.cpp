@@ -1,5 +1,4 @@
 #include "CollectionManager.h"
-// #include "../../storage/include/CollectionMeta.h"
 
 namespace zoro::core{
 
@@ -32,4 +31,56 @@ std::optional<zoro::storage::CollectionInfo> CollectionManager::LoadCollection(c
 
     return info;
 };
+
+
+bool CollectionManager::UpsertPoints(
+    const std::string& coll_name,
+    const std::vector<int>& point_id,
+    const std::vector<std::vector<float>>& vectors,
+    const std::vector<nlohmann::json>& payload
+) {
+    const size_t count = point_id.size();
+
+    // input validation
+    if (count == 0 ||
+        vectors.size() != count ||
+        payload.size() != count) {
+        return false;
+    }
+
+    for (size_t i = 0; i < count; ++i) {
+
+        const bool success = storage_->UpsertPoints(
+            coll_name,
+            point_id[i],
+            vectors[i],
+            payload[i]
+        );
+
+        if (!success) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+bool CollectionManager::DeletePoints(const std::string &coll_name, const std::vector<int> point_id){
+
+    for(int i: point_id){
+        const bool success = storage_->DeletePoints(coll_name,i);
+        if (!success) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+int CollectionManager::CountPoints(const std::string& coll_name){
+    if(!storage_->CollectionExists(coll_name)) return -1;
+    return storage_->CountPoints(coll_name);
+}
+
 }

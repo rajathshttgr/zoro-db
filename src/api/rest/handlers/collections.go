@@ -98,7 +98,6 @@ func GetCollections(c *gin.Context) {
             CollectionName: col.Name,
             Dimension:      strconv.Itoa(col.Dimension),
             Distance:       col.Distance,
-            PointsCount:    0,            // TODO: compute later
             Status:         col.Status,
         })
     }
@@ -134,7 +133,6 @@ func GetCollectionInfo(c *gin.Context) {
 		CollectionName: collection.Name,
 		Dimension:      strconv.Itoa(collection.Dimension),
 		Distance:       collection.Distance,
-		PointsCount:    0,            // TODO: compute later
 		Status:         collection.Status,
 	},
 	Time: latency,

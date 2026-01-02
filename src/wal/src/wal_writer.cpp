@@ -56,19 +56,64 @@ bool WALWriter::log_delete_collection(uint32_t coll_id){
     return append_central(OpType::DELETE_COLLECTION, coll_id, payload);
 }
 
-bool WALWriter::log_upsert_point(uint32_t coll_id, uint64_t point_id, const std::vector<float>& vector, const json& payload){
-
-    // payload logic
-    return append_central(OpType::UPSERT_POINT, coll_id, payload);
-}
-
-bool WALWriter::log_delete_point(uint32_t coll_id, uint64_t point_id){
-
-    // payload logic
+bool WALWriter::log_upsert_point(
+    uint32_t coll_id,
+    uint64_t point_id,
+    const std::vector<float>& vector,
+    const json& payload_json
+) {
     std::vector<uint8_t> payload;
-    return append_central(OpType::DELETE_POINT, coll_id, payload);
+
+    // Serialize JSON payload
+    std::string payload_str = payload_json.dump();
+    uint32_t payload_size = static_cast<uint32_t>(payload_str.size());
+
+    payload.reserve(
+        8 +                      // point_id
+        4 +                      // vector_dim
+        vector.size() * 4 +      // vector data
+        4 +                      // payload_size
+        payload_size             // payload bytes
+    );
+
+    append_u64(payload, point_id);
+
+    append_u32(payload, static_cast<uint32_t>(vector.size()));
+    append_bytes(
+        payload,
+        reinterpret_cast<const uint8_t*>(vector.data()),
+        vector.size() * sizeof(float)
+    );
+
+    append_u32(payload, payload_size);
+    append_bytes(payload,
+        reinterpret_cast<const uint8_t*>(payload_str.data()),
+        payload_size
+    );
+
+    return append_central(
+        OpType::UPSERT_POINT,
+        coll_id,
+        payload
+    );
 }
 
+
+bool WALWriter::log_delete_point(
+    uint32_t coll_id,
+    uint64_t point_id
+) {
+    std::vector<uint8_t> payload;
+    payload.reserve(8);
+
+    append_u64(payload, point_id);
+
+    return append_central(
+        OpType::DELETE_POINT,
+        coll_id,
+        payload
+    );
+}
 
 
 bool WALWriter::append_central(

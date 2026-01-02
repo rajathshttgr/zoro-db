@@ -12,6 +12,7 @@ void CollectionMeta::InitDefault(int dim, std::string dist,int coll_id, std::str
     j["distance"]=dist;
     j["coll_id"]=coll_id;
     j["coll_name"]=collection_name;
+    j["points_count"]=0;
 
     std::ofstream out(meta_path_);
     out<<j.dump(4);
@@ -51,4 +52,38 @@ void CollectionMeta::SetDimensions(int dim){
     std::ofstream out(meta_path_);
     out << j.dump(4);
 }
+
+int CollectionMeta::GetPointsCount() const{
+    std::ifstream in(meta_path_);
+    nlohmann::json j;
+    in>>j;
+    return j["points_count"];
+}
+
+void CollectionMeta::IncrementPointsCount(int count){
+    nlohmann::json j;
+    std::ifstream in(meta_path_);
+    if (!in.is_open()) return;
+    in >> j;
+    in.close();
+
+     j["points_count"] = j.value("points_count", 0) + count;
+
+    std::ofstream out(meta_path_);
+    out << j.dump(4);
+}
+
+void CollectionMeta::DecrementPointsCount(int count){
+    nlohmann::json j;
+    std::ifstream in(meta_path_);
+    if (!in.is_open()) return;
+    in >> j;
+    in.close();
+
+     j["points_count"] = j.value("points_count", 0) - count;
+
+    std::ofstream out(meta_path_);
+    out << j.dump(4);
+}
+
 }

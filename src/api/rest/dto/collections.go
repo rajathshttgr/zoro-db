@@ -33,20 +33,29 @@ type CollectionInfoResult struct {
     CollectionName string `json:"collection_name"`
     Dimension      string `json:"dimension"`
     Distance       string `json:"distance"`
-    PointsCount    int    `json:"points_count"`
     Status         string `json:"status"`
 }
 
 
 type UpsertPointsRequest struct {
 	Vectors [][]float32       `json:"vectors" binding:"required"`
-	Ids     []string          `json:"ids" binding:"required"`
+	Ids     []int          `json:"ids" binding:"required"`
 	Payload []map[string]any  `json:"payload"`
 }
 
+type DeletePointsRequest struct {
+	Ids []int `json:"ids" binding:"required"`
+}
 
 type UpsertPointsResult struct {
 	Status         string `json:"status"`
 	CollectionName string `json:"collection_name"`
 	Upserted       int    `json:"upserted"`
+}
+
+
+type CollectionPointsInfoResult struct {
+	CollectionName string `json:"collection_name"`
+	PointsCount    int    `json:"points_count"`
+	Status         string `json:"status"`
 }
