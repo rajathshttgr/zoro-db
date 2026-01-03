@@ -8,9 +8,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(index STATIC
-    index.h
-    faiss_index.h
-    faiss_index.cpp
+    vector_index.h
+    index_factory.h
+    faiss/faiss_index.h
+    faiss/faiss_index.cpp
+    faiss/faiss_id_map.h
+    faiss/faiss_config.h
 )
 
 target_include_directories(index
