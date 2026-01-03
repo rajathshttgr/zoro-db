@@ -36,4 +36,4 @@ Or run the test binary directly:
 - [x] File utilities
 - [x] Core StorageEngine
 - [ ] Shards Management
-- [ ] Upsert Points
+- [x] Upsert Points

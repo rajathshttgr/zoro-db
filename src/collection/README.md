@@ -8,7 +8,7 @@ cmake ..
 make -j8
 ```
 
-This builds the `core` static library:
+This builds the `collection` static library:
 
 ---
 
@@ -18,7 +18,7 @@ Enable tests when configuring:
 
 ```bash
 mkdir build && cd build
-cmake .. -DSTORAGE_BUILD_TESTS=ON
+cmake .. -DCOLLECTION_BUILD_TESTS=ON
 make -j8
 ctest
 ```
@@ -26,7 +26,7 @@ ctest
 Or run the test binary directly:
 
 ```bash
-./core_tests
+./collection_tests
 ```
 
 ## TODO

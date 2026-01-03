@@ -12,19 +12,19 @@ file(GLOB CLI_SOURCES
     cli/src/*.cpp 
 )
 
-add_library(zoro_cli STATIC
+add_library(zoro_api STATIC
     ${CLI_SOURCES}
 )
 
 
-target_include_directories(zoro_cli PUBLIC
+target_include_directories(zoro_api PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/cli
     ${CMAKE_CURRENT_SOURCE_DIR}/cli/include
 )
 
-target_link_libraries(zoro_cli
-    zoro_services
+target_link_libraries(zoro_api
+    services
 )
 
 # C API 
@@ -37,7 +37,7 @@ target_include_directories(zoro PUBLIC
 )
 
 target_link_libraries(zoro
-    zoro_services
+    services
     collection
     storage
     wal
