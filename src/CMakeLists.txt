@@ -11,8 +11,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(storage)
 add_subdirectory(wal)
 add_subdirectory(collection)
-add_subdirectory(api) 
 add_subdirectory(services) 
+add_subdirectory(api) 
 
 add_executable(zoro-db
     main.cpp
@@ -22,6 +22,6 @@ target_link_libraries(zoro-db PRIVATE
     storage
     wal
     collection
-    zoro_cli
-    zoro_services
+    services
+    zoro_api
 )
