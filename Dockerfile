@@ -18,7 +18,8 @@ RUN git clone https://github.com/facebookresearch/faiss.git /tmp/faiss && \
     cmake -B build -S . \
       -DFAISS_ENABLE_GPU=OFF \
       -DFAISS_ENABLE_PYTHON=OFF \
-      -DBUILD_SHARED_LIBS=ON && \
+      -DBUILD_SHARED_LIBS=ON \
+      -DBUILD_TESTING=OFF && \
     cmake --build build -j$(nproc) && \
     cmake --install build && \
     rm -rf /tmp/faiss
