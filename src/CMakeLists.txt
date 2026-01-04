@@ -20,10 +20,10 @@ add_executable(zoro-db
 )
 
 target_link_libraries(zoro-db PRIVATE
-    storage
-    wal
-    index
-    collection
     services
+    collection
+    index
+    wal
+    storage
     zoro_api
 )
