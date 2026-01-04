@@ -29,9 +29,6 @@ namespace zoro::storage {
 
         metaInfo.IncrementPointsCount(); 
 
-
-        // FAISS index update can be added here
-
         return true;
 
     }
