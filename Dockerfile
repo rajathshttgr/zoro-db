@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     git \
     nlohmann-json3-dev \
     libopenblas-dev \
+    liblapack-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Build FAISS 
