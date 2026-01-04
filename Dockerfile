@@ -5,19 +5,25 @@ ENV GO_VERSION=1.22.3
 
 RUN apt-get update && apt-get install -y \
     build-essential \
-    cmake \
     curl \
     git \
+    ca-certificates \
     nlohmann-json3-dev \
     libopenblas-dev \
     liblapack-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# install CMake 
+RUN curl -fsSL https://github.com/Kitware/CMake/releases/download/v3.27.9/cmake-3.27.9-linux-x86_64.tar.gz \
+    | tar -xz --strip-components=1 -C /usr/local
+
+RUN cmake --version
+
 # Build FAISS 
 RUN git clone --branch v1.7.4 --depth=1 \
     https://github.com/facebookresearch/faiss.git /tmp/faiss && \
     cd /tmp/faiss && \
-    cmake -B build -S . \
+    cmake -S . -B build \
         -DFAISS_ENABLE_GPU=OFF \
         -DFAISS_ENABLE_PYTHON=OFF \
         -DFAISS_ENABLE_C_API=ON \
@@ -39,7 +45,7 @@ COPY src/ ./src/
 
 # Build C++ core
 WORKDIR /app/src
-RUN mkdir build && cd build && \
+RUN mkdir -p build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release .. && \
     make -j$(nproc)
 
