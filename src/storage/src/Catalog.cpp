@@ -22,7 +22,7 @@ Catalog::Catalog(const std::string& root):path_(root+"/catalog.json"){
     }
 }
 
-bool Catalog::AddCollection(const std::string& name, int& out_coll_id, int& dimension, std::string& distance)
+bool Catalog::AddCollection(const std::string& name, int& out_coll_id, int& dimension, const std::string& distance)
 {
     std::ifstream in(path_);
     nlohmann::json j;

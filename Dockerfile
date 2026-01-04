@@ -9,7 +9,20 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     nlohmann-json3-dev \
+    libopenblas-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Build FAISS (CPU-only)
+RUN git clone https://github.com/facebookresearch/faiss.git /tmp/faiss && \
+    cd /tmp/faiss && \
+    cmake -B build -S . \
+      -DFAISS_ENABLE_GPU=OFF \
+      -DFAISS_ENABLE_PYTHON=OFF \
+      -DBUILD_SHARED_LIBS=ON \
+      -DBUILD_TESTING=OFF && \
+    cmake --build build -j$(nproc) && \
+    cmake --install build && \
+    rm -rf /tmp/faiss
 
 # Install Go
 RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
@@ -41,13 +54,16 @@ ENV GIN_MODE=release
 
 RUN apt-get update && apt-get install -y \
     libstdc++6 \
+    libopenblas0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy binaries
 COPY --from=builder /app/src/build/zoro-db /app/zoro-db
 COPY --from=builder /app/zoro-rest /app/zoro-rest
 
+# Copy shared libraries
 COPY --from=builder /app/src/build/api/libzoro.so /usr/local/lib/libzoro.so
+COPY --from=builder /usr/local/lib/libfaiss.so /usr/local/lib/libfaiss.so
 
 RUN ldconfig
 

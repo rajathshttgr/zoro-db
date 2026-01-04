@@ -6,18 +6,8 @@ namespace zoro::storage {
 
     bool StorageEngine::UpsertPoints(const std::string &coll_name, int point_id, const std::vector<float> &vectors, const json& payload){
 
-        if(!StorageEngine::CollectionExists(coll_name)){
-            return false;
-        }
-
         std::string coll_path=collection_root_+"/"+coll_name;
         CollectionMeta metaInfo(coll_path);
-        int coll_id=metaInfo.GetCollectionId();
-
-        // Append to WAL 
-        if (!wal_.log_upsert_point(coll_id, point_id, vectors, payload)) {
-            return false;
-        }
 
         // vectors.bin // [length][data]...
         // vectors.idx vector(file, id, offset, length, is_deleted)
@@ -46,19 +36,8 @@ namespace zoro::storage {
 
     bool StorageEngine::DeletePoints(const std::string &coll_name, int point_id){
 
-        if(!StorageEngine::CollectionExists(coll_name)){
-            return false;
-        }
-
         std::string coll_path=collection_root_+"/"+coll_name;
         CollectionMeta metaInfo(coll_path);
-        int coll_id=metaInfo.GetCollectionId();
-
-        // Append to WAL
-        if (!wal_.log_delete_point(coll_id, point_id)) {
-            return false;
-        }
-        
 
         if(!FileUtils::updateIndexFile(coll_path+"/vectors.idx", point_id, std::numeric_limits<uint64_t>::max(), std::numeric_limits<uint32_t>::max(), 0)) {
             return false;

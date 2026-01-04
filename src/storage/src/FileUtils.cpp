@@ -140,4 +140,57 @@ bool FileUtils::updateIndexFile(
 }
 
 
+bool FileUtils::findPayloadIndex(
+    const std::string& idx_path,
+    uint32_t target_id,
+    uint64_t& out_offset,
+    uint32_t& out_length
+) {
+    std::ifstream file(idx_path, std::ios::binary);
+    if (!file) return false;
+
+    uint32_t id;
+    uint64_t offset;
+    uint32_t length;
+    uint8_t flag;
+
+    while (file.read(reinterpret_cast<char*>(&id), sizeof(id))) {
+        file.read(reinterpret_cast<char*>(&offset), sizeof(offset));
+        file.read(reinterpret_cast<char*>(&length), sizeof(length));
+        file.read(reinterpret_cast<char*>(&flag), sizeof(flag));
+
+        if (id == target_id && flag == 1) {
+            out_offset = offset;
+            out_length = length;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+std::string FileUtils::readBinaryData(
+    const std::string& path,
+    uint64_t offset,
+    uint32_t length
+) {
+    std::ifstream file(path, std::ios::binary);
+    if (!file) {
+        throw std::runtime_error("Failed to open payload file");
+    }
+
+    file.seekg(offset);
+
+    std::string buffer(length, '\0');
+    file.read(buffer.data(), length);
+
+    if (!file) {
+        throw std::runtime_error("Failed to read payload data");
+    }
+
+    return buffer;
+}
+
+
 }

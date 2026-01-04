@@ -5,6 +5,8 @@
 #include <nlohmann/json.hpp>
 #include "../../storage/include/StorageEngine.h"
 #include "../../storage/include/struct.h"
+#include "../../storage/include/Catalog.h"
+#include "../../wal/include/wal.h"
 
 namespace zoro::core{
 
@@ -12,7 +14,7 @@ using json = nlohmann::json;
 
 class CollectionManager{
 public:
-    explicit CollectionManager(zoro::storage::StorageEngine* storage);
+    explicit CollectionManager(const std::string& root_path, zoro::storage::StorageEngine* storage, zoro::wal::WAL& wal);
     bool CreateCollection(const std::string& name, int dimension,const std::string& distance);
     bool DeleteCollection(const std::string& name);
 
@@ -24,8 +26,10 @@ public:
     int CountPoints(const std::string &coll_name);
 
 private:
+    std::string root_path_;
     zoro::storage::StorageEngine* storage_;
-
+    zoro::storage::Catalog catalog_; 
+    zoro::wal::WAL& wal_;
 };
 
 }

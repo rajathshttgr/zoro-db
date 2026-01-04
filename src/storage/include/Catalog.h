@@ -10,7 +10,7 @@ class Catalog{
 public:
     explicit Catalog(const std::string& root);
 
-    bool AddCollection(const std::string& name, int& coll_id, int& dimension, std::string& distance);
+    bool AddCollection(const std::string& name, int& coll_id, int& dimension, const std::string& distance);
     bool CollectionExists(const std::string& name) const;
     int GetCollectionId(const std::string& name);
     std::optional<CollectionInfo>  GetCollectionInfo(const std::string& name) const;
