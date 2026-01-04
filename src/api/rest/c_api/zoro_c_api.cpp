@@ -19,8 +19,8 @@ extern "C" {
 bool zoro_init(const char* data_path, char* err) {
     try {
         g_wal = std::make_unique<zoro::wal::WALWriter>(data_path);
-        g_storage = std::make_unique<zoro::storage::StorageEngine>(data_path, *g_wal);
-        g_manager = std::make_unique<zoro::core::CollectionManager>(g_storage.get());
+        g_storage = std::make_unique<zoro::storage::StorageEngine>(data_path);
+        g_manager = std::make_unique<zoro::core::CollectionManager>(data_path, g_storage.get(), *g_wal);
         g_service = std::make_unique<zoro::services::CollectionService>(g_manager.get());
         return true;
     } catch (const std::exception& e) {

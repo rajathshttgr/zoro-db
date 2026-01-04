@@ -5,7 +5,6 @@
 #include <vector>
 #include <optional>
 #include <nlohmann/json.hpp>
-#include "../../wal/include/wal.h"
 
 namespace zoro::storage{
 
@@ -13,9 +12,9 @@ using json = nlohmann::json;
 
 class StorageEngine {
 public:
-    explicit StorageEngine(const std::string& root_path,zoro::wal::WAL& wal);
+    explicit StorageEngine(const std::string& root_path);
 
-    bool CreateCollection(const std::string& name, int dimension,std::string distance);
+    bool CreateCollection(const std::string& name, int dimension,std::string distance, int coll_id);
     bool DeleteCollection(const std::string& name);
     bool CollectionExists(const std::string& name) const;
     std::optional<CollectionInfo> GetCollectionInfo(const std::string& name) const;
@@ -29,7 +28,6 @@ private:
     std::string root_path_;
     std::string collection_root_;
     Catalog catalog_; 
-    zoro::wal::WAL& wal_;
 };
 
 }

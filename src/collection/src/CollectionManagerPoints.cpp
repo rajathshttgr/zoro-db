@@ -3,7 +3,7 @@
 namespace zoro::core {
 
 bool CollectionManager::UpsertPoints(
-    const std::string& coll_name,
+    const std::string& collection_name,
     const std::vector<int>& point_id,
     const std::vector<std::vector<float>>& vectors,
     const std::vector<nlohmann::json>& payload
@@ -16,9 +16,23 @@ bool CollectionManager::UpsertPoints(
         return false;
     }
 
+    if (!storage_->CollectionExists(collection_name)) {
+        return false;
+    }
+
+    int coll_id=catalog_.GetCollectionId(collection_name);
+
+    // Append to WAL 
+    for (size_t i = 0; i < count; ++i) {
+        if (!wal_.log_upsert_point(coll_id, point_id[i], vectors[i], payload[i])) {
+            return false;
+        }
+    }
+
+    // Disk write
     for (size_t i = 0; i < count; ++i) {
         if (!storage_->UpsertPoints(
-                coll_name,
+                collection_name,
                 point_id[i],
                 vectors[i],
                 payload[i])) {
@@ -30,11 +44,27 @@ bool CollectionManager::UpsertPoints(
 }
 
 bool CollectionManager::DeletePoints(
-    const std::string& coll_name,
+    const std::string& collection_name,
     const std::vector<int> point_id
 ) {
+
+    if (!storage_->CollectionExists(collection_name)) {
+        return false;
+    }
+
+    int coll_id=catalog_.GetCollectionId(collection_name);
+
+    // Append to WAL
     for (int id : point_id) {
-        if (!storage_->DeletePoints(coll_name, id)) {
+        if (!wal_.log_delete_point(coll_id, id)) {
+            return false;
+        }
+    }
+    
+
+    // disk write
+    for (int id : point_id) {
+        if (!storage_->DeletePoints(collection_name, id)) {
             return false;
         }
     }
