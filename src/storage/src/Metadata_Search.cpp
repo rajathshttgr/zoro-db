@@ -3,7 +3,7 @@
 
 namespace zoro::storage {
 
-json StorageEngine::GetMetadataByPointId(
+std::optional<PointInfo> StorageEngine::GetMetadataByPointId(
     const std::string& collection_name,
     int point_id
 ) {
@@ -12,15 +12,29 @@ json StorageEngine::GetMetadataByPointId(
     uint64_t offset;
     uint32_t length;
 
-    bool found = FileUtils::findPayloadIndex(coll_path + "/payload.idx", point_id, offset,length);
+    bool found = FileUtils::findPayloadIndex(
+        coll_path + "/payload.idx",
+        point_id,
+        offset,
+        length
+    );
 
     if (!found) {
         throw std::runtime_error("Point ID not found");
     }
 
-    std::string payload_str = FileUtils::readBinaryData( coll_path + "/payload.bin", offset, length);
+    std::string payload_str =
+        FileUtils::readBinaryData(coll_path + "/payload.bin", offset, length);
 
-    return json::parse(payload_str);
+    json payload = json::parse(payload_str);
+
+    PointInfo info;
+    info.status = "ok";
+    info.point_id = point_id;
+    info.payload = payload;
+
+    return info;
 }
 
-}
+
+} // namespace zoro::storage

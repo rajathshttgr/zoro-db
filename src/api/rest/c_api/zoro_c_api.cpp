@@ -232,3 +232,32 @@ bool zoro_delete_points(
     }
 }
 }
+
+bool zoro_point_retrival(
+    const char* name,
+    const int* point_id,
+    zoro_point_retrival_t* out_info,
+    char* err
+){
+    std::string error;
+
+    auto info = g_service->RetrivePointById(name, *point_id, error);
+
+    if (!info) {
+        std::strcpy(err, error.c_str());
+        return false;
+    }
+
+    out_info->status   = strdup(info->status.c_str());
+    out_info->point_id = info->point_id;
+    out_info->payload  = strdup(info->payload.dump().c_str());
+
+    return true;
+}
+
+void zoro_free_point_retrival(zoro_point_retrival_t* info){
+    if (!info) return;
+
+    free((void*)info->status);
+    free((void*)info->payload);
+}

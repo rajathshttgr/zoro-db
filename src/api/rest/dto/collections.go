@@ -53,9 +53,14 @@ type UpsertPointsResult struct {
 	Upserted       int    `json:"upserted"`
 }
 
-
 type CollectionPointsInfoResult struct {
 	CollectionName string `json:"collection_name"`
 	PointsCount    int    `json:"points_count"`
 	Status         string `json:"status"`
+}
+
+type PointRetriveResult struct{
+	Status		string				`json:"status"`
+	PointId		int					`json:"point_id"`
+	Payload 	[]map[string]any	`json:"payload"`
 }

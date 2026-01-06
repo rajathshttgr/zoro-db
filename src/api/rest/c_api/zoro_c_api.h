@@ -49,6 +49,16 @@ bool zoro_delete_points(
 
 int zoro_count_points(const char* name, char* err);
 
+
+bool zoro_point_retrival(
+    const char* name,
+    const int* point_id,
+    zoro_point_retrival_t* out_info,
+    char* err
+);
+
+void zoro_free_point_retrival(zoro_point_retrival_t* info);
+
 #ifdef __cplusplus
 }
 #endif

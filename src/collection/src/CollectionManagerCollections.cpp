@@ -60,4 +60,14 @@ CollectionManager::LoadCollection(const std::string& name) {
     return storage_->GetCollectionInfo(name);
 }
 
+
+
+std::optional<zoro::storage::PointInfo>
+CollectionManager::RetrivePointById(const std::string& name, const int& point_id){
+    if (!storage_->CollectionExists(name)) {
+        return std::nullopt;
+    }
+    return storage_->GetMetadataByPointId(name, point_id);
+}
+
 } // namespace zoro::core

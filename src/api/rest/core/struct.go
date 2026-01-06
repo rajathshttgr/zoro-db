@@ -1,5 +1,7 @@
 package core
 
+import "encoding/json"
+
 type CollectionInfo struct {
 	ID        int
 	Name      string
@@ -8,4 +10,11 @@ type CollectionInfo struct {
 	Status    string
 	CreatedAt string
 }
+
+type PointRetrival struct {
+	Status  string
+	PointId int
+	Payload json.RawMessage
+}
+
 
