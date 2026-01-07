@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 	"time"
-
+	"strconv"
+	
 	"github.com/gin-gonic/gin"
 	"zoro/api/dto"
 	"zoro/api/services"
@@ -19,7 +19,7 @@ func GetPointById(c *gin.Context) {
 	pointId, err := strconv.Atoi(pointIdStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "point_id must be an integer",
+			"error": "Invalid point ID",
 		})
 		return
 	}
@@ -55,13 +55,6 @@ func SearchPoints(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
-		})
-		return
-	}
-
-	if req.Limit <= 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "limit should be greater than 0",
 		})
 		return
 	}

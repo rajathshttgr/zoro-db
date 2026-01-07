@@ -110,19 +110,18 @@ SearchResult FaissIndex::search(const float* query, uint32_t k) const
     }
 
     // FAISS returns internal IDs
-    std::vector<faiss::idx_t> labels(k);
-    std::vector<float> distances(k);
-
     uint32_t search_k = std::min<uint32_t>(
         k * 2,
         static_cast<uint32_t>(index_->ntotal)
     );
     
-    index_->search(1, query, search_k, distances.data(), labels.data()); // where 1 is  // number of queries
-
+    std::vector<faiss::idx_t> labels(search_k);
+    std::vector<float> distances(search_k);
+    
+    index_->search(1, query, search_k, distances.data(), labels.data());
 
     // Convert internal IDs → point_ids
-    for (uint32_t i = 0; i < k; ++i) {
+    for (uint32_t i = 0; i < search_k && result.point_ids.size() < k; ++i) {
         faiss::idx_t internal_id = labels[i];
 
         if (internal_id < 0) {

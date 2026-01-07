@@ -22,20 +22,6 @@ func UpsertPoint(c *gin.Context) {
 		return
 	}
 
-	if len(req.Ids) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "ids must not be empty",
-		})
-		return
-	}
-
-	if req.Payload != nil && len(req.Payload) != len(req.Ids) {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "payload length must match ids length",
-		})
-		return
-	}
-
 	if err := services.UpsertPoints(
 		collectionName,
 		req.Vectors,
@@ -69,13 +55,6 @@ func DeletePoints(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
-		})
-		return
-	}
-
-	if len(req.Ids) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "ids must not be empty",
 		})
 		return
 	}

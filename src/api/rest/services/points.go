@@ -13,6 +13,15 @@ func UpsertPoints(
 	payload []map[string]any,
 ) error {
 
+	if len(ids) == 0 {
+		return errors.New("vids must not be empty")
+	}
+
+	if payload != nil && len(payload) != len(ids) {
+		return errors.New("payload length must match ids length")
+	}
+
+
 	if len(vectors) == 0 {
 		return nil
 	}
@@ -58,12 +67,11 @@ func UpsertPoints(
 
 func DeletePoints(collectionName string, ids []int) error {
 	if len(ids) == 0 {
-		return nil
+		return errors.New("ids must not be empty")
 	}
 
 	return core.DeletePoints(collectionName, ids)
 }
-
 
 func GetPointCount(collection_name string) (int, error) {
 	count, err := core.CountPoints(collection_name)
@@ -72,34 +80,4 @@ func GetPointCount(collection_name string) (int, error) {
 	}
 
 	return count, nil
-}
-
-func SearchPoints(
-    collectionName string,
-    vectors []float32,
-    limit int,
-) (*core.SearchPointRetrival, error) {
-
-    if limit <= 0 {
-        return nil, errors.New("limit should be greater than 0")
-    }
-
-    points, err := core.SearchPointsByVector(collectionName, vectors, limit)
-    if err != nil {
-        return nil, err
-    }
-
-    return &core.SearchPointRetrival{
-        Points: points,
-        Count:  len(points),
-    }, nil
-}
-
-func GetPointById(collectionName string, pointId int) (*core.PointRetrival, error) {
-
-	if pointId <= 0 {
-		return nil, errors.New("point id seems invalid")
-	}
-
-	return core.GetPointById(collectionName, pointId)
 }

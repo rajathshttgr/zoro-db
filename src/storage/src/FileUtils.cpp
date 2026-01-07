@@ -80,7 +80,7 @@ uint64_t FileUtils::appendBinaryData(const std::string& path,const char* data, u
 }
 
 
-bool FileUtils::updateIndexFile(
+IndexUpdateResult FileUtils::updateIndexFile(
     const std::string& path,
     uint32_t id,
     uint64_t offset,
@@ -113,7 +113,6 @@ bool FileUtils::updateIndexFile(
         file.read(reinterpret_cast<char*>(&existing_flag), sizeof(existing_flag));
 
         if (existing_id == id) {
-            // overwrite in place
             file.seekp(record_pos);
 
             file.write(reinterpret_cast<const char*>(&id), sizeof(id));
@@ -122,11 +121,14 @@ bool FileUtils::updateIndexFile(
             file.write(reinterpret_cast<const char*>(&flag), sizeof(flag));
 
             file.flush();
-            return true;
+
+            if (existing_flag == 0 && flag == 1)
+                return IndexUpdateResult::Inserted;   // revive
+            else
+                return IndexUpdateResult::Updated;    // true update
         }
     }
 
-    // not found → append
     file.clear();
     file.seekp(0, std::ios::end);
 
@@ -136,7 +138,8 @@ bool FileUtils::updateIndexFile(
     file.write(reinterpret_cast<const char*>(&flag), sizeof(flag));
 
     file.flush();
-    return true;
+
+    return flag == 1 ? IndexUpdateResult::Inserted : IndexUpdateResult::NoOp;
 }
 
 

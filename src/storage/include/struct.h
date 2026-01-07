@@ -27,4 +27,5 @@ struct SearchPointInfo{
     json payload;
 };
 
+
 }

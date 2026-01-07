@@ -20,6 +20,7 @@ func Ping(c *gin.Context) {
 
 func Health(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"message": "green",
+		"status": "green",
+		"uptime": "72h",
 	})
 }

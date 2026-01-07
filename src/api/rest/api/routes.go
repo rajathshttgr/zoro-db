@@ -6,22 +6,23 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine) {
-	//System
+	// System
 	r.GET("/health", handlers.Health)
 	r.GET("/version", handlers.Version)
 	r.GET("/ping", handlers.Ping)
 
-	//Collection
+	// Collection
 	r.POST("/collections",handlers.CreateCollection)
 	r.DELETE("/collections/:collection_name",handlers.DeleteCollection)
 	r.GET("/collections",handlers.GetCollections)
 	r.GET("/collections/:collection_name",handlers.GetCollectionInfo)
 
-	//Points
+	// Points
 	r.POST("/collections/:collection_name/points", handlers.UpsertPoint)
 	r.DELETE("/collections/:collection_name/points", handlers.DeletePoints)
 	r.GET("/collections/:collection_name/count", handlers.GetPointCount)
 
+	// Search
 	r.GET("/collections/:collection_name/points/:point_id", handlers.GetPointById)
 	r.POST("/collections/:collection_name/points/search", handlers.SearchPoints)
 }
