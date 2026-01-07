@@ -23,7 +23,7 @@ public:
     bool UpsertPoints(const std::string& collection_name, int id, const std::vector<float> &vectors, const json& payload);
     bool DeletePoints(const std::string& collection_name, int point_id);
     int CountPoints(const std::string& collection_name);
-    json GetMetadataByPointId(const std::string& collection_name, int point_id);
+    std::optional<PointInfo> GetMetadataByPointId(const std::string& collection_name, int point_id, std::string& err);
 
 private:
     std::string root_path_;

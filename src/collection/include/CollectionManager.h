@@ -25,6 +25,8 @@ public:
     bool DeletePoints(const std::string &coll_name, const std::vector<int> point_id);
     int CountPoints(const std::string &coll_name);
 
+    std::optional<zoro::storage::PointInfo> RetrivePointById(const std::string& name,const int& point_id, std::string& err);
+
 private:
     std::string root_path_;
     zoro::storage::StorageEngine* storage_;

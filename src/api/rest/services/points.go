@@ -73,3 +73,12 @@ func GetPointCount(collection_name string) (int, error) {
 
 	return count, nil
 }
+
+func GetPointById(collectionName string, pointId int) (*core.PointRetrival, error) {
+
+	if pointId <= 0 {
+		return nil, errors.New("point id seems invalid")
+	}
+
+	return core.GetPointById(collectionName, pointId)
+}

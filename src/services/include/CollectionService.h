@@ -23,6 +23,8 @@ public:
     bool DeletePointsService(const std::string &coll_name, const std::vector<int> point_id);
     int CountPointsService(const std::string &coll_name);
 
+    std::optional<zoro::storage::PointInfo> RetrivePointById(const std::string& name, const int& point_id, std::string& err);
+
 private:
     zoro::core::CollectionManager* manager_;
 };

@@ -9,3 +9,8 @@ type CollectionInfo struct {
 	CreatedAt string
 }
 
+type PointRetrival struct {
+	Status  string
+	PointId int
+	Payload map[string]any
+}
