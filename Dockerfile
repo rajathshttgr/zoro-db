@@ -65,6 +65,7 @@ ENV LD_LIBRARY_PATH=/usr/local/lib
 RUN apt-get update && apt-get install -y \
     libstdc++6 \
     libopenblas0 \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/build/zoro-db /app/zoro-db
