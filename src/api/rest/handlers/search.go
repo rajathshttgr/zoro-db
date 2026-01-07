@@ -45,3 +45,55 @@ func GetPointById(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+func SearchPoints(c *gin.Context) {
+	start := time.Now()
+
+	collectionName := c.Param("collection_name")
+
+	var req dto.SearchPointsRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if req.Limit <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "limit should be greater than 0",
+		})
+		return
+	}
+
+	retrieval, err := services.SearchPoints(
+		collectionName,
+		req.Vectors,
+		req.Limit,
+	)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	result := make([]dto.PointSearchResult, 0, retrieval.Count)
+
+	for _, p := range retrieval.Points {
+		result = append(result, dto.PointSearchResult{
+			PointId: p.PointId,
+			Score:   p.Score,
+			Payload: p.Payload,
+		})
+	}
+
+	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+
+	resp := dto.CollectionResponseLayout{
+		Result: result,
+		Time:   latency,
+	}
+
+	c.JSON(http.StatusOK, resp)
+}

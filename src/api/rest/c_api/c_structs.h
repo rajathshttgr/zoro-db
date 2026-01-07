@@ -27,6 +27,12 @@ typedef struct {
     const char* payload;
 } zoro_point_retrival_t;
 
+typedef struct {
+    int point_id;
+    int score;
+    const char* payload;
+} zoro_search_point_t;
+
 
 #ifdef __cplusplus
 }

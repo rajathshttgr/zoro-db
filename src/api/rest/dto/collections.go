@@ -66,3 +66,14 @@ type PointRetriveResult struct{
 	PointId		int				`json:"point_id"`
 	Payload 	map[string]any	`json:"payload"`
 }
+
+type SearchPointsRequest struct{
+	Vectors []float32 `json:"vectors" binding:"required"`
+	Limit 	int 		`json:"limit" binding:"required"`		
+}
+
+type PointSearchResult struct{
+	PointId		int				`json:"point_id"`
+	Score		int				`json:"score"`
+	Payload 	map[string]any	`json:"payload"`
+}

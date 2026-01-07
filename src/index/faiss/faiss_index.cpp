@@ -105,6 +105,10 @@ SearchResult FaissIndex::search(const float* query, uint32_t k) const
         return result;
     }
 
+    if (k > static_cast<uint32_t>(index_->ntotal)) {
+        k = static_cast<uint32_t>(index_->ntotal);
+    }
+
     // FAISS returns internal IDs
     std::vector<faiss::idx_t> labels(k);
     std::vector<float> distances(k);

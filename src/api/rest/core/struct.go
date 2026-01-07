@@ -14,3 +14,14 @@ type PointRetrival struct {
 	PointId int
 	Payload map[string]any
 }
+
+type SearchPoint struct {
+	PointId int
+	Score   int
+	Payload map[string]any
+}
+
+type SearchPointRetrival struct {
+    Points []*SearchPoint `json:"points"`
+    Count  int            `json:"count"`
+}

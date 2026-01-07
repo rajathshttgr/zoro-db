@@ -13,3 +13,4 @@ struct FaissConfig {
     uint32_t dimension;
     DistanceMetric metric;
 };
+

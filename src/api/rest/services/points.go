@@ -74,6 +74,27 @@ func GetPointCount(collection_name string) (int, error) {
 	return count, nil
 }
 
+func SearchPoints(
+    collectionName string,
+    vectors []float32,
+    limit int,
+) (*core.SearchPointRetrival, error) {
+
+    if limit <= 0 {
+        return nil, errors.New("limit should be greater than 0")
+    }
+
+    points, err := core.SearchPointsByVector(collectionName, vectors, limit)
+    if err != nil {
+        return nil, err
+    }
+
+    return &core.SearchPointRetrival{
+        Points: points,
+        Count:  len(points),
+    }, nil
+}
+
 func GetPointById(collectionName string, pointId int) (*core.PointRetrival, error) {
 
 	if pointId <= 0 {

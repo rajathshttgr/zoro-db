@@ -71,4 +71,13 @@ std::optional<zoro::storage::PointInfo> CollectionService::RetrivePointById(cons
     return result;
 }
 
+std::vector<zoro::storage::SearchPointInfo> CollectionService::SearchPointByVector(const std::string& coll_name, const std::vector<float>& query_vector, int k, std::string& err){
+    if(k<=0){
+        err = "k can't be less than or equal to 0";
+        return {};
+    }
+
+    return manager_->SearchPointByVector(coll_name, query_vector, k);
+}
+
 }

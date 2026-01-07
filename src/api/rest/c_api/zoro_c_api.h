@@ -58,6 +58,22 @@ bool zoro_point_retrival(
 
 void zoro_free_point_retrival(zoro_point_retrival_t* info);
 
+bool zoro_search_points(
+    const char* name,
+    const float* vector,      
+    size_t vector_dim,       
+    int k,                   
+    zoro_search_point_t** out_points, 
+    int* out_count,           
+    char* err             
+);
+
+
+void zoro_free_search_result(
+    zoro_search_point_t* points,
+    int count
+);
+
 
 #ifdef __cplusplus
 }

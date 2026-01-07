@@ -39,6 +39,7 @@ target_include_directories(zoro PUBLIC
 target_link_libraries(zoro
     services
     collection
+    index  
     storage
     wal
 )
