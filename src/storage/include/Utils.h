@@ -14,3 +14,11 @@ static std::string CurrentTimestampUTC()
     oss << std::put_time(&tm, "%Y-%m-%dT%H:%M:%SZ");
     return oss.str();
 }
+
+enum class IndexUpdateResult {
+    Inserted,
+    Updated,
+    Deleted,
+    Revived,
+    NoOp
+};

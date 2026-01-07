@@ -45,3 +45,9 @@ size_t FaissIdMap::size() const
 {
     return point_to_internal_.size();
 }
+
+void FaissIdMap::clear()
+{
+    internal_to_point_.clear();
+    point_to_internal_.clear();
+}

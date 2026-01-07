@@ -25,6 +25,8 @@ public:
 
     std::optional<zoro::storage::PointInfo> RetrivePointById(const std::string& name, const int& point_id, std::string& err);
 
+    std::vector<zoro::storage::SearchPointInfo> SearchPointByVector(const std::string& coll_name, const std::vector<float>& query_vector, int k, std::string& err);
+
 private:
     zoro::core::CollectionManager* manager_;
 };

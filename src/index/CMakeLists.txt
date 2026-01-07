@@ -10,9 +10,12 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_library(index STATIC
     vector_index.h
     index_factory.h
+    index_factory.cpp  
+    distance_metric_utils.h
     faiss/faiss_index.h
     faiss/faiss_index.cpp
     faiss/faiss_id_map.h
+    faiss/faiss_id_map.cpp 
     faiss/faiss_config.h
 )
 

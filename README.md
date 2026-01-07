@@ -25,14 +25,6 @@ docker run -p 6464:6464 ghcr.io/rajathshttgr/zoro-db:dev
 
 Access the API at `http://localhost:6464`
 
-### Use the CLI (Optional)
-
-For development or debugging, you can also run the CLI:
-
-```bash
-docker run -it ghcr.io/rajathshttgr/zoro-db:dev /app/zoro-db
-```
-
 For instructions on persistent storage, detached mode, or other advanced options, please refer to the [DEVELOPER_GUIDE](docs/DEVELOPER_GUIDE.md).
 
 ## Usage

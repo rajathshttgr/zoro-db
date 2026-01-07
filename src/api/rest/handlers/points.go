@@ -22,20 +22,6 @@ func UpsertPoint(c *gin.Context) {
 		return
 	}
 
-	if len(req.Ids) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "ids must not be empty",
-		})
-		return
-	}
-
-	if req.Payload != nil && len(req.Payload) != len(req.Ids) {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "payload length must match ids length",
-		})
-		return
-	}
-
 	if err := services.UpsertPoints(
 		collectionName,
 		req.Vectors,
@@ -73,13 +59,6 @@ func DeletePoints(c *gin.Context) {
 		return
 	}
 
-	if len(req.Ids) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "ids must not be empty",
-		})
-		return
-	}
-
 	if err := services.DeletePoints(
 		collectionName,
 		req.Ids,
@@ -91,10 +70,10 @@ func DeletePoints(c *gin.Context) {
 	}
 
 	resp := dto.CollectionResponseLayout{
-		Result: dto.UpsertPointsResult{
-			Status:         "deleted",
+		Result: dto.DeletePointsResult{
+			Status:         "success",
 			CollectionName: collectionName,
-			Upserted:       len(req.Ids),
+			Deleted:       len(req.Ids),
 		},
 		Time: float64(time.Since(start).Milliseconds()),
 	}

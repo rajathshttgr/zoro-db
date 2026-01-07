@@ -53,6 +53,12 @@ type UpsertPointsResult struct {
 	Upserted       int    `json:"upserted"`
 }
 
+type DeletePointsResult struct {
+	Status         string `json:"status"`
+	CollectionName string `json:"collection_name"`
+	Deleted        int    `json:"deleted"`
+}
+
 
 type CollectionPointsInfoResult struct {
 	CollectionName string `json:"collection_name"`
@@ -64,5 +70,16 @@ type CollectionPointsInfoResult struct {
 type PointRetriveResult struct{
 	Status		string			`json:"status"`
 	PointId		int				`json:"point_id"`
+	Payload 	map[string]any	`json:"payload"`
+}
+
+type SearchPointsRequest struct{
+	Vectors []float32 `json:"vectors" binding:"required"`
+	Limit 	int 		`json:"limit" binding:"required"`		
+}
+
+type PointSearchResult struct{
+	PointId		int				`json:"point_id"`
+	Score		int				`json:"score"`
 	Payload 	map[string]any	`json:"payload"`
 }
