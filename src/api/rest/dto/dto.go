@@ -53,6 +53,12 @@ type UpsertPointsResult struct {
 	Upserted       int    `json:"upserted"`
 }
 
+type DeletePointsResult struct {
+	Status         string `json:"status"`
+	CollectionName string `json:"collection_name"`
+	Deleted        int    `json:"deleted"`
+}
+
 
 type CollectionPointsInfoResult struct {
 	CollectionName string `json:"collection_name"`

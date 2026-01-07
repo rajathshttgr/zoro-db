@@ -8,6 +8,7 @@ namespace zoro::core {
 struct CollectionRuntime {
     std::unique_ptr<VectorIndex> index;
     int dimension;
+    bool built = false;
 };
 
 }

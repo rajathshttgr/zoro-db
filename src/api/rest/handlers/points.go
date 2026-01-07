@@ -70,10 +70,10 @@ func DeletePoints(c *gin.Context) {
 	}
 
 	resp := dto.CollectionResponseLayout{
-		Result: dto.UpsertPointsResult{
-			Status:         "deleted",
+		Result: dto.DeletePointsResult{
+			Status:         "success",
 			CollectionName: collectionName,
-			Upserted:       len(req.Ids),
+			Deleted:       len(req.Ids),
 		},
 		Time: float64(time.Since(start).Milliseconds()),
 	}

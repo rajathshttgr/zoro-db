@@ -79,97 +79,112 @@ uint64_t FileUtils::appendBinaryData(const std::string& path,const char* data, u
     return offset;
 }
 
-
 IndexUpdateResult FileUtils::updateIndexFile(
     const std::string& path,
     uint32_t id,
     uint64_t offset,
     uint32_t length,
-    uint8_t flag
+    uint8_t flag_delete // 0 = active, 1 = deleted
 ) {
+    struct Record {
+        uint32_t id;
+        uint64_t offset;
+        uint32_t length;
+        uint8_t  flag;
+    };
+
     std::fstream file(path, std::ios::binary | std::ios::in | std::ios::out);
 
-    // If file doesn't exist, create it
+    // Create file if it does not exist
     if (!file) {
         file.open(path, std::ios::binary | std::ios::out);
         file.close();
         file.open(path, std::ios::binary | std::ios::in | std::ios::out);
     }
 
-    const std::streamoff record_size =
-        sizeof(uint32_t) + sizeof(uint64_t) + sizeof(uint32_t) + sizeof(uint8_t);
+    Record rec;
+    while (file.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
+        if (rec.id != id)
+            continue;
 
-    uint32_t existing_id;
-    uint64_t existing_offset;
-    uint32_t existing_length;
-    uint8_t existing_flag;
+        // DELETE 
+        if (flag_delete) {
+            if (rec.flag == 1)
+                return IndexUpdateResult::NoOp; // already deleted
 
-    while (file.read(reinterpret_cast<char*>(&existing_id), sizeof(existing_id))) {
-
-        std::streampos record_pos = file.tellg() - record_size;
-
-        file.read(reinterpret_cast<char*>(&existing_offset), sizeof(existing_offset));
-        file.read(reinterpret_cast<char*>(&existing_length), sizeof(existing_length));
-        file.read(reinterpret_cast<char*>(&existing_flag), sizeof(existing_flag));
-
-        if (existing_id == id) {
-            file.seekp(record_pos);
-
-            file.write(reinterpret_cast<const char*>(&id), sizeof(id));
-            file.write(reinterpret_cast<const char*>(&offset), sizeof(offset));
-            file.write(reinterpret_cast<const char*>(&length), sizeof(length));
-            file.write(reinterpret_cast<const char*>(&flag), sizeof(flag));
-
+            rec.flag = 1;
+            file.seekp(-static_cast<std::streamoff>(sizeof(rec)), std::ios::cur);
+            file.write(reinterpret_cast<const char*>(&rec), sizeof(rec));
             file.flush();
-
-            if (existing_flag == 0 && flag == 1)
-                return IndexUpdateResult::Inserted;   // revive
-            else
-                return IndexUpdateResult::Updated;    // true update
+            return IndexUpdateResult::Deleted;
         }
+
+        // UPSERT
+        bool was_deleted = (rec.flag == 1);
+
+        rec.offset = offset;
+        rec.length = length;
+        rec.flag   = 0;
+
+        file.seekp(-static_cast<std::streamoff>(sizeof(rec)), std::ios::cur);
+        file.write(reinterpret_cast<const char*>(&rec), sizeof(rec));
+        file.flush();
+
+        return was_deleted
+            ? IndexUpdateResult::Inserted   // revival
+            : IndexUpdateResult::Updated;
     }
 
+    // NOT FOUND
+    if (flag_delete)
+        return IndexUpdateResult::NoOp;
+
+    // INSERT NEW
+    Record new_rec{ id, offset, length, 0 };
     file.clear();
     file.seekp(0, std::ios::end);
-
-    file.write(reinterpret_cast<const char*>(&id), sizeof(id));
-    file.write(reinterpret_cast<const char*>(&offset), sizeof(offset));
-    file.write(reinterpret_cast<const char*>(&length), sizeof(length));
-    file.write(reinterpret_cast<const char*>(&flag), sizeof(flag));
-
+    file.write(reinterpret_cast<const char*>(&new_rec), sizeof(new_rec));
     file.flush();
 
-    return flag == 1 ? IndexUpdateResult::Inserted : IndexUpdateResult::NoOp;
+    return IndexUpdateResult::Inserted;
 }
 
 
 bool FileUtils::findPayloadIndex(
     const std::string& idx_path,
-    uint32_t target_id,
+    uint32_t id,
     uint64_t& out_offset,
     uint32_t& out_length
 ) {
+    struct Record {
+        uint32_t id;
+        uint64_t offset;
+        uint32_t length;
+        uint8_t  flag;
+    };
+
     std::ifstream file(idx_path, std::ios::binary);
-    if (!file) return false;
+    if (!file.is_open())
+        return false;
 
-    uint32_t id;
-    uint64_t offset;
-    uint32_t length;
-    uint8_t flag;
+    Record rec;
+    bool found = false;
 
-    while (file.read(reinterpret_cast<char*>(&id), sizeof(id))) {
-        file.read(reinterpret_cast<char*>(&offset), sizeof(offset));
-        file.read(reinterpret_cast<char*>(&length), sizeof(length));
-        file.read(reinterpret_cast<char*>(&flag), sizeof(flag));
+    while (file.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
+        if (rec.id != id)
+            continue;
 
-        if (id == target_id && flag == 1) {
-            out_offset = offset;
-            out_length = length;
-            return true;
+        // last-write-wins
+        if (rec.flag == 1) {
+            found = false; // tombstone overrides
+        } else {
+            out_offset = rec.offset;
+            out_length = rec.length;
+            found = true;
         }
     }
 
-    return false;
+    return found;
 }
 
 

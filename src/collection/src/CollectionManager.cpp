@@ -21,24 +21,35 @@ CollectionManager::CollectionManager(
 }
 
 bool CollectionManager::EnsureIndex(const std::string& name) {
-    if (runtimes_.count(name)) {
-        return true;
+    auto& runtime = runtimes_[name];
+
+    if (!runtime.index) {
+        auto info = storage_->GetCollectionInfo(name);
+        if (!info) {
+            return false;
+        }
+
+        FaissConfig config;
+        config.dimension = info->dimension;
+        config.metric = DistanceMetricFromString(info->distance);
+
+        runtime.index = IndexFactory::create_faiss_index(config);
+        runtime.built = false;
     }
 
-    auto info = storage_->GetCollectionInfo(name);
-    if (!info) {
-        return false;
+    if (!runtime.built) {
+        std::vector<float> vectors;
+        std::vector<uint64_t> ids;
+
+        storage_->LoadAllVectors(name, vectors, ids); 
+
+        if (!vectors.empty()) {
+            runtime.index->build(vectors, ids);
+        }
+
+        runtime.built = true;
     }
-
-    FaissConfig config;
-    config.dimension = info->dimension;
-    config.metric = DistanceMetricFromString(info->distance);
-
-    CollectionRuntime runtime;
-    runtime.index = IndexFactory::create_faiss_index(config);
-    runtime.dimension = info->dimension;
-
-    runtimes_[name] = std::move(runtime);
+    
     return true;
 }
 

@@ -27,5 +27,11 @@ struct SearchPointInfo{
     json payload;
 };
 
+struct VectorIndexEntry {
+    uint64_t point_id;
+    uint64_t offset;
+    uint32_t length;
+    uint8_t is_deleted;
+};
 
 }
