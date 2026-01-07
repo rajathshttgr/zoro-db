@@ -281,6 +281,34 @@ POST /collections/{collection_name}/points/search
 
 ---
 
+## Get Point by ID
+
+Retrive point metadata information by ID
+
+**Endpoint**
+
+```
+GET /collections/{collection_name}/points/{point_id}
+```
+
+**Response**
+
+```json
+{
+  "result": {
+    "status": "ok",
+    "point_id": 12,
+    "payload": {
+      "document": "How to reset a forgotten password",
+      "tag": "authentication"
+    }
+  },
+  "time": 1.671502
+}
+```
+
+---
+
 ## System API
 
 ### Ping
