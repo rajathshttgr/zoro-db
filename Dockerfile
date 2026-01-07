@@ -13,13 +13,13 @@ RUN apt-get update && apt-get install -y \
     liblapack-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# install CMake 
+# install CMake
 RUN curl -fsSL https://github.com/Kitware/CMake/releases/download/v3.27.9/cmake-3.27.9-linux-x86_64.tar.gz \
     | tar -xz --strip-components=1 -C /usr/local
 
 RUN cmake --version
 
-# Build FAISS 
+# Build FAISS
 RUN git clone --branch v1.7.4 --depth=1 \
     https://github.com/facebookresearch/faiss.git /tmp/faiss && \
     cd /tmp/faiss && \
@@ -44,14 +44,13 @@ WORKDIR /app
 COPY src/ ./src/
 
 # Build C++ core
-WORKDIR /app/src
+WORKDIR /app
 RUN mkdir -p build && cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    cmake -DCMAKE_BUILD_TYPE=Release ../src && \
     make -j$(nproc)
 
 # Build REST API
 WORKDIR /app/src/api/rest
-ENV LD_LIBRARY_PATH=/usr/local/lib:/app/src/build/api
 RUN go build -o /app/zoro-rest
 
 # Runtime image
@@ -68,9 +67,9 @@ RUN apt-get update && apt-get install -y \
     libopenblas0 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /app/src/build/zoro-db /app/zoro-db
+COPY --from=builder /app/build/zoro-db /app/zoro-db
 COPY --from=builder /app/zoro-rest /app/zoro-rest
-COPY --from=builder /app/src/build/api/libzoro.so /usr/local/lib/libzoro.so
+COPY --from=builder /app/build/api/libzoro.so /usr/local/lib/libzoro.so
 COPY --from=builder /usr/local/lib/libfaiss.so /usr/local/lib/libfaiss.so
 
 RUN ldconfig
