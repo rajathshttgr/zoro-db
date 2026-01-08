@@ -6,7 +6,7 @@
 <div align="center">
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/rajathshttgr/zoro-db/docker-image.yml?branch=main&label=build&style=flat-square)
-![Version](https://img.shields.io/badge/version-v0.0.1-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.1.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)
 
 </div>
