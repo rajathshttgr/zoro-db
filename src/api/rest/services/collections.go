@@ -66,10 +66,10 @@ func CreateCollection(
 	}
 
 	switch distance {
-	case "dot", "cosine", "euclid":
+	case "dot", "cosine", "l2":
 		// ok
 	default:
-		return errors.New(`distance must be one of: "dot", "cosine", "euclid"`)
+		return errors.New(`distance must be one of: "dot", "cosine", "l2"`)
 	}
 
 	return core.CreateCollection(name, dimension, distance)
