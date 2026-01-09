@@ -106,7 +106,7 @@ func SearchPointsByVector(
 
         results = append(results, &SearchPoint{
             PointId: int(cp.point_id),
-            Score:   int(cp.score),
+            Score:   float32(cp.score),
             Payload: payload,
         })
     }

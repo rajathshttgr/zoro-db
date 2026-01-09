@@ -29,7 +29,7 @@ typedef struct {
 
 typedef struct {
     int point_id;
-    int score;
+    float score;
     const char* payload;
 } zoro_search_point_t;
 

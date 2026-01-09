@@ -80,6 +80,6 @@ type SearchPointsRequest struct{
 
 type PointSearchResult struct{
 	PointId		int				`json:"point_id"`
-	Score		int				`json:"score"`
+	Score		float32			`json:"score"`
 	Payload 	map[string]any	`json:"payload"`
 }
