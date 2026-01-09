@@ -16,7 +16,11 @@ bool CollectionService::CreateCollection(const std::string& name, int dimension,
         return false;
     }
 
-    // add distance enum validation
+    // distance enum validation
+    if (distance != "l2" && distance != "cosine" && distance != "dot") {
+        err = "Invalid distance metric. Must be one of: l2, cosine, dot.";
+        return false;
+    }
 
     if (!manager_->CreateCollection(name, dimension, distance)) {
         err = "Failed to create collection, name already exists.";

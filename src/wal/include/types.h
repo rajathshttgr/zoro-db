@@ -11,7 +11,7 @@ enum class OpType: uint8_t{
 enum class DistType: uint8_t{
     DOT=1,
     COSINE=2,
-    EUCLID=3
+    L2=3
 };
 
 

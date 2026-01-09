@@ -9,6 +9,7 @@
 |               | exp/v1.3    | 02 Jan 2026 |
 |               | exp/v1.4    | 07 Jan 2026 |
 |               | exp/v1.5    | 08 Jan 2026 |
+|               | exp/v1.6    | 09 Jan 2026 |
 | v0.0.2        | exp/v2.0    |             |
 
 ## [11 Dec 2025] v0.0.1
@@ -19,6 +20,7 @@
 - `exp/v1.3` Brut Force indexing and FAISS Integration.
 - `exp/v1.4` Retrive point by ID, all standard operations done.
 - `exp/v1.5` First Release version.
+- `exp/v1.6` Fix Score representation, change distance name form euclid to l2.
 
 ## [16 Nov 2025] v0.0.0
 

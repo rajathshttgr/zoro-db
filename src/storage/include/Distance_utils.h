@@ -8,7 +8,7 @@ inline DistType DistTypeFromString(std::string dist) {
     // normalize
     std::transform(dist.begin(), dist.end(), dist.begin(), ::tolower);
 
-    if (dist == "euclid") return DistType::EUCLID;
+    if (dist == "l2") return DistType::L2;
     if (dist == "cosine") return DistType::COSINE;
     if (dist == "dot") return DistType::DOT;
 
@@ -18,7 +18,7 @@ inline DistType DistTypeFromString(std::string dist) {
 // map dist types
 inline std::string DistTypeToString(DistType type) {
     switch (type) {
-        case DistType::EUCLID: return "EUCLID";
+        case DistType::L2: return "L2";
         case DistType::COSINE: return "COSINE";
         case DistType::DOT:    return "DOT";
     }
