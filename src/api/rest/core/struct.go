@@ -17,7 +17,7 @@ type PointRetrival struct {
 
 type SearchPoint struct {
 	PointId int
-	Score   int
+	Score   float32
 	Payload map[string]any
 }
 

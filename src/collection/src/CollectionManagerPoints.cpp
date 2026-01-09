@@ -124,7 +124,7 @@ CollectionManager::SearchPointByVector(
         info.point_id = point_id;
 
         // score strategy (simple version)
-        info.score = static_cast<int>(1000 / (1.0f + result.distances[i]));
+        info.score = result.distances[i];
 
         info.payload = meta->payload;
 

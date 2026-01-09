@@ -23,7 +23,7 @@ struct PointInfo{
 
 struct SearchPointInfo{
     int point_id;
-    int score;
+    float score;
     json payload;
 };
 
