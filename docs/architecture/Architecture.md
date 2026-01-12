@@ -14,7 +14,7 @@ This database is built to support:
 - Predictable performance
 - Clean extensibility for future indexing engines
 
-The architecture uses **FAISS** for in-memory similarity search and a **custom disk storage engine** as the source of truth.
+The architecture uses FAISS for in-memory similarity search and a custom disk storage engine as the source of truth.
 
 ---
 
@@ -208,34 +208,7 @@ References:
 
 ---
 
-## Current Status
-
-- Core architecture implemented
-- FAISS-based in-memory search
-- WAL-backed durable writes
-- Custom disk storage engine
-- Binary search–based index traversal
-
----
-
-## Future Improvements
-
-- Pluggable ANN engines (HNSW, DiskANN)
-- Background compaction
-- Sharding and replication
-- Snapshot-based recovery
-- Query planning optimizations
-
----
-
 ## Disclaimer
 
 This project is a learning-focused implementation inspired by real-world database systems.  
 It is not intended to be a drop-in replacement for production-grade vector databases.
-
----
-
-## Author
-
-**Rajath Shettigar**  
-Backend / Systems / Vector Databases
