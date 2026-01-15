@@ -10,10 +10,15 @@ file(GLOB SERVICES_SOURCES src/*.cpp)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-add_library(services STATIC
-    ${SERVICES_SOURCES}
-    ${SERVICES_HEADERS}
+add_library(services
+    src/CollectionService.cpp
+    src/CollectionService_collections.cpp
+    src/CollectionService_points.cpp
+    src/CollectionService_search.cpp
+    include/CollectionService.h
 )
+
+target_link_libraries(services PUBLIC collection)
 
 target_include_directories(services PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
