@@ -6,18 +6,30 @@
 <div align="center">
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/rajathshttgr/zoro-db/docker-image.yml?branch=main&label=build&style=flat-square)
-![Version](https://img.shields.io/badge/version-v0.0.1-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.1.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)
 
 </div>
 
 ---
 
+## Overview
+
+**Zoro-DB** is a lightweight, high-performance vector database designed for similarity search workloads.  
+Built entirely from scratch in C++, it provides a RESTful API for managing vector collections and executing fast approximate nearest neighbor (ANN) searches.
+
+Zoro-DB is suitable for:
+
+- Semantic search
+- Recommendation systems
+- Retrieval-Augmented Generation (RAG)
+- Embedding-based similarity search
+
 ## Getting Started
 
-### Run the REST API Server
+## Run the REST API Server
 
-Start Zoro-DB with Docker:
+The fastest way to start Zoro-DB is with Docker:
 
 ```bash
 docker run -p 6464:6464 ghcr.io/rajathshttgr/zoro-db:dev
@@ -27,7 +39,69 @@ Access the API at `http://localhost:6464`
 
 For instructions on persistent storage, detached mode, or other advanced options, please refer to the [DEVELOPER_GUIDE](docs/DEVELOPER_GUIDE.md).
 
-## Usage
+## Python Client Installation
+
+Install the official Python client:
+
+```bash
+pip install zoro-client
+```
+
+## Connect to the Server
+
+```python
+from zoro_client import ZoroClient
+
+client = ZoroClient(host="localhost", port=6464)
+# or
+client = ZoroClient(url="http://localhost:6464")
+```
+
+## Working with Vectors (Self-Managed Embeddings)
+
+Zoro-DB supports externally generated embeddings and direct vector storage.
+
+```python
+from zoro_client import VectorConfig, Distance
+
+# Create collection
+client.create_collection(
+    collection_name="test",
+    vector_config=VectorConfig(size=100, distance=Distance.COSINE)
+)
+
+# Upsert points
+import numpy as np
+
+vectors = np.random.rand(5, 100).tolist()
+
+payloads = [
+    {"document": "LangChain integration"},
+    {"document": "LlamaIndex integration"},
+    {"document": "Hybrid search"},
+    {"document": "Fast ANN search"},
+    {"document": "Python for Machine Learning"},
+]
+
+client.upsert_points(
+    collection_name="test",
+    vectors=vectors,
+    ids=[12, 4, 34, 23, 2],
+    payloads=payloads,
+)
+
+# search query
+results = client.search(
+    collection_name="test", query_vector=np.random.rand(100).tolist(), limit=2
+)
+
+print(results)
+
+```
+
+## Using the REST API Directly
+
+Zoro-DB exposes a RESTful interface for direct integration with any language or platform.
 
 ### Create Collection
 
@@ -145,7 +219,7 @@ curl -X GET http://localhost:6464/collections
 }
 ```
 
-For detailed endpoint specifications, request/response schemas, and APIs that are still evolving, see the [API DOCUMENTATION](docs/API_DOCS.md). An official client library is in progress for easier and safer integration.
+For detailed endpoint specifications, request/response schemas, and APIs that are still evolving, see the [API DOCUMENTATION](docs/API_DOCS.md).
 
 ## Contributing
 
