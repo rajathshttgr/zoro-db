@@ -113,3 +113,55 @@ func SearchPointsByVector(
 
     return results, nil
 }
+
+func ScrollPointsDataRetrival(
+    collectionName string,
+    limit int,
+) ([]*SearchPoint, error) {
+
+    cName := C.CString(collectionName)
+    defer C.free(unsafe.Pointer(cName))
+
+    cLimit := C.int(limit)
+
+    var cPoints *C.zoro_scroll_point_t
+    var cCount C.int
+
+    errBuf := C.malloc(256)
+    defer C.free(errBuf)
+
+    ok := C.zoro_scroll_points(
+        cName,
+        cLimit,
+        &cPoints,
+        &cCount,
+        (*C.char)(errBuf),
+    )
+
+    if !ok {
+        return nil, errors.New(C.GoString((*C.char)(errBuf)))
+    }
+    defer C.zoro_free_scroll_result(cPoints, cCount)
+
+    count := int(cCount)
+    results := make([]*SearchPoint, 0, count)
+
+    slice := unsafe.Slice(cPoints, count)
+
+    for _, cp := range slice {
+        var payload map[string]any
+        if err := json.Unmarshal(
+            []byte(C.GoString(cp.payload)),
+            &payload,
+        ); err != nil {
+            return nil, err
+        }
+
+        results = append(results, &SearchPoint{
+            PointId: int(cp.point_id),
+            Payload: payload,
+        })
+    }
+
+    return results, nil
+}

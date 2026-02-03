@@ -90,3 +90,47 @@ func SearchPoints(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+
+func GetScrollPoints(c *gin.Context) {
+	start := time.Now()
+
+	collectionName := c.Param("collection_name")
+
+	var req dto.ScrollPointsRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	retrieval, err := services.ScrollPoints(
+		collectionName,
+		req.Limit,
+	)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	result := make([]dto.PointsScrollResult, 0, retrieval.Count)
+
+	for _, p := range retrieval.Points {
+		result = append(result, dto.PointsScrollResult{
+			PointId: p.PointId,
+			Payload: p.Payload,
+		})
+	}
+
+	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+
+	resp := dto.CollectionResponseLayout{
+		Result: result,
+		Time:   latency,
+	}
+
+	c.JSON(http.StatusOK, resp)
+}

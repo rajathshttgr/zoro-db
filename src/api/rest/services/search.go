@@ -48,3 +48,23 @@ func GetPointById(collectionName string, pointId int) (*core.PointRetrival, erro
 	return core.GetPointById(collectionName, pointId)
 }
 
+
+func ScrollPoints(
+    collectionName string,
+    limit int,
+) (*core.SearchPointRetrival, error) {
+
+    if limit <= 0 {
+        return nil, errors.New("limit should be greater than 0")
+    }
+
+    points, err := core.ScrollPointsDataRetrival(collectionName, limit)
+    if err != nil {
+        return nil, err
+    }
+
+    return &core.ScrollPointsRetrival{
+        Points: points,
+        Count:  len(points),
+    }, nil
+}

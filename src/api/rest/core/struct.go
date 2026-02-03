@@ -25,3 +25,8 @@ type SearchPointRetrival struct {
     Points []*SearchPoint `json:"points"`
     Count  int            `json:"count"`
 }
+
+type ScrollPointsRetrival struct {
+    Points []*SearchPoint `json:"points"`
+    Count  int            `json:"count"`
+}

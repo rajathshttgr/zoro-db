@@ -33,6 +33,11 @@ typedef struct {
     const char* payload;
 } zoro_search_point_t;
 
+typedef struct {
+    int point_id;
+    const char* payload;
+} zoro_scroll_point_t;
+
 
 #ifdef __cplusplus
 }

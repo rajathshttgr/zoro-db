@@ -83,3 +83,12 @@ type PointSearchResult struct{
 	Score		float32			`json:"score"`
 	Payload 	map[string]any	`json:"payload"`
 }
+
+type ScrollPointsRequest struct{
+	Limit 	int 		`json:"limit" binding:"required"`		
+}
+
+type PointsScrollResult struct{
+	PointId		int				`json:"point_id"`
+	Payload 	map[string]any	`json:"payload"`
+}
