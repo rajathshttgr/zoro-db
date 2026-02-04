@@ -29,6 +29,11 @@ typedef struct {
 
 typedef struct {
     int point_id;
+    const char* payload;
+} zoro_point_scroll_t;
+
+typedef struct {
+    int point_id;
     float score;
     const char* payload;
 } zoro_search_point_t;

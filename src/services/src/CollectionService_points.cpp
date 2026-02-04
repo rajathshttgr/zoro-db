@@ -23,4 +23,13 @@ std::optional<zoro::storage::PointInfo> CollectionService::RetrivePointById(cons
     return result;
 }
 
+std::vector<zoro::storage::ScrollPointInfo> CollectionService::ScrollPointMetadata(const std::string& name, const int limit, std::string& err){
+    if (limit <= 0) {
+        err = "limit should be atleast 1";
+        return {};
+    }
+    auto result= manager_->ScrollPointMetadata(name, limit, err);
+    return result;
+}
+
 }

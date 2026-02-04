@@ -84,7 +84,7 @@ IndexUpdateResult FileUtils::updateIndexFile(
     uint32_t id,
     uint64_t offset,
     uint32_t length,
-    uint8_t flag_delete // 0 = active, 1 = deleted
+    uint8_t flag_delete // 0 = activate, 1 = delete
 ) {
     struct Record {
         uint32_t id;
@@ -210,5 +210,41 @@ std::string FileUtils::readBinaryData(
     return buffer;
 }
 
+// This function collects ID's  of active payload points 
+
+bool FileUtils::ListActivePointIds(const std::string &idx_file_path, std::vector<uint32_t> &out_ids, int limit)
+{
+    // Payload index file records format [id][offset][length][flag]
+    struct Record {
+        uint32_t id;
+        uint64_t offset;
+        uint32_t length;
+        uint8_t  flag;
+    };
+
+    // make sure limit is not less than 1
+    if (limit <= 0)
+        return true;
+
+    // open index file
+    std::ifstream file(idx_file_path, std::ios::binary);
+    if (!file.is_open())
+        return false;
+
+    Record rec;
+
+    // Read until EOF 
+    while (limit > 0 && file.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
+
+        // flag == 0 is active
+        if(rec.flag==0){
+            out_ids.push_back(rec.id);
+            --limit;
+        }
+    }
+
+    // limit not reached but file records limit reached
+    return true;
+}
 
 }

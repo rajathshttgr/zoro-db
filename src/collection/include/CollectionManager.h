@@ -30,6 +30,7 @@ public:
     int CountPoints(const std::string &coll_name);
 
     std::optional<zoro::storage::PointInfo> RetrivePointById(const std::string& coll_name, const int& point_id, std::string& err);
+    std::vector<zoro::storage::ScrollPointInfo> ScrollPointMetadata(const std::string& coll_name, const int limit, std::string& err);
 
     std::vector<zoro::storage::SearchPointInfo> SearchPointByVector(const std::string& coll_name, const std::vector<float>& query_vector, int k);
 

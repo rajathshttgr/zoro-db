@@ -52,7 +52,7 @@ func GetPointById(collectionName string, pointId int) (*core.PointRetrival, erro
 func ScrollPoints(
     collectionName string,
     limit int,
-) (*core.SearchPointRetrival, error) {
+) (*core.ScrollPointsRetrival, error) {
 
     if limit <= 0 {
         return nil, errors.New("limit should be greater than 0")

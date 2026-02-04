@@ -60,13 +60,14 @@ CollectionManager::LoadCollection(const std::string& name) {
     return storage_->GetCollectionInfo(name);
 }
 
-std::optional<zoro::storage::PointInfo>
-CollectionManager::RetrivePointById(const std::string& name, const int& point_id, std::string& err){
-    if (!storage_->CollectionExists(name)) {
-        err = "Matching point not found.";
-        return std::nullopt;
+std::vector<zoro::storage::ScrollPointInfo> 
+CollectionManager::ScrollPointMetadata(const std::string& coll_name, const int limit, std::string& err){
+    if (!storage_->CollectionExists(coll_name)) {
+        err = "collection doesn't exist in the system!";
+        return {};
     }
-    return storage_->GetMetadataByPointId(name, point_id, err);
+    return storage_->ListPointMetadata(coll_name, limit, err);
 }
+
 
 } // namespace zoro::core

@@ -349,21 +349,12 @@ bool zoro_scroll_points(
 
     try {
         std::string error;
-
-        // Temporarily using SearchPointByVector to skip build errors
-        auto results = g_service->SearchPointByVector(
+        
+        auto results = g_service->ScrollPointMetadata(
             name,
-            {},
             k,
             error
         );
-
-        // uncomment this when ScrollPoints is implemented
-        // auto results = g_service->ScrollPoints(
-        //     name,
-        //     k,
-        //     error
-        // );
 
         if (!error.empty()) {
             if (err) std::strcpy(err, error.c_str());

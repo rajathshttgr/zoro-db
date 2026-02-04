@@ -117,7 +117,7 @@ func SearchPointsByVector(
 func ScrollPointsDataRetrival(
     collectionName string,
     limit int,
-) ([]*SearchPoint, error) {
+) ([]*ScrollPoint, error) {
 
     cName := C.CString(collectionName)
     defer C.free(unsafe.Pointer(cName))
@@ -144,7 +144,7 @@ func ScrollPointsDataRetrival(
     defer C.zoro_free_scroll_result(cPoints, cCount)
 
     count := int(cCount)
-    results := make([]*SearchPoint, 0, count)
+    results := make([]*ScrollPoint, 0, count)
 
     slice := unsafe.Slice(cPoints, count)
 
@@ -157,7 +157,7 @@ func ScrollPointsDataRetrival(
             return nil, err
         }
 
-        results = append(results, &SearchPoint{
+        results = append(results, &ScrollPoint{
             PointId: int(cp.point_id),
             Payload: payload,
         })
