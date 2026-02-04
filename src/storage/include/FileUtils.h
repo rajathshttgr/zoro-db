@@ -18,5 +18,8 @@ public:
 
     static bool findPayloadIndex(const std::string& idx_path, uint32_t target_id, uint64_t& out_offset, uint32_t& out_length);
     static std::string readBinaryData(const std::string& path, uint64_t offset, uint32_t length);
+
+    static bool ListActivePointIds(const std::string& idx_file_path, std::vector<uint32_t>& out_ids, int limit);
+ 
 };
 }

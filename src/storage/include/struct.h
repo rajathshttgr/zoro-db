@@ -21,6 +21,11 @@ struct PointInfo{
     json payload;
 };
 
+struct ScrollPointInfo{
+    int point_id;
+    json payload;
+};
+
 struct SearchPointInfo{
     int point_id;
     float score;

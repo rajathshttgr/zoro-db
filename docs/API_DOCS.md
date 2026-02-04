@@ -309,6 +309,44 @@ GET /collections/{collection_name}/points/{point_id}
 
 ---
 
+## Scroll Points
+
+Scroll Points in Collection by limit
+
+**Endpoint**
+
+```
+POST /collections/{collection_name}/points/scroll
+```
+
+**Request Body**
+
+```json
+{
+  "limit": 3
+}
+```
+
+**Response**
+
+```json
+{
+  "result": [
+    {
+      "point_id": 12,
+      "payload": { "document": "How to reset a forgotten password" }
+    },
+    {
+      "point_id": 24,
+      "payload": { "document": "forgot my password" }
+    }
+  ],
+  "time": 0.933878
+}
+```
+
+---
+
 ## System API
 
 ### Ping

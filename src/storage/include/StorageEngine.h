@@ -24,6 +24,7 @@ public:
     bool DeletePoints(const std::string& collection_name, int point_id);
     int CountPoints(const std::string& collection_name);
     std::optional<PointInfo> GetMetadataByPointId(const std::string& collection_name, int point_id, std::string& err);
+    std::vector<ScrollPointInfo> ListPointMetadata(const std::string& collection_name, int limit, std::string& err);
     bool LoadAllVectors(const std::string& coll_name, std::vector<float>& out_vectors, std::vector<uint64_t>& out_ids);
 
 private:

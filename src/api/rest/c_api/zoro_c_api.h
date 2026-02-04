@@ -74,6 +74,19 @@ void zoro_free_search_result(
     int count
 );
 
+bool zoro_scroll_points(
+    const char* name,     
+    int k,                   
+    zoro_scroll_point_t** out_points, 
+    int* out_count,           
+    char* err             
+);
+
+
+void zoro_free_scroll_result(
+    zoro_scroll_point_t* points,
+    int count
+);
 
 #ifdef __cplusplus
 }

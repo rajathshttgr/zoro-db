@@ -135,6 +135,18 @@ CollectionManager::SearchPointByVector(
 }
 
 
+std::optional<zoro::storage::PointInfo>
+CollectionManager::RetrivePointById(const std::string& name, const int& point_id, std::string& err){
+    if (!storage_->CollectionExists(name)) {
+        err = "Matching point not found.";
+        return std::nullopt;
+    }
+    return storage_->GetMetadataByPointId(name, point_id, err);
+}
+
+
+
+
 } // namespace zoro::core
 
 
