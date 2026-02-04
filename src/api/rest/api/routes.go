@@ -24,7 +24,7 @@ func RegisterRoutes(r *gin.Engine) {
 
 	// Search
 	r.GET("/collections/:collection_name/points/:point_id", handlers.GetPointById)
-	r.POST("/collections/:collection_name/scroll", handlers.GetScrollPoints)
+	r.POST("/collections/:collection_name/points/scroll", handlers.GetScrollPoints)
 	r.POST("/collections/:collection_name/points/search", handlers.SearchPoints)
 }
 

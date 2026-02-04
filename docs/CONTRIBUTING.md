@@ -1,5 +1,8 @@
 # Contributing to Zoro-DB
 
+Thanks for your interest in contributing to Zoro-DB.
+This guide explains how to build, run, and make small contributions to the project.
+
 ### Prerequisites
 
 - Linux or macOS (Windows users: WSL recommended)
@@ -42,6 +45,29 @@ http://localhost:6464
 
 ```bash
 ./scripts/build.sh cli
+```
+
+## Contribution Notes
+
+- Create feature or fix branches from main
+- Keep changes focused and easy to review
+- Follow existing code style and structure
+
+### Commit messages
+
+Use a simple prefix:
+
+- `feat`: new feature
+- `fix`: bug fix
+- `docs`: documentation changes
+- `tests`: tests only
+- `chore`: refactor, cleanup, tooling
+
+Example:
+
+```
+feat: add basic index search
+fix: prevent crash on empty input
 ```
 
 ## Notes

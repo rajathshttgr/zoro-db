@@ -323,7 +323,7 @@ POST /collections/{collection_name}/points/scroll
 
 ```json
 {
-  "limit": 3
+  "limit": 2
 }
 ```
 
