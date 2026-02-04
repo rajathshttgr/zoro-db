@@ -2,6 +2,7 @@
 #include "../include/Utils.h"
 #include <string>
 #include <cstdint>
+#include <vector>
 
 namespace zoro::storage{
 
