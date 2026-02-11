@@ -24,6 +24,10 @@ func main() {
 		c.String(200, "Welcome to Zoro-DB REST API!")
 	})
 
+	r.HEAD("/", func(c *gin.Context) {
+        c.Status(200) 
+    })
+
     api.RegisterRoutes(r)
 
     log.Println("Listening on :6464")
