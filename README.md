@@ -6,12 +6,15 @@
 <div align="center">
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/rajathshttgr/zoro-db/docker-image.yml?branch=main&label=build&style=flat-square)
-![Version](https://img.shields.io/badge/version-v0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.2.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)
 
 </div>
 
 ---
+
+> [!CAUTION]
+> This is experimental version of zoro-db and it will be very unstable version at this moment.
 
 ## Overview
 
