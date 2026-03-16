@@ -14,19 +14,18 @@
 ---
 
 > [!CAUTION]
-> This is experimental version of zoro-db and it will be very unstable version at this moment.
+> Zoro-DB is currently in an experimental stage and may be unstable.
 
 ## Overview
 
-**Zoro-DB** is a lightweight, high-performance vector database designed for similarity search workloads.  
-Built entirely from scratch in C++, it provides a RESTful API for managing vector collections and executing fast approximate nearest neighbor (ANN) searches.
+**Zoro-DB** is a high-performance vector database designed for similarity search workloads. Built entirely from scratch in C++, it provides a RESTfull API for managing vector collections and executing fast approximate nearest neighbor (ANN) searches.
 
 Zoro-DB is suitable for:
 
 - Semantic search
 - Recommendation systems
-- Retrieval-Augmented Generation (RAG)
-- Embedding-based similarity search
+- RAG (Retrieval-Augmented Generation)
+- Embedding similarity / clustering
 
 ## Getting Started
 
@@ -40,7 +39,7 @@ docker run -p 6464:6464 ghcr.io/rajathshttgr/zoro-db:dev
 
 Access the API at `http://localhost:6464`
 
-For instructions on persistent storage, detached mode, or other advanced options, please refer to the [DEVELOPER_GUIDE](docs/DEVELOPER_GUIDE.md).
+For advanced setup such as persistent storage, detached mode, and development workflows, see the [DEVELOPER_GUIDE](docs/DEVELOPER_GUIDE.md).
 
 ## Python Client Installation
 
@@ -60,22 +59,23 @@ client = ZoroClient(host="localhost", port=6464)
 client = ZoroClient(url="http://localhost:6464")
 ```
 
-## Working with Vectors (Self-Managed Embeddings)
+## Working with Vectors
 
 Zoro-DB supports externally generated embeddings and direct vector storage.
 
+Example workflow using the Python SDK:
+
 ```python
 from zoro_client import VectorConfig, Distance
+import numpy as np
 
-# Create collection
+# Create a collection
 client.create_collection(
     collection_name="test",
     vector_config=VectorConfig(size=100, distance=Distance.COSINE)
 )
 
-# Upsert points
-import numpy as np
-
+# Generate example vectors
 vectors = np.random.rand(5, 100).tolist()
 
 payloads = [
@@ -86,68 +86,84 @@ payloads = [
     {"document": "Python for Machine Learning"},
 ]
 
+# Insert vectors
 client.upsert_points(
     collection_name="test",
     vectors=vectors,
     ids=[12, 4, 34, 23, 2],
-    payloads=payloads,
+    payloads=payloads
 )
 
-# search query
+# Search
 results = client.search(
-    collection_name="test", query_vector=np.random.rand(100).tolist(), limit=2
+    collection_name="test",
+    query_vector=np.random.rand(100).tolist(),
+    limit=2
 )
 
 print(results)
 
 ```
 
-## Using the REST API Directly
+> For full SDK usage, parameters, and examples see the [SDK DOCUMENTATION](docs/SDK_DOCUMENTATION.md).
 
-Zoro-DB exposes a RESTful interface for direct integration with any language or platform.
+## Using the REST API
+
+Zoro-DB provides a RESTful interface that can be used from any programming language.
 
 ### Create Collection
 
 ```bash
-curl -X POST http://localhost:6464/collections \
+curl -X POST http://localhost:6464/collections/:collection_name \
   -H "Content-Type: application/json" \
   -d '{
-  "collection_name": "products",
-  "dimension": 10,
-  "distance": "cosine"
+  "vectors": {
+    "size": 10,
+    "distance": "Cosine"
+  }
 }'
 ```
 
 ### Upsert Points
 
 ```bash
-curl -X POST http://localhost:6464/collections/products/points \
+curl -X PUT http://localhost:6464/collections/:collection_name/points \
   -H "Content-Type: application/json" \
   -d '{
-  "vectors": [
-    [0.12, 0.34, 0.53, 0.63, 0.23, 0.91, 0.11, 0.42, 0.77, 0.08],
-    [0.91, 0.11, 0.42, 0.77, 0.08, 0.12, 0.34, 0.53, 0.63, 0.23]
-  ],
-  "ids": [12, 24],
-  "payload": [
-    {"document": "How to reset a forgotten password"},
-    {"document": "Best movies to watch this weekend"}
+  "points": [
+    {
+      "id": 12,
+      "payload": {
+        "document": "How to reset a forgotten password",
+        "tag": "authentication"
+      },
+      "vector": [0.12, 0.34, 0.53, 0.63, 0.23, 0.91, 0.11, 0.42, 0.77, 0.08]
+    },
+    {
+      "id": 24,
+      "payload": {
+        "document": "Best movies to watch on this weekend",
+        "tag": "entertainment"
+      },
+      "vector": [0.91, 0.11, 0.42, 0.77, 0.08, 0.12, 0.34, 0.53, 0.63, 0.23]
+    }
   ]
-}'
+}
+'
 ```
 
-### Search Query
+### Search
 
 ```bash
-curl -X POST http://localhost:6464/collections/products/search \
+curl -X POST http://localhost:6464/collections/:collection_name/points/search \
   -H "Content-Type: application/json" \
   -d '{
-  "vectors": [0.16, 0.34, 0.63, 0.63, 0.23, 0.91, 0.11, 0.42, 0.77, 0.07],
-  "limit": 1
+  "vector": [0.22, 0.34, 0.53, 0.63, 0.23, 0.81, 0.11, 0.42, 0.77, 0.08],
+  "limit": 2,
 }'
 ```
 
-**Response:**
+**Example Response**
 
 ```json
 {
@@ -155,77 +171,28 @@ curl -X POST http://localhost:6464/collections/products/search \
     {
       "id": 12,
       "score": 0.86,
-      "payload": { "document": "How to reset a forgotten password" }
-    }
-  ],
-  "time": 5.539202
-}
-```
-
-### Delete Points
-
-```bash
-curl -X DELETE http://localhost:6464/collections/products/points \
-  -H "Content-Type: application/json" \
-  -d '{"ids": [12, 24]}'
-```
-
-### Get Collection Info
-
-```bash
-curl -X GET http://localhost:6464/collections/products
-```
-
-**Response:**
-
-```json
-{
-  "result": {
-    "coll_id": 100,
-    "collection_name": "products",
-    "dimension": 10,
-    "distance": "cosine",
-    "shards_count": 1,
-    "points_count": 10,
-    "status": "active"
-  },
-  "time": 5.539202
-}
-```
-
-### List All Collections
-
-```bash
-curl -X GET http://localhost:6464/collections
-```
-
-**Response:**
-
-```json
-{
-  "collections_count": 2,
-  "collections": [
-    {
-      "collection_name": "products",
-      "distance": "cosine",
-      "dimension": 156,
-      "status": "active"
+      "payload": {
+        "document": "How to reset a forgotten password",
+        "tag": "authentication"
+      }
     },
     {
-      "collection_name": "movies",
-      "distance": "dot",
-      "dimension": 156,
-      "status": "active"
+      "id": 28,
+      "score": 0.62,
+      "payload": { "document": "forgot my password", "tag": "authentication" }
     }
   ],
-  "time": 5.539202
+  "status": "ok",
+  "time": 0.94741
 }
 ```
 
-For detailed endpoint specifications, request/response schemas, and APIs that are still evolving, see the [API DOCUMENTATION](docs/API_DOCUMENTATION.md).
+> For the complete list of endpoints, request schemas, and response formats see the [API DOCUMENTATION](docs/api/API_DOCUMENTATION.md).
 
 ## Contributing
 
-Contributions, ideas, and feedback are always welcome. If you find a bug, have a feature request, or want to suggest improvements, please feel free to open an issue. Code contributions are also appreciated. For detailed contribution guidelines and project flow, see [CONTRIBUTING.md](docs/api/CONTRIBUTING.md).
+Contributions, ideas, and feedback are always welcome.
+If you find a bug, want to suggest a feature, or improve documentation, feel free to open an issue or submit a pull request.
+For contribution guidelines and development workflow see [CONTRIBUTING.md](docs/api/CONTRIBUTING.md).
 
 Thank you for your interest in Zoro-DB.
