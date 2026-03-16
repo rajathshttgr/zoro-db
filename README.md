@@ -222,10 +222,10 @@ curl -X GET http://localhost:6464/collections
 }
 ```
 
-For detailed endpoint specifications, request/response schemas, and APIs that are still evolving, see the [API DOCUMENTATION](docs/API_DOCS.md).
+For detailed endpoint specifications, request/response schemas, and APIs that are still evolving, see the [API DOCUMENTATION](docs/API_DOCUMENTATION.md).
 
 ## Contributing
 
-Contributions, ideas, and feedback are always welcome. If you find a bug, have a feature request, or want to suggest improvements, please feel free to open an issue. Code contributions are also appreciated. For detailed contribution guidelines and project flow, see [CONTRIBUTING.md](docs/CONTRIBUTING.md).
+Contributions, ideas, and feedback are always welcome. If you find a bug, have a feature request, or want to suggest improvements, please feel free to open an issue. Code contributions are also appreciated. For detailed contribution guidelines and project flow, see [CONTRIBUTING.md](docs/api/CONTRIBUTING.md).
 
 Thank you for your interest in Zoro-DB.

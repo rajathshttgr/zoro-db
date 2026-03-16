@@ -1,3 +1,5 @@
+**[API version v0, Application version v0.1.0]**
+
 # Zoro DB – API Documentations
 
 **Note:** Some API endpoints documented here are still under development and may not be available yet. For stable functionality, please use the CLI and refer to [README.md](../README.md).
