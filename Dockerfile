@@ -50,7 +50,7 @@ RUN mkdir -p build && cd build && \
     make -j$(nproc)
 
 # Build REST API
-WORKDIR /app/src/api/rest
+WORKDIR /app/src/api
 RUN go build -o /app/zoro-rest
 
 # Runtime image

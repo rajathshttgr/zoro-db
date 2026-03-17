@@ -26,6 +26,6 @@ echo "Running Zoro REST API..."
 
 export LD_LIBRARY_PATH="$BUILD_PATH/api:$LD_LIBRARY_PATH"
 
-cd "$SRC_DIR/api/src"
+cd "$SRC_DIR/api"
 go run .
 

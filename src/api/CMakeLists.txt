@@ -8,7 +8,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # C API 
 add_library(zoro SHARED
-    src/c_api/zoro_c_api.cpp
+    c_api/zoro_c_api.cpp
 )
 
 target_include_directories(zoro PUBLIC
