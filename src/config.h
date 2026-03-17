@@ -6,7 +6,7 @@ namespace zoro {
 namespace config {
 
 inline std::string getVersion(){
-    std::string VERSION="v0.0.1";
+    std::string VERSION="v0.2.0";
     return VERSION;
 }
 
