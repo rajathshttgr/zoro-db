@@ -3,8 +3,6 @@
 A high-performance, crash-safe vector database designed for **similarity search at scale**, combining **in-memory ANN search** with **durable disk persistence**.  
 The system follows proven database principles such as **Write-Ahead Logging (WAL)**, **append-only storage**, and **clear separation of concerns**.
 
----
-
 ## Overview
 
 This database is built to support:
@@ -16,13 +14,9 @@ This database is built to support:
 
 The architecture uses FAISS for in-memory similarity search and a custom disk storage engine as the source of truth.
 
----
-
 ## Architecture Diagram
 
 ![Architecture](block-diagram.jpg)
-
----
 
 ## Core Components
 
@@ -43,8 +37,6 @@ A Python client library that simplifies interaction with the database.
 - Reduced load on API layer
 - Improved developer experience
 
----
-
 ### 2. API Layer (REST API / CLI)
 
 The primary external interface for users.
@@ -60,8 +52,6 @@ The primary external interface for users.
 - Written in **Go (Golang)** for performance and concurrency
 - Interacts with C++ core components via a **C API bridge**
 
----
-
 ### 3. Services Layer
 
 Acts as a business-logic boundary between the API and the core database engine.
@@ -72,8 +62,6 @@ Acts as a business-logic boundary between the API and the core database engine.
 - Enforces system rules and constraints
 - Orchestrates calls to the Collection Manager
 - Converts internal responses into API-friendly formats
-
----
 
 ### 4. Collection Manager
 
@@ -90,8 +78,6 @@ The central orchestrator of the system.
 
 > No data is indexed or exposed until it is safely logged and persisted.
 
----
-
 ### 5. Write-Ahead Log (WAL)
 
 Ensures durability and crash recovery.
@@ -106,8 +92,6 @@ Ensures durability and crash recovery.
 - Guarantees no acknowledged write is lost
 - Supports replay during crash recovery
 - Prevents partial or corrupted writes
-
----
 
 ### 6. Disk Storage Layer
 
@@ -124,8 +108,6 @@ Optimized for sequential writes and efficient reads.
   - Collection state
 - Serves as the source of truth for collection existence
 
----
-
 #### 6.2 Collection Metadata Manager
 
 - Tracks collection-level statistics:
@@ -133,8 +115,6 @@ Optimized for sequential writes and efficient reads.
   - Point count
   - Internal states and counters
 - Used for validation and monitoring
-
----
 
 #### 6.3 Index Files
 
@@ -147,16 +127,12 @@ Optimized for sequential writes and efficient reads.
 - Currently supports **binary search traversal**
 - Designed to evolve into B-tree or advanced index structures
 
----
-
 #### 6.4 Source Files
 
 - Store actual payload data
 - Append-only binary format for fast writes
 - No random traversal
 - Data retrieval uses offset and length from index files
-
----
 
 ### 7. Index & Search Layer
 
@@ -171,8 +147,6 @@ Maintains synchronization between disk storage and in-memory indexes.
 **Design Principle**
 
 > Disk is the source of truth, FAISS is the accelerator.
-
----
 
 ### 8. FAISS (In-Memory ANN Engine)
 
@@ -194,8 +168,6 @@ References:
 - https://github.com/facebookresearch/faiss
 - https://github.com/nmslib/hnswlib
 
----
-
 ## Design Principles
 
 - Write-Ahead Logging for durability
@@ -205,8 +177,6 @@ References:
 - Clear separation of responsibilities
 - Crash-safe and recoverable design
 - Extensible ANN backend
-
----
 
 ## Disclaimer
 

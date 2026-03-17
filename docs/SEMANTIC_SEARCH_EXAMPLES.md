@@ -1,4 +1,4 @@
-# Examples or Expected Behaviour
+# SEMANTIC SEARCH EXAMPLES
 
 Example documents for various topics:
 
@@ -23,6 +23,7 @@ Example documents for various topics:
 **Query:** "How do vector databases perform similarity search?"
 
 **Results:**
+
 - "Vector databases enable fast similarity search over embeddings."
 - "Cosine similarity measures the angle between two vectors."
 - "Transformers power most modern large language models."
@@ -32,6 +33,7 @@ Example documents for various topics:
 **Query:** "Which programming language is best for AI and machine learning?"
 
 **Results:**
+
 - "Python is the most popular language for machine learning."
 - "Neural networks are the foundation of deep learning models."
 - "Transformers power most modern large language models."
@@ -41,6 +43,7 @@ Example documents for various topics:
 **Query:** "How are containers deployed and managed in production?"
 
 **Results:**
+
 - "Docker containers simplify application deployment."
 - "Kubernetes manages containerized workloads at scale."
 - "FastAPI is used to build high-performance backend APIs."
@@ -50,6 +53,7 @@ Example documents for various topics:
 **Query:** "Which database is good for caching and fast access?"
 
 **Results:**
+
 - "Redis is commonly used for caching and session storage."
 - "PostgreSQL is a reliable relational database system."
 - "Vector databases enable fast similarity search over embeddings."
@@ -59,5 +63,6 @@ Example documents for various topics:
 **Query:** "What events influence stock prices?"
 
 **Results:**
+
 - "Stock markets react strongly to economic news."
 - "The FIFA World Cup is watched by millions of fans worldwide."

@@ -193,6 +193,6 @@ curl -X POST http://localhost:6464/collections/:collection_name/points/search \
 
 Contributions, ideas, and feedback are always welcome.
 If you find a bug, want to suggest a feature, or improve documentation, feel free to open an issue or submit a pull request.
-For contribution guidelines and development workflow see [CONTRIBUTING.md](docs/api/CONTRIBUTING.md).
+For contribution guidelines and development workflow see [CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 Thank you for your interest in Zoro-DB.

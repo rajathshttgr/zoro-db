@@ -1,4 +1,4 @@
-## [Current Version] v0.0.1
+## [Current Version] v0.0.2
 
 | Major Version | Exp Version | Date        |
 | ------------- | ----------- | ----------- |
@@ -14,7 +14,7 @@
 
 ## [15 Mar 2026] v0.0.2
 
-- `exp/v2.0` API standardization, API documentations, SDK versioning
+- `exp/v2.0` API standardization, API documentations, Initialize Major Architecture Improvements
 
 ## [11 Dec 2025] v0.0.1
 
