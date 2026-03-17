@@ -25,5 +25,4 @@ target_link_libraries(zoro-db PRIVATE
     index
     wal
     storage
-    zoro_api
 )
