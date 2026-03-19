@@ -16,9 +16,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Go
-RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
-    | tar -C /usr/local -xz
-
+RUN curl -L --http1.1 --retry 5 --retry-delay 5 \
+    https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
+    -o /tmp/go.tar.gz && \
+    tar -C /usr/local -xzf /tmp/go.tar.gz && \
+    rm /tmp/go.tar.gz
+    
 ENV PATH="/usr/local/go/bin:$PATH"
 
 # Build FAISS
