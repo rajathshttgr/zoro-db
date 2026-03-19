@@ -1,4 +1,4 @@
-module zoro/api
+module zoro
 
 go 1.23.0
 

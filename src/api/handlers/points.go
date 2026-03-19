@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"zoro/api/dto"
-	"zoro/api/services"
+	"zoro/dto"
+	"zoro/services"
 )
 
 func UpsertPoint(c *gin.Context) {

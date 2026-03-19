@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode"
 
-	"zoro/api/core"
+	"zoro/core"
 )
 
 var collectionNameRegex = regexp.MustCompile(

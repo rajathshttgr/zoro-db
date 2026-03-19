@@ -2,7 +2,7 @@ package services
 
 import (
 	"errors"
-	"zoro/api/core"
+	"zoro/core"
 )
 
 func SearchPoints(

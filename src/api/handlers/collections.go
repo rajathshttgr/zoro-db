@@ -6,8 +6,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"zoro/api/dto"
-	"zoro/api/services"
+	"zoro/dto"
+	"zoro/services"
 )
 
 func CreateCollection(c *gin.Context) {

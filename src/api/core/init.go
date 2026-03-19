@@ -1,7 +1,7 @@
 package core
 
 /*
-#cgo LDFLAGS: -L../../../build/api -lzoro
+#cgo LDFLAGS: -L../../../build/bridge -lzoro
 #include "../../bridge/zoro_c_api.h"
 #include <stdlib.h>
 */

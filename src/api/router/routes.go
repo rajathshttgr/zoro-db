@@ -1,8 +1,8 @@
-package api
+package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"zoro/api/handlers"
+	"zoro/handlers"
 )
 
 func RegisterRoutes(r *gin.Engine) {
