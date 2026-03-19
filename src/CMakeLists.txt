@@ -13,17 +13,4 @@ add_subdirectory(wal)
 add_subdirectory(index)
 add_subdirectory(collection)
 add_subdirectory(services) 
-add_subdirectory(api) 
-
-add_executable(zoro-db
-    main.cpp
-)
-
-target_link_libraries(zoro-db PRIVATE
-    services
-    collection
-    index
-    wal
-    storage
-    zoro_api
-)
+add_subdirectory(bridge) 

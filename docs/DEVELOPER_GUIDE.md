@@ -1,182 +1,160 @@
-# Zoro-DB Developer Guide
+# Deploy Zoro-DB
 
-## Table of Contents
+This guide explains how to deploy **Zoro-DB using Docker** for development and production environments.
 
-1. Overview
-2. Running Zoro-DB with Docker
-   - Detached Mode
-   - Persistent Storage
-   - Custom Port
-3. Managing Containers
-   - Stopping the Container
-   - Checking Container Status
-   - Removing Containers and Volumes
-4. Port Conflicts
-5. Pulling the Latest Image
-6. Using the CLI
-7. Notes
+# Quick Start
 
----
+Run the REST API server:
 
-## Overview
+```bash
+docker run -p 6464:6464 ghcr.io/rajathshttgr/zoro-db:dev
+```
 
-This guide covers all the essential commands and best practices for developers using **Zoro-DB** with Docker. It includes persistent storage, detached mode, container management, and troubleshooting common issues.
-
----
-
-## Running Zoro-DB with Docker
-
-### Detached Mode
-
-Run Zoro-DB in the background (detached mode):
+Access the API:
 
 ```
+http://localhost:6464
+```
+
+# Recommended Deployment
+
+For long-running services or production environments, run Zoro-DB with:
+
+- background execution
+- persistent storage
+- automatic image updates
+
+```bash
+docker run -d \
+  -p 6464:6464 \
+  -v $(pwd)/zoro-data:/app/data \
+  --name zoro-db \
+  --pull always \
+  ghcr.io/rajathshttgr/zoro-db:dev
+```
+
+| Option                     | Description                 |
+| -------------------------- | --------------------------- |
+| `-d`                       | Run container in background |
+| `-p 6464:6464`             | Expose REST API             |
+| `-v ./zoro-data:/app/data` | Persist database data       |
+| `--name zoro-db`           | Container name              |
+| `--pull always`            | Pull latest image           |
+
+Data will be stored locally in:
+
+```
+./zoro-data
+```
+
+# Deployment Options
+
+## Run in Detached Mode
+
+Run Zoro-DB as a background service.
+
+```bash
 docker run -d -p 6464:6464 --name zoro-db ghcr.io/rajathshttgr/zoro-db:dev
 ```
 
-- `-d` → Detached mode
-- `--name zoro-db` → Assigns a name to the container
+View logs:
 
-You can check the logs anytime:
-
-```
+```bash
 docker logs -f zoro-db
 ```
 
----
+## Enable Persistent Storage
 
-### Persistent Storage
+Persist vectors and collections across container restarts.
 
-To keep data even if the container stops or is removed, mount a local folder as a Docker volume:
-
-```
-docker run -d -p 6464:6464 \
+```bash
+docker run -d \
+  -p 6464:6464 \
   -v $(pwd)/zoro-data:/app/data \
-  --name zoro-db ghcr.io/rajathshttgr/zoro-db:dev
+  --name zoro-db \
+  ghcr.io/rajathshttgr/zoro-db:dev
 ```
 
-- `-v $(pwd)/zoro-data:/app/data` → Maps your local folder to the container's data directory.
-- All vector collections will persist in `./zoro-data`.
-
----
-
-### Custom Port
-
-If port `6464` is in use, map to another port:
+All database files are stored in:
 
 ```
-docker run -d -p 6565:6464 --name zoro-db ghcr.io/rajathshttgr/zoro-db:dev
+./zoro-data
 ```
 
-- Container still uses `6464` internally.
-- Access externally via `http://localhost:6565`.
+Recommended for **production deployments**.
 
----
+## Use a Custom Port
 
-## Managing Containers
+If port `6464` is already in use, map a different host port.
 
-### Stopping the Container
+```bash
+docker run -d \
+  -p 6565:6464 \
+  --name zoro-db \
+  ghcr.io/rajathshttgr/zoro-db:dev
+```
+
+Access the API at:
 
 ```
+http://localhost:6565
+```
+
+# Container Management
+
+Stop the container:
+
+```bash
 docker stop zoro-db
 ```
 
-To remove it completely:
+Start the container:
 
+```bash
+docker start zoro-db
 ```
+
+Remove the container:
+
+```bash
 docker rm zoro-db
 ```
 
----
-
-### Checking Container Status
-
 List running containers:
 
-```
+```bash
 docker ps
 ```
 
-List all containers (running or stopped):
+# Updating Zoro-DB
 
-```
-docker ps -a
-```
+Pull the latest image:
 
----
-
-### Removing Containers and Volumes
-
-Remove a container and its associated volumes:
-
-```
-docker rm -v zoro-db
-```
-
-Remove all unused volumes:
-
-```
-docker volume prune
-```
-
-> **Caution:** This deletes data stored in volumes not currently used by containers.
-
----
-
-## Port Conflicts
-
-If the port is already in use:
-
-1. Find which process uses the port:
-
-```
-lsof -i :6464
-```
-
-2. Kill the process (Linux/macOS):
-
-```
-kill -9 <PID>
-```
-
-3. Restart Zoro-DB with the same or a new port.
-
----
-
-## Pulling the Latest Image
-
-Always pull the latest image before running containers:
-
-```
+```bash
 docker pull ghcr.io/rajathshttgr/zoro-db:dev
 ```
 
-To automatically pull the latest image every time you run a container:
+If using `--pull always`, Docker automatically updates the image when starting the container.
 
-```
-docker run -d -p 6464:6464 --name zoro-db --pull always ghcr.io/rajathshttgr/zoro-db:dev
-```
+# Production Recommendation
 
-- `--pull always` → Always pull the latest image before starting the container.
+For most deployments, use:
 
----
-
-## Using the CLI
-
-For debugging or development:
-
-```
-docker run -it --rm ghcr.io/rajathshttgr/zoro-db:dev /app/zoro-db
+```bash
+docker run -d \
+  -p 6464:6464 \
+  -v $(pwd)/zoro-data:/app/data \
+  --name zoro-db \
+  --pull always \
+  ghcr.io/rajathshttgr/zoro-db:dev
 ```
 
-- `--rm` → Automatically remove container after exit.
+This ensures:
 
----
+- persistent data
+- background execution
+- automatic updates
 
-## Notes
+## Need Help?
 
-- Use persistent storage in production or long-term testing.
-- Detached mode is recommended for background services.
-- Always check port availability before running containers.
-- Pull the latest image regularly to get updates and bug fixes.
-- CLI usage is optional and mostly for debugging.
+If you run into any issues while deploying or running Zoro-DB, feel free to open an issue in the repository.
