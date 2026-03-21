@@ -19,8 +19,8 @@ func CreateCollection(
 	distance string,
 ) error {
 
-	if dimension <= 0 || dimension > 9999 {
-		return errors.New("dimension must be between 1 and 9999")
+	if dimension <= 0 || dimension > 20000 {
+		return errors.New("size of the vector should be between 1 and 20000")
 	}
 
 	name = strings.TrimSpace(name)
@@ -84,6 +84,12 @@ func ListCollections() ([]core.CollectionInfo, error) {
     return core.ListCollections()
 }
 
-func GetCollectionInfo(collectionName string) (*core.CollectionInfo, error){
+
+func CheckCollectionExists(collectionName string) (bool, error){
+	return true, nil
+}
+
+
+func GetCollectionDetails(collectionName string) (*core.CollectionInfo, error){
 	return core.GetCollectionInfo(collectionName)
 }

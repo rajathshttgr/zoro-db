@@ -24,7 +24,7 @@ func SearchPoints(
 		return nil, err
 	}
 
-	if len(vectors) != collectionInfo.Dimension {
+	if len(vectors) != collectionInfo.Size {
 		return nil, errors.New("vector dimension does not match collection dimension")
 	}
 

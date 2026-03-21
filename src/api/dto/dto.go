@@ -5,35 +5,16 @@ type ErrorResponse struct {
     Error string `json:"error"`
 }
 
-type CreateCollectionRequest struct {
-    CollectionName  string `json:"collection_name" binding:"required"`
-    Dimension       int    `json:"dimension" binding:"required"`
-    Distance        string `json:"distance" binding:"required"`
+type ResponseLayout struct {
+	Result     any      `json:"result"`
+	Status     string 	`json:"status"`
+	Time  	   float64 	`json:"time"`
 }
+
 
 type CollectionResponseLayout struct {
 	Result any     `json:"result"`
 	Time   float64 `json:"time"`
-}
-
-type CreateCollectionResult struct {
-	Status         string `json:"status"`
-	CollectionName string `json:"collection_name"`
-	Dimension      int    `json:"dimension"`
-	Distance       string `json:"distance"`
-	Sharding       int    `json:"sharding"`
-}
-
-type DeleteCollectionResult struct {
-	Status         string `json:"status"`
-	CollectionName string `json:"collection_name"`
-}
-
-type CollectionInfoResult struct {
-    CollectionName string `json:"collection_name"`
-    Dimension      string `json:"dimension"`
-    Distance       string `json:"distance"`
-    Status         string `json:"status"`
 }
 
 

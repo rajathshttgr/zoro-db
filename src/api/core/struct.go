@@ -3,7 +3,7 @@ package core
 type CollectionInfo struct {
 	ID        int
 	Name      string
-	Dimension int
+	Size int
 	Distance  string
 	Status    string
 	CreatedAt string

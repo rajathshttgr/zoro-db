@@ -3,7 +3,7 @@ package main
 import (
     "log"
 	"github.com/gin-gonic/gin"
-	"zoro/router"
+	"zoro/routes"
     "zoro/utils"
     "zoro/core"
 )
@@ -28,7 +28,7 @@ func main() {
         c.Status(200) 
     })
 
-    router.RegisterRoutes(r)
+    routes.RegisterRoutes(r)
 
     log.Println("Listening on :6464")
 	r.Run(":6464") 

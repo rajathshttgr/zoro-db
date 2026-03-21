@@ -1,4 +1,4 @@
-package router
+package routes
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,16 +7,17 @@ import (
 
 func RegisterRoutes(r *gin.Engine) {
 	// System
-	r.GET("/health", handlers.Health)
 	r.GET("/version", handlers.Version)
+	r.GET("/health", handlers.Health)
 	r.GET("/ping", handlers.Ping)
 
 	// Collection
-	r.POST("/collections",handlers.CreateCollection)
-	r.DELETE("/collections/:collection_name",handlers.DeleteCollection)
-	r.GET("/collections",handlers.GetCollections)
-	r.GET("/collections/:collection_name",handlers.GetCollectionInfo)
-
+	r.POST("/collections/:collection_name", handlers.CreateCollection)  // Create a Collection
+	r.DELETE("/collections/:collection_name",handlers.DeleteCollection) // Delete a Collection
+	r.GET("/collections/:collection_name",handlers.GetCollectionInfo) // Get collection details
+	r.GET("/collections/:collection_name/exists",handlers.CheckCollectionExists) // Check Collection Exists
+	r.GET("/collections",handlers.GetCollections) // List all Collections
+	
 	// Points
 	r.POST("/collections/:collection_name/points", handlers.UpsertPoint)
 	r.DELETE("/collections/:collection_name/points", handlers.DeletePoints)
