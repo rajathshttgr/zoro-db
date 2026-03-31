@@ -133,3 +133,6 @@ func GetCollectionInfo(collectionName string) (*CollectionInfo, error) {
     return info, nil
 }
 
+func CheckCollectionExists(collectionName string) (bool, error){
+	return true, nil
+}

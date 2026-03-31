@@ -1,25 +1,19 @@
 #include "../include/CollectionService.h"
+#include <unordered_map>
+
 
 namespace zoro::services {
 
-    bool CollectionService::CreateCollection(const std::string& name, int dimension,const std::string& distance, std::string& err){
+    bool CollectionService::CreateCollection(const std::string& name, int size, const std::string& distance, std::string& err){
         if (name.empty()) {
             err = "Collection name cannot be empty.";
             return false;
         }
-        if (dimension <= 0) {
-            err = "Dimension must be greater than zero.";
-            return false;
-        }
 
-        // distance enum validation
-        if (distance != "l2" && distance != "cosine" && distance != "dot") {
-            err = "Invalid distance metric. Must be one of: l2, cosine, dot.";
-            return false;
-        }
-
-        if (!manager_->CreateCollection(name, dimension, distance)) {
-            err = "Failed to create collection, name already exists.";
+        if (!manager_->CreateCollection(name, size, distance, err)) {
+            if(err.empty()) {
+                err = "Failed to create collection, storage error.";
+            }
             return false;
         }
 

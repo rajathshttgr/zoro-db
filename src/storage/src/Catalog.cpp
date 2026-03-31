@@ -47,11 +47,30 @@ bool Catalog::AddCollection(const std::string& name, int& out_coll_id, int& dime
         { "dimension",dimension},
         { "distance",distance},
         { "created_at", CurrentTimestampUTC() },
-        { "status", "active"} // demo status
+        { "status", "pending"} // demo status
     };
 
     out_coll_id = curr_id;
     j["current_coll_id"] = curr_id + 1;
+
+    std::ofstream out(path_);
+    out << j.dump(4);
+    return true;
+}
+
+bool Catalog::AckCollection(const std::string& name)
+{
+    std::ifstream in(path_);
+    nlohmann::json j;
+    in >> j;
+    in.close();
+
+    auto& collections = j["collections"];
+
+    if (!collections.contains(name))
+        return false;
+
+    collections[name]["status"] = "active";
 
     std::ofstream out(path_);
     out << j.dump(4);
