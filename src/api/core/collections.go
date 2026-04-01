@@ -87,7 +87,7 @@ func ListCollections() ([]CollectionInfo, error) {
 		collections = append(collections, CollectionInfo{
 			ID:        int(c.id),
 			Name:      C.GoString(c.name),
-			Dimension: int(c.dimension),
+			Size:      int(c.dimension),
 			Distance:  C.GoString(c.distance),
 			Status:    C.GoString(c.status),
 			CreatedAt: C.GoString(c.created_at),
@@ -124,7 +124,7 @@ func GetCollectionInfo(collectionName string) (*CollectionInfo, error) {
     info := &CollectionInfo{
         ID:        int(cInfo.id),
         Name:      C.GoString(cInfo.name),
-        Dimension: int(cInfo.dimension),
+        Size:      int(cInfo.dimension),
         Distance:  C.GoString(cInfo.distance),
         Status:    C.GoString(cInfo.status),
         CreatedAt: C.GoString(cInfo.created_at),
@@ -133,3 +133,6 @@ func GetCollectionInfo(collectionName string) (*CollectionInfo, error) {
     return info, nil
 }
 
+func CheckCollectionExists(collectionName string) (bool, error){
+	return true, nil
+}

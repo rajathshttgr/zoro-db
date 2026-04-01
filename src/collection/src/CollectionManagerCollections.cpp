@@ -6,9 +6,11 @@ namespace zoro::core {
 bool CollectionManager::CreateCollection(
     const std::string& collection_name,
     int dimension,
-    const std::string& distance
+    const std::string& distance,
+    std::string& err
 ) {
     if (storage_->CollectionExists(collection_name)) {
+        err = "Collection name `" + collection_name + "` already exists!";
         return false;
     }
 
@@ -17,16 +19,24 @@ bool CollectionManager::CreateCollection(
 
     // update catalog and get coll_id (call by reference update)
     int coll_id;
-    if (!catalog_.AddCollection(collection_name, coll_id, dimension, distance))
+    if (!catalog_.AddCollection(collection_name, coll_id, dimension, distance)){
+        err = "Failed to add collection to catalog, storage error.";
         return false;
+    }
 
     // Append to WAL
     if (!wal_.log_create_collection(
             coll_id, collection_name, dimension, dist_enum)) {
+        err = "Failed to log create collection in WAL.";
         return false;
     }
 
-    return storage_->CreateCollection(collection_name, dimension, dist_str, coll_id);
+    bool success = storage_->CreateCollection(collection_name, dimension, dist_str, coll_id);
+    if (!success) {
+        err = "Failed to create collection in storage.";
+        return false;
+    }
+    return true;
 }
 
 bool CollectionManager::DeleteCollection(const std::string& collection_name) {

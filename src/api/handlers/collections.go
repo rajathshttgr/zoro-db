@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 	"time"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"zoro/dto"
@@ -12,6 +11,7 @@ import (
 
 func CreateCollection(c *gin.Context) {
 	start := time.Now()
+	collectionName := c.Param("collection_name")
 
 	var req dto.CreateCollectionRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -22,9 +22,9 @@ func CreateCollection(c *gin.Context) {
 	}
 
 	if err := services.CreateCollection(
-		req.CollectionName,
-		req.Dimension,
-		req.Distance,
+		collectionName,
+		req.Vectors.Size,
+		req.Vectors.Distance,
 	); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -32,22 +32,13 @@ func CreateCollection(c *gin.Context) {
 
 	latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
-	// default config values
-	sharding := 1
-	status := "active"
-
-	resp := dto.CollectionResponseLayout{
-	Result: dto.CreateCollectionResult{
-		Status:         status,
-		CollectionName: req.CollectionName,
-		Dimension:      req.Dimension,
-		Distance:       req.Distance,
-		Sharding:       sharding,
-	},
-	Time: latency,
+	resp := dto.CreateCollectionResult{
+		Result:	   true,
+		Status:    "ok",
+		Time:      latency,
 	}
 
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusCreated, resp)
 
 }
 
@@ -65,19 +56,16 @@ func DeleteCollection(c *gin.Context) {
 
 	latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
-	// default status
-	status := "deleted"
 
-	resp := dto.CollectionResponseLayout{
-	Result: dto.DeleteCollectionResult{
-		Status:         status,
-		CollectionName: collectionName,
-	},
-	Time: latency,
+	resp := dto.DeleteCollectionResult{
+		Result:	   true,
+		Status:    "ok",
+		Time:      latency,
 	}
 
 	c.JSON(http.StatusOK, resp)
 }
+
 
 
 func GetCollections(c *gin.Context) {
@@ -91,21 +79,26 @@ func GetCollections(c *gin.Context) {
         return
     }
 
-    result := make([]dto.CollectionInfoResult, 0, len(collections))
+    collections_list := make([]dto.CollectionInfo, 0, len(collections))
 
     for _, col := range collections {
-        result = append(result, dto.CollectionInfoResult{
-            CollectionName: col.Name,
-            Dimension:      strconv.Itoa(col.Dimension),
-            Distance:       col.Distance,
-            Status:         col.Status,
+        collections_list = append(collections_list, dto.CollectionInfo{
+            Name:     col.Name,
+            Size:     col.Size,
+            Distance: col.Distance,
         })
     }
 
+	result := dto.CollectionsResult{
+		CollectionCount: len(collections),
+		Collections: collections_list,
+	}
+
     latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
-    resp := dto.CollectionResponseLayout{
+    resp := dto.ResponseLayout{
         Result: result,
+		Status: "ok",
         Time:   latency,
     }
 
@@ -113,12 +106,42 @@ func GetCollections(c *gin.Context) {
 }
 
 
+func CheckCollectionExists(c *gin.Context){
+	start := time.Now()
+
+	collectionName := c.Param("collection_name")
+
+	exists, err := services.CheckCollectionExists(collectionName)
+	if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+    latency := float64(time.Since(start).Nanoseconds()) / 1e6
+
+	result := dto.CollectionExists{
+		Exists: exists,
+	}
+
+    resp := dto.ResponseLayout{
+        Result: result,
+		Status: "ok",
+        Time:   latency,
+    }
+
+    c.JSON(http.StatusOK, resp)
+}
+
+
+
 func GetCollectionInfo(c *gin.Context) {
 	start := time.Now()
 
 	collectionName := c.Param("collection_name")
 
-    collection, err := services.GetCollectionInfo(collectionName)
+    collection, err := services.GetCollectionDetails(collectionName)
     if err != nil {
         c.JSON(http.StatusBadRequest, gin.H{
             "error": err.Error(),
@@ -128,15 +151,30 @@ func GetCollectionInfo(c *gin.Context) {
 
 	latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
-	resp := dto.CollectionResponseLayout{
-	Result: dto.CollectionInfoResult{
-		CollectionName: collection.Name,
-		Dimension:      strconv.Itoa(collection.Dimension),
-		Distance:       collection.Distance,
-		Status:         collection.Status,
-	},
-	Time: latency,
+
+	vector_config := dto.VectorConfigDetails{
+		Size:        collection.Size,
+		Distance:    collection.Distance,
 	}
+
+	config_details := dto.ConfigDetails{
+		Name:       collection.Name,
+		InternalId: "8fa3c1d2",
+		Vectors:    vector_config,
+	}
+
+	result := dto.CollectionDetails{
+		Status:       collection.Status,
+		PointsCount:  0,
+		SegmentCount: 6, 
+		Config:       config_details,
+	}
+
+    resp := dto.ResponseLayout{
+        Result: result,
+		Status: "ok",
+        Time:   latency,
+    }
 
     c.JSON(http.StatusOK, resp)
 }

@@ -19,24 +19,24 @@ func CreateCollection(
 	distance string,
 ) error {
 
-	if dimension <= 0 || dimension > 9999 {
-		return errors.New("dimension must be between 1 and 9999")
+	if dimension <= 0 || dimension > 20000 {
+		return errors.New("the vector size must be between 1 and 20,000")
 	}
 
 	name = strings.TrimSpace(name)
 
 	if len(name) == 0 {
-		return errors.New("collection name must not be empty")
+		return errors.New("the collection name must not be empty")
 	}
 
-	if len(name) > 36 {
-		return errors.New("collection name must be at most 36 characters long")
+	if len(name) > 128 {
+		return errors.New("the collection name must not exceed 128 characters")
 	}
 
 	if !collectionNameRegex.MatchString(name) {
 		return errors.New(
-			`invalid collection name: must start with a letter, end with a letter or number, ` +
-				`and contain only letters, numbers, '_' or '-'`,
+			"invalid collection name: it must start with a letter, end with a letter or number, " +
+				"and contain only letters, numbers, '_' or '-'",
 		)
 	}
 
@@ -45,7 +45,7 @@ func CreateCollection(
 		if (name[i] == '_' || name[i] == '-') &&
 			(name[i-1] == '_' || name[i-1] == '-') {
 			return errors.New(
-				"collection name must not contain consecutive '_' or '-' characters",
+				"the collection name must not contain consecutive '_' or '-' characters",
 			)
 		}
 	}
@@ -61,7 +61,7 @@ func CreateCollection(
 
 	if !hasAlnum {
 		return errors.New(
-			"collection name must contain at least one letter or number",
+			"the collection name must contain at least one letter or number",
 		)
 	}
 
@@ -69,7 +69,7 @@ func CreateCollection(
 	case "dot", "cosine", "l2":
 		// ok
 	default:
-		return errors.New(`distance must be one of: "dot", "cosine", "l2"`)
+		return errors.New(`distance must be one of: "dot", "cosine", or "l2"`)
 	}
 
 	return core.CreateCollection(name, dimension, distance)
@@ -84,6 +84,12 @@ func ListCollections() ([]core.CollectionInfo, error) {
     return core.ListCollections()
 }
 
-func GetCollectionInfo(collectionName string) (*core.CollectionInfo, error){
+
+func CheckCollectionExists(collectionName string) (bool, error){
+	return core.CheckCollectionExists(collectionName)
+}
+
+
+func GetCollectionDetails(collectionName string) (*core.CollectionInfo, error){
 	return core.GetCollectionInfo(collectionName)
 }

@@ -53,7 +53,7 @@ func UpsertPoints(
 		return err
 	}
 
-	if collectionInfo.Dimension != dim {
+	if collectionInfo.Size != dim {
 		return errors.New("vector dimension does not match collection dimension")
 	}
 

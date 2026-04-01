@@ -19,7 +19,7 @@ public:
     explicit CollectionManager(const std::string& root_path, zoro::storage::StorageEngine* storage, zoro::wal::WAL& wal);
     bool EnsureIndex(const std::string& name);
 
-    bool CreateCollection(const std::string& name, int dimension,const std::string& distance);
+    bool CreateCollection(const std::string& name, int dimension,const std::string& distance, std::string& err);
     bool DeleteCollection(const std::string& name);
 
     std::vector<zoro::storage::CollectionInfo> ListCollections() const;

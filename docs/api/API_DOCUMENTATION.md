@@ -54,7 +54,7 @@ GET /collections/{collection_name}
       "internal_id": "8fa3c1d2",
       "vectors": {
         "size": 384,
-        "distance": "Cosine"
+        "distance": "cosine"
       }
     }
   },
@@ -79,7 +79,7 @@ POST /collections/{collection_name}
 {
   "vectors": {
     "size": 384,
-    "distance": "Cosine"
+    "distance": "cosine"
   }
 }
 ```
@@ -134,12 +134,12 @@ GET /collections
       {
         "name": "documents",
         "size": 384,
-        "distance": "Dot"
+        "distance": "dot"
       },
       {
         "name": "movies",
         "size": 1536,
-        "distance": "Cosine"
+        "distance": "cosine"
       }
     ]
   },
