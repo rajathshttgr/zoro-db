@@ -37,7 +37,7 @@ bool StorageEngine::CollectionExists(const std::string& name) const{
 }
 
 
-std::optional<CollectionInfo> StorageEngine::GetCollectionInfo(const std::string& name) const{
+std::optional<zoro::utils::CollectionInfo> StorageEngine::GetCollectionInfo(const std::string& name) const{
     auto info_opt = catalog_.GetCollectionInfo(name);
 
     if (!info_opt) {
@@ -48,7 +48,7 @@ std::optional<CollectionInfo> StorageEngine::GetCollectionInfo(const std::string
 }
 
 
-std::vector<CollectionInfo> StorageEngine::ListCollections() const{
+std::vector<zoro::utils::CollectionInfo> StorageEngine::ListCollections() const{
     
     auto collections = catalog_.ListCollections();
     

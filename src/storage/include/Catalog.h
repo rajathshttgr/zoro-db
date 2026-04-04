@@ -1,5 +1,6 @@
 #pragma once
 #include "struct.h"
+#include "../../utils/struct.h"
 #include <string>
 #include <vector>
 #include <optional>
@@ -14,9 +15,9 @@ public:
     bool AckCollection(const std::string& name);
     bool CollectionExists(const std::string& name) const;
     int GetCollectionId(const std::string& name);
-    std::optional<CollectionInfo>  GetCollectionInfo(const std::string& name) const;
+    std::optional<zoro::utils::CollectionInfo>  GetCollectionInfo(const std::string& name) const;
     bool RemoveCollection(const std::string& name);
-    std::vector<CollectionInfo> ListCollections() const;
+    std::vector<zoro::utils::CollectionInfo> ListCollections() const;
 
 private:
     std::string path_;

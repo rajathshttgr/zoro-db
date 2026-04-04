@@ -7,6 +7,7 @@
 #include "collection_runtime.h"
 #include "../../storage/include/StorageEngine.h"
 #include "../../storage/include/struct.h"
+#include "../../utils/struct.h"
 #include "../../storage/include/Catalog.h"
 #include "../../wal/include/wal.h"
 
@@ -22,17 +23,17 @@ public:
     bool CreateCollection(const std::string& name, int dimension,const std::string& distance, std::string& err);
     bool DeleteCollection(const std::string& name);
 
-    std::vector<zoro::storage::CollectionInfo> ListCollections() const;
-    std::optional<zoro::storage::CollectionInfo> LoadCollection(const std::string& name);
+    std::vector<zoro::utils::CollectionInfo> ListCollections() const;
+    std::optional<zoro::utils::CollectionInfo> LoadCollection(const std::string& name);
 
     bool UpsertPoints(const std::string& coll_name, const std::vector<int>& point_id, const std::vector<std::vector<float>>& vectors,const std::vector<nlohmann::json>& payload);
     bool DeletePoints(const std::string &coll_name, const std::vector<int> point_id);
     int CountPoints(const std::string &coll_name);
 
-    std::optional<zoro::storage::PointInfo> RetrivePointById(const std::string& coll_name, const int& point_id, std::string& err);
-    std::vector<zoro::storage::ScrollPointInfo> ScrollPointMetadata(const std::string& coll_name, const int limit, std::string& err);
+    std::optional<zoro::utils::PointInfo> RetrivePointById(const std::string& coll_name, const int& point_id, std::string& err);
+    std::vector<zoro::utils::ScrollPointInfo> ScrollPointMetadata(const std::string& coll_name, const int limit, std::string& err);
 
-    std::vector<zoro::storage::SearchPointInfo> SearchPointByVector(const std::string& coll_name, const std::vector<float>& query_vector, int k);
+    std::vector<zoro::utils::SearchPointInfo> SearchPointByVector(const std::string& coll_name, const std::vector<float>& query_vector, int k);
 
 private:
     std::string root_path_;

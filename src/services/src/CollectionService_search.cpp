@@ -1,8 +1,8 @@
-#include "../include/CollectionService.h"
+#include "./CollectionService.h"
 
 namespace zoro::services {
 
-std::vector<zoro::storage::SearchPointInfo> CollectionService::SearchPointByVector(const std::string& coll_name, const std::vector<float>& query_vector, int k, std::string& err){
+std::vector<zoro::utils::SearchPointInfo> CollectionService::SearchPointByVector(const std::string& coll_name, const std::vector<float>& query_vector, int k, std::string& err){
     if (coll_name.empty()) {
         err = "Collection name cannot be empty.";
         return {};
