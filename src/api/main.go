@@ -13,7 +13,7 @@ func main() {
     utils.PrintBanner()
 
 	if err := core.InitFromEnv(); err != nil {
-		log.Fatal("failed to init core:", err)
+		log.Fatal("failed to initialize system: ", err)
 	}
 	
 	defer core.Shutdown()
