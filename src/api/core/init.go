@@ -31,7 +31,7 @@ func Init(dataPath string) error {
 func InitFromEnv() error {
     path := os.Getenv("ZORO_DATA_PATH")
     if path == "" {
-        path = "/storage"
+        path = "/.storage" // replace this with relative persistent storage path
     }
     return Init(path)
 }
