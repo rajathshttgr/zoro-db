@@ -10,6 +10,7 @@ import "C"
 import (
 	"errors"
 	"unsafe"
+	"fmt"
 )
 
 func CreateCollection(name string, dimension int, distance string) error {
@@ -133,6 +134,23 @@ func GetCollectionInfo(collectionName string) (*CollectionInfo, error) {
     return info, nil
 }
 
-func CheckCollectionExists(collectionName string) (bool, error){
-	return true, nil
+func CheckCollectionExists(name string) (bool, error) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+
+	errBuf := C.malloc(256)
+	defer C.free(errBuf)
+
+	exists := C.zoro_check_collection_exists(
+		cName,
+		(*C.char)(errBuf),
+	)
+
+	errStr := C.GoString((*C.char)(errBuf))
+
+	if errStr != "" {
+		return false, fmt.Errorf(errStr)
+	}
+
+	return bool(exists), nil
 }
