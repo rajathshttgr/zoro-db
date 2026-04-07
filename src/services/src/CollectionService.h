@@ -4,9 +4,8 @@
 #include <optional>
 #include <nlohmann/json.hpp>
 #include "../../collection/include/CollectionManager.h"
-#include "../../storage/include/struct.h"
 #include "../../utils/struct.h"
-
+#include "./metadata_cache.h"
 namespace zoro::services {
 
 using json = nlohmann::json;
@@ -15,9 +14,17 @@ class CollectionService {
 public:
     explicit CollectionService(zoro::core::CollectionManager* manager);
 
-    bool CreateCollection(const std::string& name, int dimension,const std::string& distance, std::string& err);
+    bool InitStartUp();
+
+    bool CreateCollection(const std::string& name, int& size,const std::string& distance, std::string& err);
     bool DeleteCollection(const std::string& name, std::string& err);
+    bool CheckCollectionExists(const std::string& name, std::string& err);
+    bool LoadCollections(std::vector<zoro::utils::CollectionMetadata>& collections, std::string& err);
+    bool GetCollectionInfo(const std::string& name, std::vector<zoro::utils::CollectionInfoT>& collection, std::string& err);
+
+    // deprecated
     std::vector<zoro::utils::CollectionInfo> ListCollections() const;
+    // deprecated
     std::optional<zoro::utils::CollectionInfo> LoadCollection(const std::string& name, std::string& err);
 
     bool UpsertPointsService(const std::string& coll_name, const std::vector<int>& point_id, const std::vector<std::vector<float>> &vectors, const std::vector<nlohmann::json>& payload);
@@ -32,6 +39,7 @@ public:
 
 private:
     zoro::core::CollectionManager* manager_;
+    MetadataCache metadata_cache_;
 };
 
 }
