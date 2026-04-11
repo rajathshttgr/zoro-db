@@ -86,6 +86,7 @@ func GetCollections(c *gin.Context) {
             Name:     col.Name,
             Size:     col.Size,
             Distance: col.Distance,
+			Status:   col.Status,
         })
     }
 
@@ -159,7 +160,7 @@ func GetCollectionInfo(c *gin.Context) {
 
 	config_details := dto.ConfigDetails{
 		Name:       collection.Name,
-		InternalId: "8fa3c1d2",
+		InternalId: "8fa3c1d2", // placeholder, can be generated or fetched from service layer
 		Vectors:    vector_config,
 	}
 
