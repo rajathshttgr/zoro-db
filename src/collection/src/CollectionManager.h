@@ -21,11 +21,11 @@ public:
     bool EnsureIndex(const std::string& name);
 
     bool CreateCollection(const std::string& name, int dimension,const std::string& distance, std::string& err);
-    bool DeleteCollection(const std::string& name);
-
-    std::vector<zoro::utils::CollectionInfo> ListCollections() const;
-    std::optional<zoro::utils::CollectionInfo> LoadCollection(const std::string& name);
-
+    bool DeleteCollection(const std::string& name, std::string& err);
+    bool LoadCollections(std::vector<zoro::utils::CollectionMetadata>& collections, std::string& err);
+    bool CollectionExists(const std::string& name, std::string& err); 
+    bool GetCollection(const std::string& name, zoro::utils::CollectionInfo& collection, std::string& err); 
+    
     bool UpsertPoints(const std::string& coll_name, const std::vector<int>& point_id, const std::vector<std::vector<float>>& vectors,const std::vector<nlohmann::json>& payload);
     bool DeletePoints(const std::string &coll_name, const std::vector<int> point_id);
     int CountPoints(const std::string &coll_name);
@@ -34,6 +34,12 @@ public:
     std::vector<zoro::utils::ScrollPointInfo> ScrollPointMetadata(const std::string& coll_name, const int limit, std::string& err);
 
     std::vector<zoro::utils::SearchPointInfo> SearchPointByVector(const std::string& coll_name, const std::vector<float>& query_vector, int k);
+
+    // DEPRECATED
+    // deprecated, now it relies on LoadCollections and data is stored in cache.
+    std::vector<zoro::utils::CollectionInfo> ListCollections() const;
+    // deprecated, use GetCollection instead
+    std::optional<zoro::utils::CollectionInfo> LoadCollection(const std::string& name);
 
 private:
     std::string root_path_;

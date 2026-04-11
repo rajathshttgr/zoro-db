@@ -1,29 +1,29 @@
 cmake_minimum_required(VERSION 3.16)
-project(collection LANGUAGES CXX)
+
+project(services LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-file(GLOB COLLECTION_HEADERS include/*.h)
-file(GLOB COLLECTION_SOURCES src/*.cpp)
-
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(collection STATIC
-    ${COLLECTION_SOURCES}
-    ${COLLECTION_HEADERS}
+    src/manage_collections.cpp
+    src/points.cpp
+    src/CollectionManager.cpp
+    src/access_collection.cpp
 )
 
 target_link_libraries(collection PUBLIC storage)
 
 target_include_directories(collection PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 # Tests
-option(COLLECTION_BUILD_TESTS "Build Collection module tests" OFF)
+option(BUILD_TESTS "Build Collection module tests" OFF)
 
-if(COLLECTION_BUILD_TESTS)
+if(BUILD_TESTS)
     enable_testing()
 
     include(FetchContent)
@@ -43,5 +43,5 @@ if(COLLECTION_BUILD_TESTS)
         GTest::gtest_main
     )
 
-    add_test(NAME collection_tests COMMAND collection_tests)
+    add_test(NAME unit_tests COMMAND unit_tests)
 endif()
