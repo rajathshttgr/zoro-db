@@ -1,6 +1,6 @@
 #pragma once
 #include <stdbool.h>
-#include "c_structs.h"
+#include "src/c_structs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,15 +11,16 @@ void zoro_shutdown();
 
 bool zoro_create_collection(const char* name, int dimension, const char* distance, char* err);
 bool zoro_delete_collection(const char* name, char* err);
+bool zoro_check_collection_exists(const char* name, char* err);
 
 bool zoro_list_collections(
-    zoro_collection_info_t** out_collections,
+    collection_metadata_t** out_collections,
     int* out_count,
     char* err
 );
 
 void zoro_free_collections(
-    zoro_collection_info_t* collections,
+    collection_metadata_t* collections,
     int count
 );
 
@@ -31,10 +32,11 @@ bool zoro_get_collection(
 
 void zoro_free_collection(zoro_collection_info_t* info);
 
+// points
 bool zoro_upsert_points(
     const char* collection_name,
     const zoro_point_t* points,
-    size_t point_count,  
+    size_t point_count,
     char* err,
     size_t err_len
 );
@@ -42,7 +44,7 @@ bool zoro_upsert_points(
 bool zoro_delete_points(
     const char* collection_name,
     const int* point_ids,
-    size_t point_count,  
+    size_t point_count,
     char* err,
     size_t err_len
 );
@@ -58,16 +60,16 @@ bool zoro_point_retrival(
 
 void zoro_free_point_retrival(zoro_point_retrival_t* info);
 
+// search
 bool zoro_search_points(
     const char* name,
-    const float* vector,      
-    size_t vector_dim,       
-    int k,                   
-    zoro_search_point_t** out_points, 
-    int* out_count,           
-    char* err             
+    const float* vector,
+    size_t vector_dim,
+    int k,
+    zoro_search_point_t** out_points,
+    int* out_count,
+    char* err
 );
-
 
 void zoro_free_search_result(
     zoro_search_point_t* points,
@@ -75,13 +77,12 @@ void zoro_free_search_result(
 );
 
 bool zoro_scroll_points(
-    const char* name,     
-    int k,                   
-    zoro_scroll_point_t** out_points, 
-    int* out_count,           
-    char* err             
+    const char* name,
+    int k,
+    zoro_scroll_point_t** out_points,
+    int* out_count,
+    char* err
 );
-
 
 void zoro_free_scroll_result(
     zoro_scroll_point_t* points,
