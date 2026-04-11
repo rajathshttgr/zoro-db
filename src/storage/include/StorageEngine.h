@@ -1,5 +1,4 @@
 #pragma once
-#include "struct.h"
 #include "../../utils/struct.h"
 #include "Catalog.h"
 #include <string>
@@ -15,11 +14,15 @@ class StorageEngine {
 public:
     explicit StorageEngine(const std::string& root_path);
 
-    bool CreateCollection(const std::string& collection_name, int dimension,std::string distance, int coll_id);
-    bool DeleteCollection(const std::string& collection_name);
-    bool CollectionExists(const std::string& collection_name) const;
+    bool CreateCollection(const std::string& collection_name, int dimension, std::string distance, std::string& err);
+    bool DeleteCollection(const std::string& collection_name, std::string& err);
+    bool LoadCollections(std::vector<zoro::utils::CollectionMetadata>& collections, std::string& err);
+    bool GetCollection(zoro::utils::CollectionInfo& collection, const std::string& collection_name, std::string& err); // dev
+
+    // deprecated
+    bool CollectionExists(const std::string& collection_name);
     std::optional<zoro::utils::CollectionInfo> GetCollectionInfo(const std::string& collection_name) const;
-    std::vector<zoro::utils::CollectionInfo> ListCollections() const;
+    std::vector<zoro::utils::CollectionInfo> ListCollections() const; 
 
     bool UpsertPoints(const std::string& collection_name, int id, const std::vector<float> &vectors, const json& payload);
     bool DeletePoints(const std::string& collection_name, int point_id);

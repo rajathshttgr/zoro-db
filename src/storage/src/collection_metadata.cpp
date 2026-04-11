@@ -6,16 +6,31 @@ namespace zoro::storage{
 
 CollectionMeta::CollectionMeta(const std::string& collection_path):meta_path_(collection_path+"/meta.json"){}
 
-void CollectionMeta::InitDefault(int dim, std::string dist,int coll_id, std::string collection_name){
+void CollectionMeta::InitDefault(int dim, std::string dist,std::string collection_name){
     nlohmann::json j;
     j["dimensions"]=dim;
     j["distance"]=dist;
-    j["coll_id"]=coll_id;
+    j["coll_id"]=999;
     j["coll_name"]=collection_name;
     j["points_count"]=0;
+    j["status"]="pending";
 
     std::ofstream out(meta_path_);
     out<<j.dump(4);
+}
+
+void CollectionMeta::SetStatus(const std::string& status){
+    nlohmann::json j;
+    std::ifstream in(meta_path_);
+    if (in.good()) {
+        in >> j;
+    }
+    in.close();
+
+    j["status"] = status;
+
+    std::ofstream out(meta_path_);
+    out << j.dump(4);
 }
 
 int CollectionMeta::GetDimensions() const{
