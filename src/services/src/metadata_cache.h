@@ -11,6 +11,10 @@ struct Metadata{
 class MetadataCache {
 public:
     MetadataCache(){};
+        
+    const std::unordered_map<std::string, Metadata>& data() const {
+        return cacheMap;
+    }
 
     bool get(const std::string &key, Metadata& result){
         auto it = cacheMap.find(key);
