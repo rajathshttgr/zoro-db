@@ -21,10 +21,11 @@ type DeleteCollectionResult struct {
 	Time  	   float64 	`json:"time"`
 }
 
-type CollectionInfo struct{
-	Name		string `json:"name"`
-	Size        int    `json:"size"`
-    Distance    string `json:"distance"`
+type CollectionInfo struct {
+	Name     string `json:"name"`
+	Size     int    `json:"size"`
+	Distance string `json:"distance"`
+	Status   string `json:"status"`
 }
 
 type CollectionsResult struct {
