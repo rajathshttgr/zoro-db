@@ -11,6 +11,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(utils
     struct.h
+    common/generate_id.h
 )
 
 target_link_libraries(utils PUBLIC services)

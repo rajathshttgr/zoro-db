@@ -1,42 +1,40 @@
 #pragma once
 #include <string>
-#include <nlohmann/json.hpp>
+#include "vector_index.hpp"
 
 namespace zoro::utils{
 
-using json = nlohmann::json;
-
-struct CollectionInfo {
-    int id;
-    std::string coll_name;
-    int dimension;
+// collection metadata
+struct CollectionMetadata {
+    std::string name;
+    int size;
     std::string distance;
     std::string status;
-    std::string created_at;
 };
 
-struct PointInfo{
+// collection info with all metadata details
+struct CollectionInfo {
+    std::string name;
+    int size;
+    std::string distance;
     std::string status;
-    int point_id;
-    json payload;
-};
 
-struct ScrollPointInfo{
-    int point_id;
-    json payload;
-};
+    // detailed metadata
+    int points_count;
+    int segments_count;
+    std::string collection_id;
+    std::string created_at;
+    std::string updated_at;
 
-struct SearchPointInfo{
-    int point_id;
-    float score;
-    json payload;
-};
+    // index config attached at collection level
+    std::string index;
+    bool gpu_support;
+    bool parallel_boost;
 
-struct VectorIndexEntry {
-    uint64_t point_id;
-    uint64_t offset;
-    uint32_t length;
-    uint8_t is_deleted;
+    // deprecated - to remove
+    int id;
+    int dimension;
+    std::string coll_name;
 };
 
 }
