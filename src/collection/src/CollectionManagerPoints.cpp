@@ -95,13 +95,13 @@ int CollectionManager::CountPoints(const std::string& coll_name) {
 
 
 
-std::vector<zoro::storage::SearchPointInfo>
+std::vector<zoro::utils::SearchPointInfo>
 CollectionManager::SearchPointByVector(
     const std::string& coll_name,
     const std::vector<float>& query_vector,
     int k
 ) {
-    std::vector<zoro::storage::SearchPointInfo> output;
+    std::vector<zoro::utils::SearchPointInfo> output;
 
     if (!storage_->CollectionExists(coll_name)) {
         return output;
@@ -120,7 +120,7 @@ CollectionManager::SearchPointByVector(
             continue; // skip missing/deleted points
         }
 
-        zoro::storage::SearchPointInfo info;
+        zoro::utils::SearchPointInfo info;
         info.point_id = point_id;
 
         // score strategy (simple version)
@@ -135,7 +135,7 @@ CollectionManager::SearchPointByVector(
 }
 
 
-std::optional<zoro::storage::PointInfo>
+std::optional<zoro::utils::PointInfo>
 CollectionManager::RetrivePointById(const std::string& name, const int& point_id, std::string& err){
     if (!storage_->CollectionExists(name)) {
         err = "Matching point not found.";

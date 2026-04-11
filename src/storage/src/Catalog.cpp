@@ -123,7 +123,7 @@ int Catalog::GetCollectionId(const std::string& name){
     return c.at("id").get<int>();
 }
 
-std::optional<CollectionInfo> Catalog::GetCollectionInfo(const std::string& name) const{
+std::optional<zoro::utils::CollectionInfo> Catalog::GetCollectionInfo(const std::string& name) const{
     std::ifstream in(path_);
     json j;
     in >> j;
@@ -135,7 +135,7 @@ std::optional<CollectionInfo> Catalog::GetCollectionInfo(const std::string& name
 
     const auto& c = collections[name];
 
-    CollectionInfo info;
+    zoro::utils::CollectionInfo info;
     info.coll_name = name;
     info.id = c.at("id").get<int>();
     info.dimension = c.at("dimension").get<int>();
@@ -147,7 +147,7 @@ std::optional<CollectionInfo> Catalog::GetCollectionInfo(const std::string& name
 }
 
 
-std::vector<CollectionInfo> Catalog::ListCollections() const
+std::vector<zoro::utils::CollectionInfo> Catalog::ListCollections() const
 {
     std::ifstream in(path_);
     json j;
@@ -155,11 +155,11 @@ std::vector<CollectionInfo> Catalog::ListCollections() const
 
     const auto& collections = j["collections"];
 
-    std::vector<CollectionInfo> collection_list;
+    std::vector<zoro::utils::CollectionInfo> collection_list;
     collection_list.reserve(collections.size());
 
     for (const auto& [name, c] : collections.items()) {
-        CollectionInfo info;
+        zoro::utils::CollectionInfo info;
         info.coll_name = name;
         info.id = c.at("id").get<int>();
         info.dimension = c.at("dimension").get<int>();

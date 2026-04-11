@@ -1,5 +1,6 @@
 #pragma once
 #include "struct.h"
+#include "../../utils/struct.h"
 #include "Catalog.h"
 #include <string>
 #include <vector>
@@ -17,14 +18,14 @@ public:
     bool CreateCollection(const std::string& collection_name, int dimension,std::string distance, int coll_id);
     bool DeleteCollection(const std::string& collection_name);
     bool CollectionExists(const std::string& collection_name) const;
-    std::optional<CollectionInfo> GetCollectionInfo(const std::string& collection_name) const;
-    std::vector<CollectionInfo> ListCollections() const;
+    std::optional<zoro::utils::CollectionInfo> GetCollectionInfo(const std::string& collection_name) const;
+    std::vector<zoro::utils::CollectionInfo> ListCollections() const;
 
     bool UpsertPoints(const std::string& collection_name, int id, const std::vector<float> &vectors, const json& payload);
     bool DeletePoints(const std::string& collection_name, int point_id);
     int CountPoints(const std::string& collection_name);
-    std::optional<PointInfo> GetMetadataByPointId(const std::string& collection_name, int point_id, std::string& err);
-    std::vector<ScrollPointInfo> ListPointMetadata(const std::string& collection_name, int limit, std::string& err);
+    std::optional<zoro::utils::PointInfo> GetMetadataByPointId(const std::string& collection_name, int point_id, std::string& err);
+    std::vector<zoro::utils::ScrollPointInfo> ListPointMetadata(const std::string& collection_name, int limit, std::string& err);
     bool LoadAllVectors(const std::string& coll_name, std::vector<float>& out_vectors, std::vector<uint64_t>& out_ids);
 
 private:

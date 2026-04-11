@@ -37,6 +37,20 @@ bool CollectionManager::CreateCollection(
         return false;
     }
     return true;
+   
+    // Architecture Design Decision for Create Collection:
+    // 1. Append WAL
+    // 2. Insert into catalog with status pending
+    // 3. Apply to storage
+    // 4. Update catalog status as active or failed
+    // 5. Async cache warmup
+    // 6. Return success AFTER WAL sync
+
+    // Crash recovery or WAL replay:
+    // 1. check catalog entries if status is active - skip
+    // 2. if status is pending - check directory exists in storage else recreate collection
+    // 3. if status is failed - cleanup and remove catalog entry
+    // 4. wal replay should be idempotent, if collection already exists in catalog and storage, just skip
 }
 
 bool CollectionManager::DeleteCollection(const std::string& collection_name) {
@@ -57,12 +71,12 @@ bool CollectionManager::DeleteCollection(const std::string& collection_name) {
     return true;
 }
 
-std::vector<zoro::storage::CollectionInfo>
+std::vector<zoro::utils::CollectionInfo>
 CollectionManager::ListCollections() const {
     return storage_->ListCollections();
 }
 
-std::optional<zoro::storage::CollectionInfo>
+std::optional<zoro::utils::CollectionInfo>
 CollectionManager::LoadCollection(const std::string& name) {
     if (!storage_->CollectionExists(name)) {
         return std::nullopt;
@@ -70,7 +84,7 @@ CollectionManager::LoadCollection(const std::string& name) {
     return storage_->GetCollectionInfo(name);
 }
 
-std::vector<zoro::storage::ScrollPointInfo> 
+std::vector<zoro::utils::ScrollPointInfo> 
 CollectionManager::ScrollPointMetadata(const std::string& coll_name, const int limit, std::string& err){
     if (!storage_->CollectionExists(coll_name)) {
         err = "collection doesn't exist in the system!";

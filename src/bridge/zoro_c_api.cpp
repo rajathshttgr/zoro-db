@@ -1,6 +1,6 @@
 #include "zoro_c_api.h"
 
-#include "../../services/include/CollectionService.h"
+#include "../../services/src/CollectionService.h"
 #include "../../storage/include/StorageEngine.h"
 #include "../../collection/include/CollectionManager.h"
 #include "../../wal/include/wal_writer.h"

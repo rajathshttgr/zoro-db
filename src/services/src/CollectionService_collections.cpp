@@ -1,4 +1,4 @@
-#include "../include/CollectionService.h"
+#include "./CollectionService.h"
 #include <unordered_map>
 
 
@@ -28,11 +28,11 @@ namespace zoro::services {
         return true;
     }
 
-    std::vector<zoro::storage::CollectionInfo> CollectionService::ListCollections() const {
+    std::vector<zoro::utils::CollectionInfo> CollectionService::ListCollections() const {
         return manager_->ListCollections();
     }
 
-    std::optional<zoro::storage::CollectionInfo>
+    std::optional<zoro::utils::CollectionInfo>
     CollectionService::LoadCollection(const std::string& name, std::string& err) {
         auto result = manager_->LoadCollection(name);
         if (!result.has_value()) {

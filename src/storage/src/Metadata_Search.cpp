@@ -3,7 +3,7 @@
 
 namespace zoro::storage {
 
-std::optional<PointInfo> StorageEngine::GetMetadataByPointId(
+std::optional<zoro::utils::PointInfo> StorageEngine::GetMetadataByPointId(
     const std::string& collection_name,
     int point_id,
     std::string& err
@@ -30,7 +30,7 @@ std::optional<PointInfo> StorageEngine::GetMetadataByPointId(
 
     json payload = json::parse(payload_str);
 
-    PointInfo info;
+    zoro::utils::PointInfo info;
     info.status = "ok";
     info.point_id = point_id;
     info.payload = payload;
@@ -38,12 +38,12 @@ std::optional<PointInfo> StorageEngine::GetMetadataByPointId(
     return info;
 }
 
-std::vector<ScrollPointInfo> StorageEngine::ListPointMetadata(
+std::vector<zoro::utils::ScrollPointInfo> StorageEngine::ListPointMetadata(
     const std::string& collection_name,
     int limit,
     std::string& err
 ) {
-    std::vector<ScrollPointInfo> results;
+    std::vector<zoro::utils::ScrollPointInfo> results;
 
     std::string coll_path = collection_root_ + "/" + collection_name;
 
@@ -79,7 +79,7 @@ std::vector<ScrollPointInfo> StorageEngine::ListPointMetadata(
 
         json payload = json::parse(payload_str);
 
-        ScrollPointInfo info;
+        zoro::utils::ScrollPointInfo info;
         info.point_id = id;
         info.payload = payload;
 
