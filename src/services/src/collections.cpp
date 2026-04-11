@@ -11,9 +11,10 @@ namespace zoro::services {
             return false;
         }
 
+        auto cache = metadata_cache_.load();  
         // check cache 
         Metadata result;
-        if (metadata_cache_.get(name, result)) {
+        if (cache && cache->get(name, result)) {
             if(result.status=="active"){
                 err = "Collection name `" + name + "` already exists!";
                 return false;
@@ -24,13 +25,15 @@ namespace zoro::services {
 
         if (!manager_->CreateCollection(name, size, distance, err)) {
             if(err.empty()) {
-                err = "Failed to create collection, storage error.";
+                err = "Failed to create collection, storage error. [601]";
             }
             return false;
         }
 
         // update cache before returning success
-        metadata_cache_.put(name, Metadata{size, distance, "active"});
+        if (cache) {
+            cache->put(name, Metadata{size, distance, "active"});
+        }
 
         return true;
     }
@@ -41,15 +44,27 @@ namespace zoro::services {
             return false;
         }
 
+        auto cache = metadata_cache_.load(); 
+
+        Metadata result;
+        if(cache && !cache->get(name, result)) {
+            if(err.empty()) {
+                err = "Collection name `" + name + "` does not exist!";
+            }
+            return false;
+        }
+
         if (!manager_->DeleteCollection(name, err)) {
             if(err.empty()) {
-                err = "Failed to delete collection, storage error.";
+                err = "Failed to delete collection, storage error. [602]";
             }
             return false;
         }
 
         // update cache before returning success
-        metadata_cache_.remove(name);
+        if (cache) {
+            cache->remove(name);
+        }
         return true;
     }
 
@@ -60,14 +75,18 @@ namespace zoro::services {
         }
 
         // primary cache checking will be done, if collection status is not active, it checks disk storage
+        auto cache = metadata_cache_.load(); 
         Metadata result;
-        if (metadata_cache_.get(name, result)) {
+        if (cache && cache->get(name, result)) {
             if(result.status=="active"){
                 // collection exists and active
                 return true;
             }else{
                 // check disk, to make sure pending collections are created or not
                 if(!manager_->CollectionExists(name, err)){
+                    if(err.empty()) {
+                        err = "Unexpected error occurred in storage system [603]";
+                    }
                     return false;
                 }
                 return true;
@@ -79,46 +98,88 @@ namespace zoro::services {
         return false;
     }
 
-    bool CollectionService::LoadCollections(std::vector<zoro::utils::CollectionMetadata>& collections, std::string& err) {
-        if(!manager_->LoadCollections(collections, err)){
-            if(err==""){
-                err="Unexpected error occured in storage system";
+    bool CollectionService::ListCollections(std::vector<zoro::utils::CollectionMetadata>& collections, std::string& err) {
+
+        collections.clear();
+
+        auto cache = metadata_cache_.load();
+
+        // from cache
+        if (cache && !cache->data().empty()) {
+            const auto& map = cache->data();
+            collections.reserve(map.size());
+
+            for (const auto& [name, meta] : map) {
+                collections.emplace_back(zoro::utils::CollectionMetadata{
+                    name,
+                    meta.size,
+                    meta.distance,
+                    meta.status
+                });
+            }
+            return true;
+        }
+
+        // disk storage
+        if (!manager_->LoadCollections(collections, err)) {
+            if (err.empty()) {
+                err = "Unexpected error occurred in storage system [604]";
             }
             return false;
         }
+
+        return true;
+    }
+
+    bool CollectionService::LoadCollections(std::vector<zoro::utils::CollectionMetadata>& collections, std::string& err) {
+
+        if (!manager_->LoadCollections(collections, err)) {
+            if (err.empty()) {
+                err = "Unexpected error occurred in storage system [605]";
+            }
+            return false;
+        }
+
         return true;
     }
     
-    bool CollectionService::GetCollectionInfo(const std::string& name,std::vector<zoro::utils::CollectionInfoT>& collection, std::string& err){
+    bool CollectionService::GetCollectionInfo(const std::string& name, zoro::utils::CollectionInfo& collection, std::string& err){
         if(name.empty()){
             err = "Invalid collection name format";
             return false;
         }
+        auto cache = metadata_cache_.load();
+
+        Metadata result;
+        if (cache && !cache->get(name, result)) {
+            err = "Collection name `" + name + "` does not exist!";
+            return false;
+        }
+            
         if(!manager_->GetCollection(name, collection, err)){
             if(err==""){
-                err ="unexpected error occured to load collection info";
+                err ="unexpected error occured to load collection info [606]";
             }
             return false;
         }
         return true;
     }
 
-
     // deprecated, use GetCollectionInfo instead
-    std::optional<zoro::utils::CollectionInfo>
-    CollectionService::LoadCollection(const std::string& name, std::string& err) {
-        auto result = manager_->LoadCollection(name);
-        if (!result.has_value()) {
-            err = "Collection not found.";
-            return std::nullopt;
-        }
-        return result;
-    }
+    // std::optional<zoro::utils::CollectionInfo>
+    // CollectionService::LoadCollection(const std::string& name, std::string& err) {
+    //     auto result = manager_->LoadCollection(name);
+    //     if (!result.has_value()) {
+    //         err = "Collection not found.";
+    //         return std::nullopt;
+    //     }
+    //     return result;
+    // }
 
-    // deprecated, use LoadCollections instead
-    std::vector<zoro::utils::CollectionInfo> CollectionService::ListCollections() const {
-        return manager_->ListCollections();
-    }
+    // // deprecated, use LoadCollections / List Collections instead
+    // std::vector<zoro::utils::CollectionInfo> CollectionService::ListCollections() const {
+    //     return manager_->ListCollections();
+    // }
 
 }
 
