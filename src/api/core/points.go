@@ -46,26 +46,21 @@ func UpsertPoints(
 		return nil
 	}
 
-	if len(vectors) != count || len(payload) != count {
-		return errors.New("ids, vectors, and payload must have same length")
-	}
-
 	// Allocate C array for zoro_point_t
 	cPoints := (*C.zoro_point_t)(
 		C.malloc(C.size_t(count) * C.size_t(unsafe.Sizeof(C.zoro_point_t{}))),
 	)
+
 	if cPoints == nil {
 		return errors.New("failed to allocate C memory for points")
 	}
+
 	defer C.free(unsafe.Pointer(cPoints))
 
 	// Track payload C strings for cleanup
 	payloadPtrs := make([]*C.char, count)
 
 	for i := 0; i < count; i++ {
-		if len(vectors[i]) == 0 {
-			return errors.New("vector length cannot be zero")
-		}
 
 		point := (*C.zoro_point_t)(
 			unsafe.Add(

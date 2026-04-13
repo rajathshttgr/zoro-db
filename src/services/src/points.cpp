@@ -3,6 +3,17 @@
 namespace zoro::services {
 
 bool CollectionService::UpsertPointsService(const std::string& coll_name, const std::vector<int>& point_id, const std::vector<std::vector<float>> &vectors, const std::vector<nlohmann::json>& payload) {
+    auto cache = metadata_cache_.load();
+    Metadata result;
+    if (cache && !cache->get(coll_name, result)) {
+        return false;
+    }
+    if(cache && result.status!="active"){
+        return false;
+    }
+    if(cache && result.size != vectors[0].size()) {
+        return false;
+    }
     return manager_->UpsertPoints(coll_name, point_id, vectors, payload);
 }
 

@@ -42,10 +42,6 @@ bool zoro_upsert_points(
 
             ids.push_back(p.id);
 
-            if (!p.vector || p.vector_len == 0) {
-                throw std::runtime_error("empty vector");
-            }
-
             vectors.emplace_back(
                 p.vector,
                 p.vector + p.vector_len

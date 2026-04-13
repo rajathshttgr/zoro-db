@@ -11,24 +11,15 @@ bool CollectionManager::UpsertPoints(
 ) {
     const size_t count = point_id.size();
 
-    if (count == 0 ||
-        vectors.size() != count ||
-        payload.size() != count) {
-        return false;
-    }
+    // int coll_id=999; //catalog_.GetCollectionId(collection_name);
 
-    if (!storage_->CollectionExists(collection_name)) {
-        return false;
-    }
-
-    int coll_id=999; //catalog_.GetCollectionId(collection_name);
-
+    // temp deprecated
     // Append to WAL 
-    for (size_t i = 0; i < count; ++i) {
-        if (!wal_.log_upsert_point(coll_id, point_id[i], vectors[i], payload[i])) {
-            return false;
-        }
-    }
+    // for (size_t i = 0; i < count; ++i) {
+    //     if (!wal_.log_upsert_point(coll_id, point_id[i], vectors[i], payload[i])) {
+    //         return false;
+    //     }
+    // }
 
     // Disk write
     for (size_t i = 0; i < count; ++i) {
