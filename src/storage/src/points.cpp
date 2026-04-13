@@ -101,9 +101,9 @@ bool StorageEngine::DeletePoints(const std::string& coll_name, int point_id) {
 
 
 int StorageEngine::CountPoints(const std::string& coll_name) {
-    if (!StorageEngine::CollectionExists(coll_name)) {
-        return 0;
-    }
+    // if (!StorageEngine::CollectionExists(coll_name)) {
+    //     return 0;
+    // }
     std::string coll_path = collection_root_ + "/" + coll_name;
     CollectionMeta metaInfo(coll_path);
     return metaInfo.GetPointsCount();

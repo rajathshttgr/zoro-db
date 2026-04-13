@@ -1,4 +1,5 @@
 #include "CollectionManager.h"
+#include "../../storage/include/Distance_utils.h"
 
 namespace zoro::core {
 
@@ -10,24 +11,15 @@ bool CollectionManager::UpsertPoints(
 ) {
     const size_t count = point_id.size();
 
-    if (count == 0 ||
-        vectors.size() != count ||
-        payload.size() != count) {
-        return false;
-    }
+    // int coll_id=999; //catalog_.GetCollectionId(collection_name);
 
-    if (!storage_->CollectionExists(collection_name)) {
-        return false;
-    }
-
-    int coll_id=catalog_.GetCollectionId(collection_name);
-
+    // temp deprecated
     // Append to WAL 
-    for (size_t i = 0; i < count; ++i) {
-        if (!wal_.log_upsert_point(coll_id, point_id[i], vectors[i], payload[i])) {
-            return false;
-        }
-    }
+    // for (size_t i = 0; i < count; ++i) {
+    //     if (!wal_.log_upsert_point(coll_id, point_id[i], vectors[i], payload[i])) {
+    //         return false;
+    //     }
+    // }
 
     // Disk write
     for (size_t i = 0; i < count; ++i) {
@@ -145,7 +137,14 @@ CollectionManager::RetrivePointById(const std::string& name, const int& point_id
 }
 
 
-
+std::vector<zoro::utils::ScrollPointInfo> 
+CollectionManager::ScrollPointMetadata(const std::string& coll_name, const int limit, std::string& err){
+    if (!storage_->CollectionExists(coll_name)) {
+        err = "collection doesn't exist in the system!";
+        return {};
+    }
+    return storage_->ListPointMetadata(coll_name, limit, err);
+}
 
 } // namespace zoro::core
 

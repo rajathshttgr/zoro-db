@@ -1,3 +1,4 @@
+// Deprecated class
 #pragma once
 #include "struct.h"
 #include "../../utils/struct.h"

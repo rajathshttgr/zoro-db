@@ -3,6 +3,7 @@
 #include "../../index/faiss/faiss_config.h"
 #include "../../index/distance_metric_utils.h"
 #include "../../index/index_factory.h"
+#include "../../utils/struct.h"
 
 namespace fs=std::filesystem;
 
@@ -24,14 +25,19 @@ bool CollectionManager::EnsureIndex(const std::string& name) {
     auto& runtime = runtimes_[name];
 
     if (!runtime.index) {
-        auto info = storage_->GetCollectionInfo(name);
-        if (!info) {
+        // deprecated function replace if required
+        //bool StorageEngine::GetCollection(zoro::utils::CollectionInfo& collection, const std::string& collection_name, std::string& err){
+        // auto info = storage_->GetCollectionInfo(name);
+
+        zoro::utils::CollectionInfo collection;
+        std::string err;
+        if (!storage_->GetCollection(collection, name, err)) {
             return false;
         }
 
         FaissConfig config;
-        config.dimension = info->dimension;
-        config.metric = DistanceMetricFromString(info->distance);
+        config.dimension = collection.size; //info->dimension;
+        config.metric = DistanceMetricFromString(collection.distance);
 
         runtime.index = IndexFactory::create_faiss_index(config);
         runtime.built = false;

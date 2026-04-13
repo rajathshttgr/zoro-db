@@ -10,7 +10,7 @@ import (
 )
 
 var collectionNameRegex = regexp.MustCompile(
-	`^[A-Za-z][A-Za-z0-9_-]*[A-Za-z0-9]$`,
+	`^[A-Za-z0-9](?:[A-Za-z0-9_-]*[A-Za-z0-9])?$`,
 )
 
 func CreateCollection(
@@ -23,7 +23,9 @@ func CreateCollection(
 		return errors.New("the vector size must be between 1 and 20,000")
 	}
 
-	name = strings.TrimSpace(name)
+	if name != strings.TrimSpace(name) {
+		return errors.New("collection name must not contain leading or trailing spaces")
+	}
 
 	if len(name) == 0 {
 		return errors.New("the collection name must not be empty")
@@ -35,8 +37,8 @@ func CreateCollection(
 
 	if !collectionNameRegex.MatchString(name) {
 		return errors.New(
-			"invalid collection name: it must start with a letter, end with a letter or number, " +
-				"and contain only letters, numbers, '_' or '-'",
+			"invalid collection name: it must start and end with a letter or number, " +
+			"contain only letters, numbers, '_' or '-', and include at least one letter",
 		)
 	}
 
@@ -50,18 +52,17 @@ func CreateCollection(
 		}
 	}
 
-	// must contain at least one letter or number
-	hasAlnum := false
+	hasLetter := false
 	for _, r := range name {
-		if unicode.IsLetter(r) || unicode.IsDigit(r) {
-			hasAlnum = true
+		if unicode.IsLetter(r) {
+			hasLetter = true
 			break
 		}
 	}
 
-	if !hasAlnum {
+	if !hasLetter {
 		return errors.New(
-			"the collection name must contain at least one letter or number",
+			"the collection name must contain at least one letter",
 		)
 	}
 
@@ -86,6 +87,11 @@ func ListCollections() ([]core.CollectionInfo, error) {
 
 
 func CheckCollectionExists(collectionName string) (bool, error){
+	collectionName = strings.TrimSpace(collectionName)
+
+	if len(collectionName) == 0 {
+		return false, errors.New("invalid collection name: the collection name must not be empty")
+	}
 	return core.CheckCollectionExists(collectionName)
 }
 

@@ -14,16 +14,11 @@ func UpsertPoints(
 ) error {
 
 	if len(ids) == 0 {
-		return errors.New("vids must not be empty")
+		return errors.New("ids must not be empty")
 	}
 
 	if payload != nil && len(payload) != len(ids) {
 		return errors.New("payload length must match ids length")
-	}
-
-
-	if len(vectors) == 0 {
-		return nil
 	}
 
 	if len(vectors) != len(ids) {
@@ -47,15 +42,16 @@ func UpsertPoints(
 		}
 	}
 
-	// Validate collection dimension
-	collectionInfo, err := core.GetCollectionInfo(collectionName)
-	if err != nil {
-		return err
-	}
+	// move to core system cache check
+	// // Validate collection dimension
+	// collectionInfo, err := core.GetCollectionInfo(collectionName)
+	// if err != nil {
+	// 	return err
+	// }
 
-	if collectionInfo.Size != dim {
-		return errors.New("vector dimension does not match collection dimension")
-	}
+	// if collectionInfo.Size != dim {
+	// 	return errors.New("vector dimension does not match collection dimension")
+	// }
 
 	return core.UpsertPoints(
 		collectionName,
