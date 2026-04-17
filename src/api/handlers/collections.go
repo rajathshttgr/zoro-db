@@ -30,7 +30,8 @@ func CreateCollection(c *gin.Context) {
 		return
 	}
 
-	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+	latency := time.Since(start).Seconds()
+	//latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
 	resp := dto.CreateCollectionResult{
 		Result:	   true,
@@ -54,7 +55,8 @@ func DeleteCollection(c *gin.Context) {
 		return
 	}
 
-	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+	latency := time.Since(start).Seconds()
+	//latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
 
 	resp := dto.DeleteCollectionResult{
@@ -95,7 +97,8 @@ func GetCollections(c *gin.Context) {
 		Collections: collections_list,
 	}
 
-    latency := float64(time.Since(start).Nanoseconds()) / 1e6
+	latency := time.Since(start).Seconds()
+    //latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
     resp := dto.ResponseLayout{
         Result: result,
@@ -120,7 +123,8 @@ func CheckCollectionExists(c *gin.Context){
         return
     }
 
-    latency := float64(time.Since(start).Nanoseconds()) / 1e6
+	latency := time.Since(start).Seconds()
+    //latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
 	result := dto.CollectionExists{
 		Exists: exists,
@@ -150,7 +154,8 @@ func GetCollectionInfo(c *gin.Context) {
         return
     }
 
-	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+	latency := time.Since(start).Seconds()
+	//latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
 
 	vector_config := dto.VectorConfigDetails{
