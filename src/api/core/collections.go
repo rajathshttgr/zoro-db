@@ -11,6 +11,7 @@ import (
 	"errors"
 	"unsafe"
 	"fmt"
+	"zoro/dto"
 )
 
 func CreateCollection(name string, dimension int, distance string) error {
@@ -58,7 +59,7 @@ func DeleteCollection(collection_name string) error{
 	return nil
 }
 
-func ListCollections() ([]CollectionInfo, error) {
+func ListCollections() ([]dto.CollectionInfo, error) {
 	var cCollections *C.collection_metadata_t
 	var cCount C.int
 
@@ -80,10 +81,10 @@ func ListCollections() ([]CollectionInfo, error) {
 
 	cSlice := unsafe.Slice(cCollections, count)
 
-	collections := make([]CollectionInfo, 0, count)
+	collections := make([]dto.CollectionInfo, 0, count)
 
 	for _, c := range cSlice {
-		collections = append(collections, CollectionInfo{
+		collections = append(collections, dto.CollectionInfo{
 			Name:     C.GoString(c.name),
 			Size:     int(c.size),
 			Distance: C.GoString(c.distance),
@@ -94,7 +95,7 @@ func ListCollections() ([]CollectionInfo, error) {
 	return collections, nil
 }
 
-func GetCollectionInfo(collectionName string) (*CollectionInfo, error) {
+func GetCollectionInfo(collectionName string) (*dto.CollectionInfo, error) {
     cName := C.CString(collectionName)
     defer C.free(unsafe.Pointer(cName))
 
@@ -117,13 +118,11 @@ func GetCollectionInfo(collectionName string) (*CollectionInfo, error) {
     defer C.zoro_free_collection(&cInfo)
 
     // Convert to Go struct
-    info := &CollectionInfo{
+    info := &dto.CollectionInfo{
         Name:      C.GoString(cInfo.name),
         Size:      int(cInfo.dimension),
         Distance:  C.GoString(cInfo.distance),
         Status:    C.GoString(cInfo.status),
-		ID:        int(cInfo.id),
-        CreatedAt: C.GoString(cInfo.created_at),
     }
 
     return info, nil

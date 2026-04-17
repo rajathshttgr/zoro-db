@@ -7,6 +7,7 @@ import (
 	"unicode"
 
 	"zoro/core"
+	"zoro/dto"
 )
 
 var collectionNameRegex = regexp.MustCompile(
@@ -81,7 +82,7 @@ func DeleteCollection(collectionName string) error {
 }
 
 
-func ListCollections() ([]core.CollectionInfo, error) {
+func ListCollections() ([]dto.CollectionInfo, error) {
     return core.ListCollections()
 }
 
@@ -96,6 +97,6 @@ func CheckCollectionExists(collectionName string) (bool, error){
 }
 
 
-func GetCollectionDetails(collectionName string) (*core.CollectionInfo, error){
+func GetCollectionDetails(collectionName string) (*dto.CollectionInfo, error){
 	return core.GetCollectionInfo(collectionName)
 }
