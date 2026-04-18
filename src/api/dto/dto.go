@@ -17,21 +17,8 @@ type CollectionResponseLayout struct {
 	Time   float64 `json:"time"`
 }
 
-
-type UpsertPointsRequest struct {
-	Vectors [][]float32       `json:"vectors" binding:"required"`
-	Ids     []int          `json:"ids" binding:"required"`
-	Payload []map[string]any  `json:"payload"`
-}
-
 type DeletePointsRequest struct {
 	Ids []int `json:"ids" binding:"required"`
-}
-
-type UpsertPointsResult struct {
-	Status         string `json:"status"`
-	CollectionName string `json:"collection_name"`
-	Upserted       int    `json:"upserted"`
 }
 
 type DeletePointsResult struct {

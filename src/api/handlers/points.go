@@ -9,7 +9,7 @@ import (
 	"zoro/services"
 )
 
-func UpsertPoint(c *gin.Context) {
+func UpsertPoints(c *gin.Context) {
 	start := time.Now()
 
 	collectionName := c.Param("collection_name")
@@ -22,25 +22,26 @@ func UpsertPoint(c *gin.Context) {
 		return
 	}
 
-	if err := services.UpsertPoints(
+	operationId, err := services.UpsertPoints(
 		collectionName,
-		req.Vectors,
-		req.Ids,
-		req.Payload,
-	); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		req.Points,
+	)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
 		})
 		return
-	}
+}
+	latency := time.Since(start).Seconds() 
 
-	resp := dto.CollectionResponseLayout{
+	resp := dto.ResponseLayout{
 		Result: dto.UpsertPointsResult{
-			Status:         "success",
-			CollectionName: collectionName,
-			Upserted:       len(req.Ids),
+			Status:       "acknowledged",
+			Operation_Id:  operationId,
 		},
-		Time: float64(time.Since(start).Milliseconds()),
+		Status: "ok",
+        Time:   latency,
 	}
 
 	c.JSON(http.StatusOK, resp)

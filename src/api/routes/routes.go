@@ -19,7 +19,7 @@ func RegisterRoutes(r *gin.Engine) {
 	r.GET("/collections",handlers.GetCollections) // List all Collections
 	
 	// Points
-	r.POST("/collections/:collection_name/points", handlers.UpsertPoint)
+	r.POST("/collections/:collection_name/points", handlers.UpsertPoints) // Upsert Points
 	r.DELETE("/collections/:collection_name/points", handlers.DeletePoints)
 	r.GET("/collections/:collection_name/count", handlers.GetPointCount)
 
