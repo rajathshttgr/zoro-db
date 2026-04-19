@@ -32,7 +32,8 @@ func GetPointById(c *gin.Context) {
 		return
 	}
 
-	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+	latency := time.Since(start).Seconds()
+	//latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
 	resp := dto.CollectionResponseLayout{
 		Result: dto.PointRetriveResult{
@@ -81,7 +82,8 @@ func SearchPoints(c *gin.Context) {
 		})
 	}
 
-	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+	latency := time.Since(start).Seconds()
+	//latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
 	resp := dto.CollectionResponseLayout{
 		Result: result,
@@ -125,7 +127,8 @@ func GetScrollPoints(c *gin.Context) {
 		})
 	}
 
-	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+	latency := time.Since(start).Seconds()
+	//latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
 	resp := dto.CollectionResponseLayout{
 		Result: result,

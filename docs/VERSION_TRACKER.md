@@ -11,10 +11,12 @@
 |               | exp/v1.5    | 08 Jan 2026 |
 |               | exp/v1.6    | 09 Jan 2026 |
 | v0.0.2        | exp/v2.0    | 15 Mar 2026 |
+|               | exp/v2.1    | 01 Apr 2026 |
 
 ## [15 Mar 2026] v0.0.2
 
 - `exp/v2.0` API standardization, API documentations, Initialize Major Architecture Improvements
+- `exp/v2.1` Collection Management Optmization with metadata caching. Async data ingestion operation.
 
 ## [11 Dec 2025] v0.0.1
 
