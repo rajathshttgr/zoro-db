@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include "collection_runtime.h"
 #include "../../storage/include/StorageEngine.h"
-#include "../../storage/include/struct.h"
 #include "../../utils/struct.h"
 #include "../../storage/include/Catalog.h"
 #include "../../wal/include/wal.h"
@@ -17,7 +16,7 @@ using json = nlohmann::json;
 
 class CollectionManager{
 public:
-    explicit CollectionManager(const std::string& root_path, zoro::storage::StorageEngine* storage, zoro::wal::WAL& wal);
+    explicit CollectionManager(const std::string& root_path, zoro::storage::StorageEngine* storage);
     bool EnsureIndex(const std::string& name);
 
     bool CreateCollection(const std::string& name, int dimension,const std::string& distance, std::string& err);
@@ -26,7 +25,7 @@ public:
     bool CollectionExists(const std::string& name, std::string& err); 
     bool GetCollection(const std::string& name, zoro::utils::CollectionInfo& collection, std::string& err); 
     
-    bool UpsertPoints(const std::string& coll_name, const std::vector<int>& point_id, const std::vector<std::vector<float>>& vectors,const std::vector<nlohmann::json>& payload);
+    bool UpsertPoints(const std::string& coll_name, const std::vector<int>& point_id, const std::vector<std::vector<float>>& vectors,const std::vector<nlohmann::json>& payload, int& operation_id);
     bool DeletePoints(const std::string &coll_name, const std::vector<int> point_id);
     int CountPoints(const std::string &coll_name);
 
@@ -41,11 +40,14 @@ public:
     // deprecated, use GetCollection instead
     std::optional<zoro::utils::CollectionInfo> LoadCollection(const std::string& name);
 
+
+    // internal methods
+    void UpsertAsyncOperation(const std::string& collection_name, const std::vector<int>& point_id, const std::vector<std::vector<float>>& vectors, const std::vector<nlohmann::json>& payload, const int& count, int& operation_id);
+
 private:
     std::string root_path_;
     zoro::storage::StorageEngine* storage_;
     zoro::storage::Catalog catalog_; 
-    zoro::wal::WAL& wal_;
 
     std::unordered_map<std::string, CollectionRuntime> runtimes_;
 };

@@ -6,6 +6,7 @@
 #include <memory>
 #include <cstring>
 #include <string>
+#include "../../utils/struct.h"
 
 
 extern "C" {
@@ -24,45 +25,50 @@ bool zoro_upsert_points(
     const char* collection_name,
     const zoro_point_t* points,
     size_t point_count,  
+    int* operation_id,
     char* err,
     size_t err_len
 ) {
     try {
-        std::vector<int> ids;
-        std::vector<std::vector<float>> vectors;
-        std::vector<nlohmann::json> payloads;
-
-        ids.reserve(point_count);
-        vectors.reserve(point_count);
-        payloads.reserve(point_count);
-
-
+        if (!operation_id) return false;
+        std::vector<zoro::utils::Points> pts;
+        pts.reserve(point_count);
+        
         for (size_t i = 0; i < point_count; ++i) {
             const zoro_point_t& p = points[i];
 
-            ids.push_back(p.id);
+            zoro::utils::Points point;
 
-            vectors.emplace_back(
+            point.id = p.id;
+
+            point.vectors = std::vector<float>(
                 p.vector,
                 p.vector + p.vector_len
             );
 
-            // payload (JSON)
             if (p.payload && std::strlen(p.payload) > 0) {
-                payloads.emplace_back(
-                    nlohmann::json::parse(p.payload)
-                );
+                point.payload = nlohmann::json::parse(p.payload);
             } else {
-                payloads.emplace_back(nlohmann::json::object());
+                point.payload = nlohmann::json::object();
             }
+
+            pts.emplace_back(std::move(point));
         }
 
-        return g_service->UpsertPointsService(
+        std::string error_msg;
+        bool result = g_service->UpsertPointsService(
             collection_name,
-            ids,
-            vectors,
-            payloads
+            std::move(pts),
+            *operation_id,
+            error_msg
         );
+
+        if (!result && err && err_len > 0) {
+            std::strncpy(err, error_msg.c_str(), err_len - 1);
+            err[err_len - 1] = '\0';
+        }
+
+        return result;
 
     }catch (const std::exception& e) {
         if (err && err_len > 0) {
@@ -72,7 +78,6 @@ bool zoro_upsert_points(
         return false;
     }
 }
-
 
 bool zoro_delete_points(
     const char* collection_name,
