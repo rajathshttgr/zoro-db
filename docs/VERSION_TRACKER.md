@@ -30,4 +30,4 @@
 
 ## [16 Nov 2025] v0.0.0
 
-The Zoro-DB repository was created on 20/10/2025. First experimental version started on 16/10/2025. This version was dropped due to design issues.
+The Zoro-DB repository was created on 20/10/2025. First experimental version started on 16/11/2025. This version was dropped due to design issues.
