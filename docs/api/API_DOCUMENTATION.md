@@ -31,6 +31,37 @@ GET /collections/docs/points/12?with_vector=true
 
 ## Collections
 
+## Create a Collection
+
+Creates a new collection with the given parameters.
+
+**Endpoint**
+
+```
+POST /collections/{collection_name}
+```
+
+**Request Body**
+
+```json
+{
+  "vectors": {
+    "size": 384,
+    "distance": "cosine"
+  }
+}
+```
+
+**Response**
+
+```json
+{
+  "result": true,
+  "status": "ok",
+  "time": 0.000512113
+}
+```
+
 ## Get collection details
 
 Retrieves parameters from the specified collection.
@@ -59,38 +90,7 @@ GET /collections/{collection_name}
     }
   },
   "status": "ok",
-  "time": 0.21019
-}
-```
-
-## Create a Collection
-
-Creates a new collection with the given parameters.
-
-**Endpoint**
-
-```
-POST /collections/{collection_name}
-```
-
-**Request Body**
-
-```json
-{
-  "vectors": {
-    "size": 384,
-    "distance": "cosine"
-  }
-}
-```
-
-**Response**
-
-```json
-{
-  "result": true,
-  "status": "ok",
-  "time": 0.31409
+  "time": 0.000169827
 }
 ```
 
@@ -110,7 +110,7 @@ DELETE /collections/{collection_name}
 {
   "result": true,
   "status": "ok",
-  "time": 0.80509
+  "time": 0.002287665
 }
 ```
 
@@ -144,7 +144,7 @@ GET /collections
     ]
   },
   "status": "ok",
-  "time": 0.41409
+  "time": 0.000057143
 }
 ```
 
@@ -166,7 +166,7 @@ GET /collections/{collection_name}/exists
     "exists": true
   },
   "status": "ok",
-  "time": 0.00974
+  "time": 0.000024784
 }
 ```
 
@@ -216,11 +216,11 @@ PUT /collections/{collection_name}/points
     "operation_id": 1
   },
   "status": "ok",
-  "time": 0.00974
+  "time": 0.000553264
 }
 ```
 
-## Retrieve points
+## Retrieve multiple points
 
 Retrieves all details from multiple points.
 
@@ -261,11 +261,11 @@ Query parameters:`?with_payload=true&with_vector=false`
     }
   ],
   "status": "ok",
-  "time": 0.01974
+  "time": 0.000267921
 }
 ```
 
-## Retrieve a point
+## Retrieve a single point
 
 Retrieves all details from a single point.
 
@@ -290,7 +290,7 @@ Query parameters:
     }
   },
   "status": "ok",
-  "time": 0.671502
+  "time": 0.000667921
 }
 ```
 
@@ -321,7 +321,7 @@ DELETE /collections/{collection_name}/points
     "operation_id": 2
   },
   "status": "ok",
-  "time": 0.02904
+  "time": 0.000572077
 }
 ```
 
@@ -358,7 +358,7 @@ PUT /collections/{collection_name}/points/vectors
 {
   "result": { "status": "completed", "operation_id": 5 },
   "status": "ok",
-  "time": 0.03504
+  "time": 0.000567493
 }
 ```
 
@@ -399,7 +399,7 @@ PUT /collections/{collection_name}/points/payload
 {
   "result": { "status": "completed", "operation_id": 5 },
   "status": "ok",
-  "time": 0.03504
+  "time": 0.000357921
 }
 ```
 
@@ -434,7 +434,7 @@ PATCH /collections/{collection_name}/points/payload
 {
   "result": { "status": "completed", "operation_id": 7 },
   "status": "ok",
-  "time": 0.06504
+  "time": 0.000657041
 }
 ```
 
@@ -448,7 +448,7 @@ Returns all points. Results are sorted by {id} by default and support limit and 
 POST /collections/{collection_name}/points/scroll
 ```
 
-Query parameters:`?with_payload=true&with_vector=false`
+Query parameters: `?with_payload=true&with_vector=false`
 
 **Request body:**
 
@@ -484,7 +484,7 @@ Request body is optional and used only for filtering.
     }
   ],
   "status": "ok",
-  "time": 0.90974
+  "time": 0.000718921
 }
 ```
 
@@ -519,7 +519,7 @@ Request body is optional and used only for filtering.
     "count": 2
   },
   "status": "ok",
-  "time": 0.04741
+  "time": 0.000163911
 }
 ```
 
@@ -574,7 +574,7 @@ Request body filter and score threshold is optional.
     }
   ],
   "status": "ok",
-  "time": 0.94741
+  "time": 0.000867921
 }
 ```
 
@@ -633,7 +633,7 @@ Query parameters:
     ]
   ],
   "status": "ok",
-  "time": 0.74741
+  "time": 0.000747922
 }
 ```
 
@@ -709,17 +709,17 @@ GET /version
 
 ### Points
 
-| End Point                                             | Description       |
-| ----------------------------------------------------- | ----------------- |
-| `PUT` /collections/{collection_name}/points           | Upsert points     |
-| `POST` /collections/{collection_name}/points          | Retrieve points   |
-| `GET` /collections/{collection_name}/points/{id}      | Retrieve a point  |
-| `DELETE ` /collections/{collection_name}/points       | Delete points     |
-| `PUT` /collections/{collection_name}/points/vectors   | Update vectors    |
-| `PUT` /collections/{collection_name}/points/payload   | Overwrite payload |
-| `PATCH` /collections/{collection_name}/points/payload | Update paload     |
-| `GET` /collections/{collection_name}/points/scroll    | Scroll points     |
-| `GET` /collections/{collection_name}/points/count     | Count points      |
+| End Point                                             | Description              |
+| ----------------------------------------------------- | ------------------------ |
+| `PUT` /collections/{collection_name}/points           | Upsert points            |
+| `POST` /collections/{collection_name}/points          | Retrieve multiple points |
+| `GET` /collections/{collection_name}/points/{id}      | Retrieve a single point  |
+| `DELETE` /collections/{collection_name}/points        | Delete points            |
+| `PUT` /collections/{collection_name}/points/vectors   | Update vectors           |
+| `PUT` /collections/{collection_name}/points/payload   | Overwrite payload        |
+| `PATCH` /collections/{collection_name}/points/payload | Update paload            |
+| `GET` /collections/{collection_name}/points/scroll    | Scroll points            |
+| `GET` /collections/{collection_name}/points/count     | Count points             |
 
 ### Search
 

@@ -27,7 +27,7 @@ POST /collections/{collection_name}
 {
   "result": true,
   "status": "ok",
-  "time": 0.31409
+  "time": 0.000512113
 }
 ```
 
@@ -59,7 +59,7 @@ GET /collections/{collection_name}
     }
   },
   "status": "ok",
-  "time": 0.21019
+  "time": 0.000169827
 }
 ```
 
@@ -79,7 +79,7 @@ DELETE /collections/{collection_name}
 {
   "result": true,
   "status": "ok",
-  "time": 0.80509
+  "time": 0.002287665
 }
 ```
 
@@ -113,7 +113,7 @@ GET /collections
     ]
   },
   "status": "ok",
-  "time": 0.41409
+  "time": 0.000057143
 }
 ```
 
@@ -135,6 +135,6 @@ GET /collections/{collection_name}/exists
     "exists": true
   },
   "status": "ok",
-  "time": 0.00974
+  "time": 0.000024784
 }
 ```

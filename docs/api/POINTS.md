@@ -44,11 +44,11 @@ PUT /collections/{collection_name}/points
     "operation_id": 1
   },
   "status": "ok",
-  "time": 0.00974
+  "time": 0.000553264
 }
 ```
 
-## Retrieve points
+## Retrieve multiple points
 
 Retrieves all details from multiple points.
 
@@ -89,11 +89,11 @@ Query parameters:`?with_payload=true&with_vector=false`
     }
   ],
   "status": "ok",
-  "time": 0.01974
+  "time": 0.000267921
 }
 ```
 
-## Retrieve a point
+## Retrieve a single point
 
 Retrieves all details from a single point.
 
@@ -118,7 +118,7 @@ Query parameters:
     }
   },
   "status": "ok",
-  "time": 0.671502
+  "time": 0.000667921
 }
 ```
 
@@ -149,7 +149,7 @@ DELETE /collections/{collection_name}/points
     "operation_id": 2
   },
   "status": "ok",
-  "time": 0.02904
+  "time": 0.000572077
 }
 ```
 
@@ -186,7 +186,7 @@ PUT /collections/{collection_name}/points/vectors
 {
   "result": { "status": "completed", "operation_id": 5 },
   "status": "ok",
-  "time": 0.03504
+  "time": 0.000567493
 }
 ```
 
@@ -227,7 +227,7 @@ PUT /collections/{collection_name}/points/payload
 {
   "result": { "status": "completed", "operation_id": 5 },
   "status": "ok",
-  "time": 0.03504
+  "time": 0.000357921
 }
 ```
 
@@ -262,7 +262,7 @@ PATCH /collections/{collection_name}/points/payload
 {
   "result": { "status": "completed", "operation_id": 7 },
   "status": "ok",
-  "time": 0.06504
+  "time": 0.000657041
 }
 ```
 
@@ -312,7 +312,7 @@ Request body is optional and used only for filtering.
     }
   ],
   "status": "ok",
-  "time": 0.90974
+  "time": 0.000718921
 }
 ```
 
@@ -347,6 +347,6 @@ Request body is optional and used only for filtering.
     "count": 2
   },
   "status": "ok",
-  "time": 0.04741
+  "time": 0.000163911
 }
 ```
