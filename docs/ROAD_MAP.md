@@ -28,8 +28,10 @@
 - [x] FAISS Integration
 - [ ] WAL
 - [ ] Snapshots
-- [ ] Hot Cache
+- [x] Hot Cache
 - [ ] DB Migration
 - [ ] Web Dashboard
 - [ ] Distributed Access
 - [ ] Distributed Computing
+- [ ] gRPC
+- [ ] Security and Autherization

@@ -256,7 +256,7 @@ POST /collections/{collection_name}/points/search
 
 ```json
 {
-  "vector": [0.11, 0.97, 0.3],
+  "vectors": [0.11, 0.97, 0.3],
   "limit": 2
 }
 ```

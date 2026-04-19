@@ -37,6 +37,7 @@ bool zoro_upsert_points(
     const char* collection_name,
     const zoro_point_t* points,
     size_t point_count,
+    int* operation_id,
     char* err,
     size_t err_len
 );

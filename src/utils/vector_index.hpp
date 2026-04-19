@@ -7,6 +7,12 @@ namespace zoro::utils {
 
 using json = nlohmann::json;
 
+struct Points{
+    int id;
+    json payload;
+    std::vector<float> vectors;
+};
+
 struct PointInfo{
     std::string status;
     int point_id;

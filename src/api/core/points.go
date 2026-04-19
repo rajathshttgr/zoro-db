@@ -11,116 +11,94 @@ import (
 	"unsafe"
 	"errors"
 	"encoding/json"
+	"zoro/dto"
 )
-
-func CountPoints(collection_name string) (int, error) {
-	// convert Go string to C string
-	cCollectionName := C.CString(collection_name)
-	defer C.free(unsafe.Pointer(cCollectionName))
-
-	// Allocate C error buffer
-	errBuf := C.malloc(256)
-	defer C.free(errBuf)
-
-	count := C.zoro_count_points(
-		cCollectionName,
-		(*C.char)(errBuf),
-	)
-
-	if count == -1 {
-		return 0, errors.New(C.GoString((*C.char)(errBuf)))
-	}
-
-	return int(count), nil
-}
 
 func UpsertPoints(
 	collectionName string,
-	vectors [][]float32,
-	ids []int,
-	payload []map[string]any,
-) error {
+	points []dto.PointData,
+) (int, error) {
 
-	count := len(ids)
+	count := len(points)
 	if count == 0 {
-		return nil
+		return -1, errors.New("points must not be empty")
 	}
 
-	// Allocate C array for zoro_point_t
-	cPoints := (*C.zoro_point_t)(
-		C.malloc(C.size_t(count) * C.size_t(unsafe.Sizeof(C.zoro_point_t{}))),
-	)
+	pointSize := unsafe.Sizeof(C.zoro_point_t{})
 
+	// Allocate contiguous C memory
+	cPoints := C.malloc(C.size_t(count) * C.size_t(pointSize))
 	if cPoints == nil {
-		return errors.New("failed to allocate C memory for points")
+		return -1, errors.New("failed to allocate C memory for points")
 	}
+	defer C.free(cPoints)
 
-	defer C.free(unsafe.Pointer(cPoints))
-
-	// Track payload C strings for cleanup
-	payloadPtrs := make([]*C.char, count)
+	// Keep payload pointers for cleanup (minimal overhead)
+	payloadPtrs := make([]unsafe.Pointer, 0, count)
 
 	for i := 0; i < count; i++ {
-
 		point := (*C.zoro_point_t)(
-			unsafe.Add(
-				unsafe.Pointer(cPoints),
-				i*int(unsafe.Sizeof(C.zoro_point_t{})),
-			),
+			unsafe.Add(cPoints, uintptr(i)*pointSize),
 		)
 
+		p := &points[i]
+
 		// ID
-		point.id = C.int(ids[i])
+		point.id = C.int(p.Id)
 
-		// Vector (read-only, Go memory is OK during call)
-		point.vector = (*C.float)(unsafe.Pointer(&vectors[i][0]))
-		point.vector_len = C.size_t(len(vectors[i]))
+		// Vector - no copy, just pointer
+		if len(p.Vector) > 0 {
+			point.vector = (*C.float)(unsafe.Pointer(&p.Vector[0]))
+			point.vector_len = C.size_t(len(p.Vector))
+		}
 
-		// Payload → JSON string
-		payloadJSON, err := json.Marshal(payload[i])
+		// Payload - JSON
+		payloadJSON, err := json.Marshal(p.Payload)
 		if err != nil {
-			return err
+			return -1, err
 		}
 
 		cPayload := C.CString(string(payloadJSON))
-		payloadPtrs[i] = cPayload
+		
+		payloadPtrs = append(payloadPtrs, unsafe.Pointer(cPayload))
 		point.payload = cPayload
 	}
 
-	// Free payload strings
+	// Cleanup payloads
 	defer func() {
 		for _, p := range payloadPtrs {
-			if p != nil {
-				C.free(unsafe.Pointer(p))
-			}
+			C.free(p)
 		}
 	}()
 
-	// Error buffer
+	// Error buffer (stack-like usage)
 	const errBufSize = 512
-	cErr := (*C.char)(C.malloc(errBufSize))
+	cErr := C.malloc(errBufSize)
 	if cErr == nil {
-		return errors.New("failed to allocate error buffer")
+		return -1, errors.New("failed to allocate error buffer")
 	}
-	defer C.free(unsafe.Pointer(cErr))
+	defer C.free(cErr)
 
 	// Collection name
 	cCollection := C.CString(collectionName)
 	defer C.free(unsafe.Pointer(cCollection))
 
+	operationId := C.int(-1)
+
 	ok := C.zoro_upsert_points(
 		cCollection,
-		cPoints,
-		C.size_t(count),       
-		cErr,
+		(*C.zoro_point_t)(cPoints),
+		C.size_t(count),
+		(*C.int)(unsafe.Pointer(&operationId)), 
+		(*C.char)(cErr),
 		C.size_t(errBufSize),
 	)
 
 	if !ok {
-		return errors.New(C.GoString(cErr))
+		return -1, errors.New(C.GoString((*C.char)(cErr)))
 	}
 
-	return nil
+	return int(operationId), nil
 }
 
 
@@ -174,3 +152,23 @@ func DeletePoints(
 	return nil
 }
 
+func CountPoints(collection_name string) (int, error) {
+	// convert Go string to C string
+	cCollectionName := C.CString(collection_name)
+	defer C.free(unsafe.Pointer(cCollectionName))
+
+	// Allocate C error buffer
+	errBuf := C.malloc(256)
+	defer C.free(errBuf)
+
+	count := C.zoro_count_points(
+		cCollectionName,
+		(*C.char)(errBuf),
+	)
+
+	if count == -1 {
+		return 0, errors.New(C.GoString((*C.char)(errBuf)))
+	}
+
+	return int(count), nil
+}

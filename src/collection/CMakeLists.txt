@@ -12,6 +12,7 @@ add_library(collection STATIC
     src/points.cpp
     src/CollectionManager.cpp
     src/access_collection.cpp
+    src/upsert_points.cpp
 )
 
 target_link_libraries(collection PUBLIC storage)

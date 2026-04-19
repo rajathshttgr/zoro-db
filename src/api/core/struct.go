@@ -1,14 +1,5 @@
 package core
 
-type CollectionInfo struct {
-	ID        int
-	Name      string
-	Size int
-	Distance  string
-	Status    string
-	CreatedAt string
-}
-
 type PointRetrival struct {
 	Status  string
 	PointId int
@@ -35,3 +26,5 @@ type ScrollPointsRetrival struct {
     Points []*ScrollPoint `json:"points"`
     Count  int            `json:"count"`
 }
+
+// TODO: check can these things be moved to dto package?

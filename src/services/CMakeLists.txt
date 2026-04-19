@@ -13,6 +13,7 @@ add_library(services
     src/points.cpp
     src/search.cpp
     src/system_startup.cpp
+    src/upsert_points.cpp
 )
 
 target_link_libraries(services PUBLIC collection)

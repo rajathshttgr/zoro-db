@@ -1,4 +1,5 @@
 #include "./CollectionService.h"
+#include "./metadata_cache.h"
 
 namespace zoro::services {
 
@@ -11,16 +12,25 @@ std::vector<zoro::utils::SearchPointInfo> CollectionService::SearchPointByVector
         err = "k can't be less than or equal to 0";
         return {};
     }
-    auto coll = manager_->LoadCollection(coll_name);
-    if (!coll.has_value()) {
-        err = "Collection not found.";
+
+    auto cache = metadata_cache_.load();
+
+    Metadata result;
+    if (cache && !cache->get(coll_name, result)) {
+        err = "Collection name `" + coll_name + "` not found!";
         return {};
     }
+
+    if(cache && result.status!="active"){
+        err = "Collection is not in active state, collection current status "+result.status;
+        return {};
+    }
+    
     if (query_vector.empty()) {
         err = "Query vector cannot be empty.";
         return {};
     }
-    if (static_cast<int>(query_vector.size()) != coll->dimension) {
+    if (static_cast<int>(query_vector.size()) != result.size) {
         err = "Query vector dimension mismatch.";
         return {};
     }

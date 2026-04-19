@@ -31,15 +31,12 @@ public:
     bool LoadCollections(std::vector<zoro::utils::CollectionMetadata>& collections, std::string& err);
 
     // point management
-    bool UpsertPointsService(const std::string& coll_name, const std::vector<int>& point_id, const std::vector<std::vector<float>> &vectors, const std::vector<nlohmann::json>& payload);
+    bool UpsertPointsService(const std::string& name, const std::vector<zoro::utils::Points> points, int& operation_id, std::string& err);
     bool DeletePointsService(const std::string &coll_name, const std::vector<int> point_id);
     int CountPointsService(const std::string &coll_name);
     std::optional<zoro::utils::PointInfo> RetrivePointById(const std::string& name, const int& point_id, std::string& err);
     std::vector<zoro::utils::ScrollPointInfo> ScrollPointMetadata(const std::string& name, const int limit, std::string& err);
     std::vector<zoro::utils::SearchPointInfo> SearchPointByVector(const std::string& coll_name, const std::vector<float>& query_vector, int k, std::string& err);
-
-    // deprecated
-    //std::optional<zoro::utils::CollectionInfo> LoadCollection(const std::string& name, std::string& err);
 
 private:
     zoro::core::CollectionManager* manager_;
