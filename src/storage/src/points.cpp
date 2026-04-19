@@ -1,7 +1,7 @@
 #include "StorageEngine.h"
 #include "CollectionMeta.h"
 #include "FileUtils.h"
-#include "struct.h"
+#include "../../utils/struct.h"
 #include <fstream>
 
 namespace zoro::storage {
@@ -51,6 +51,7 @@ bool StorageEngine::UpsertPoints(
     if (vec_result != payload_result)
         return false;
 
+    // this curretly faailing during concurrency, handle this next - high priority
     if (vec_result == IndexUpdateResult::Inserted) {
         metaInfo.IncrementPointsCount(1);
     }
@@ -128,7 +129,7 @@ bool StorageEngine::LoadAllVectors(
     }
 
     while (true) {
-        VectorIndexEntry entry;
+        zoro::utils::VectorIndexEntry entry;
         idx_file.read(reinterpret_cast<char*>(&entry), sizeof(entry));
 
         if (!idx_file) {
