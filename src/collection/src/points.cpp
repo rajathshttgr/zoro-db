@@ -1,46 +1,8 @@
 #include "CollectionManager.h"
 #include "../../storage/include/Distance_utils.h"
+#include "../../wal/include/wal_writer.h"
 
 namespace zoro::core {
-
-bool CollectionManager::UpsertPoints(
-    const std::string& collection_name,
-    const std::vector<int>& point_id,
-    const std::vector<std::vector<float>>& vectors,
-    const std::vector<nlohmann::json>& payload
-) {
-    const size_t count = point_id.size();
-
-    // int coll_id=999; //catalog_.GetCollectionId(collection_name);
-
-    // temp deprecated
-    // Append to WAL 
-    // for (size_t i = 0; i < count; ++i) {
-    //     if (!wal_.log_upsert_point(coll_id, point_id[i], vectors[i], payload[i])) {
-    //         return false;
-    //     }
-    // }
-
-    // Disk write
-    for (size_t i = 0; i < count; ++i) {
-        if (!storage_->UpsertPoints(
-                collection_name,
-                point_id[i],
-                vectors[i],
-                payload[i])) {
-            return false;
-        }
-    }
-
-    // In-memory index update
-    EnsureIndex(collection_name);
-
-    for (size_t i = 0; i < count; ++i) {
-        runtimes_[collection_name].index->add(vectors[i].data(), point_id[i]);
-    }
-
-    return true;
-}
 
 bool CollectionManager::DeletePoints(
     const std::string& collection_name,
@@ -53,13 +15,13 @@ bool CollectionManager::DeletePoints(
 
     int coll_id=catalog_.GetCollectionId(collection_name);
 
+    zoro::wal::WALWriter wal(root_path_+"/collections"+"/"+collection_name);
     // Append to WAL
     for (int id : point_id) {
-        if (!wal_.log_delete_point(coll_id, id)) {
+        if (!wal.log_delete_point(coll_id, id)) {
             return false;
         }
     }
-    
 
     // disk write
     for (int id : point_id) {

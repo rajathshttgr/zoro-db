@@ -11,13 +11,11 @@ namespace zoro::core {
 
 CollectionManager::CollectionManager(
     const std::string& root_path,
-    zoro::storage::StorageEngine* storage,
-    zoro::wal::WAL& wal
+    zoro::storage::StorageEngine* storage
 )
     : root_path_(root_path),
       storage_(storage),
-      catalog_(root_path),
-      wal_(wal) {
+      catalog_(root_path) {
     fs::create_directories(root_path_);
 }
 
@@ -25,9 +23,6 @@ bool CollectionManager::EnsureIndex(const std::string& name) {
     auto& runtime = runtimes_[name];
 
     if (!runtime.index) {
-        // deprecated function replace if required
-        //bool StorageEngine::GetCollection(zoro::utils::CollectionInfo& collection, const std::string& collection_name, std::string& err){
-        // auto info = storage_->GetCollectionInfo(name);
 
         zoro::utils::CollectionInfo collection;
         std::string err;
