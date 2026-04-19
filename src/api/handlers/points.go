@@ -70,13 +70,15 @@ func DeletePoints(c *gin.Context) {
 		return
 	}
 
+	latency := time.Since(start).Seconds()
+
 	resp := dto.CollectionResponseLayout{
 		Result: dto.DeletePointsResult{
 			Status:         "success",
 			CollectionName: collectionName,
 			Deleted:       len(req.Ids),
 		},
-		Time: float64(time.Since(start).Milliseconds()),
+		Time: latency,
 	}
 
 	c.JSON(http.StatusOK, resp)
@@ -94,7 +96,8 @@ func GetPointCount(c *gin.Context) {
 		return
 	}
 
-	latency := float64(time.Since(start).Nanoseconds()) / 1e6
+	latency := time.Since(start).Seconds()
+	// latency := float64(time.Since(start).Nanoseconds()) / 1e6
 
 	resp := dto.CollectionResponseLayout{
 		Result: dto.CollectionPointsInfoResult{
