@@ -49,7 +49,7 @@ Request body filter and score threshold is optional.
     }
   ],
   "status": "ok",
-  "time": 0.94741
+  "time": 0.000867921
 }
 ```
 
@@ -108,6 +108,6 @@ Query parameters:
     ]
   ],
   "status": "ok",
-  "time": 0.74741
+  "time": 0.000747922
 }
 ```

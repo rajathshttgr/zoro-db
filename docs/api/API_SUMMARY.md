@@ -54,17 +54,17 @@ GET /collections/docs/points/12?with_vector=true
 
 ### Points
 
-| End Point                                             | Description       |
-| ----------------------------------------------------- | ----------------- |
-| `PUT` /collections/{collection_name}/points           | Upsert points     |
-| `POST` /collections/{collection_name}/points          | Retrieve points   |
-| `GET` /collections/{collection_name}/points/{id}      | Retrieve a point  |
-| `DELETE` /collections/{collection_name}/points        | Delete points     |
-| `PUT` /collections/{collection_name}/points/vectors   | Update vectors    |
-| `PUT` /collections/{collection_name}/points/payload   | Overwrite payload |
-| `PATCH` /collections/{collection_name}/points/payload | Update paload     |
-| `GET` /collections/{collection_name}/points/scroll    | Scroll points     |
-| `GET` /collections/{collection_name}/points/count     | Count points      |
+| End Point                                             | Description              |
+| ----------------------------------------------------- | ------------------------ |
+| `PUT` /collections/{collection_name}/points           | Upsert points            |
+| `POST` /collections/{collection_name}/points          | Retrieve multiple points |
+| `GET` /collections/{collection_name}/points/{id}      | Retrieve a single point  |
+| `DELETE` /collections/{collection_name}/points        | Delete points            |
+| `PUT` /collections/{collection_name}/points/vectors   | Update vectors           |
+| `PUT` /collections/{collection_name}/points/payload   | Overwrite payload        |
+| `PATCH` /collections/{collection_name}/points/payload | Update paload            |
+| `GET` /collections/{collection_name}/points/scroll    | Scroll points            |
+| `GET` /collections/{collection_name}/points/count     | Count points             |
 
 ### Search
 
