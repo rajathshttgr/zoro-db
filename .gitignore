@@ -1,6 +1,5 @@
 build/
 .env
 /.vscode
+/.zoro_storage
 TODO.md
-/.storage
-/.zoro-data
