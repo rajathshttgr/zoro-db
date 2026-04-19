@@ -1,6 +1,9 @@
 #include "CollectionMeta.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include <sys/file.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 namespace zoro::storage{
 
@@ -75,17 +78,45 @@ int CollectionMeta::GetPointsCount() const{
     return j["points_count"];
 }
 
+// void CollectionMeta::IncrementPointsCount(int count){
+//     nlohmann::json j;
+//     std::ifstream in(meta_path_);
+//     if (!in.is_open()) return;
+//     in >> j;
+//     in.close();
+
+//      j["points_count"] = j.value("points_count", 0) + count;
+
+//     std::ofstream out(meta_path_);
+//     out << j.dump(4);
+// }
+
 void CollectionMeta::IncrementPointsCount(int count){
-    nlohmann::json j;
+    int fd = open(meta_path_.c_str(), O_RDWR);
+    if (fd == -1) return;
+
+    // Acquire exclusive lock (blocks until available)
+    flock(fd, LOCK_EX);
+
+    // Read JSON
     std::ifstream in(meta_path_);
-    if (!in.is_open()) return;
-    in >> j;
+    nlohmann::json j;
+    if (in.good()) {
+        in >> j;
+    }
     in.close();
 
-     j["points_count"] = j.value("points_count", 0) + count;
+    // Modify
+    j["points_count"] = j.value("points_count", 0) + count;
 
+    // Write back
     std::ofstream out(meta_path_);
     out << j.dump(4);
+    out.close();
+
+    // Release lock
+    flock(fd, LOCK_UN);
+    close(fd);
 }
 
 void CollectionMeta::DecrementPointsCount(int count){
