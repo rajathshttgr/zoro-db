@@ -62,7 +62,7 @@ FROM ubuntu:24.04
 
 WORKDIR /app
 
-ENV ZORO_DATA_PATH=/storage
+ENV ZORO_DATA_PATH=/.zoro_storage
 ENV GIN_MODE=release
 ENV LD_LIBRARY_PATH=/usr/local/lib
 

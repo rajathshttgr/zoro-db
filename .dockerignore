@@ -1,4 +1,6 @@
 build/
 tests/
-/.storage
-/.zoro-data
+/docs
+/.vscode
+TODO.md
+/.zoro_storage

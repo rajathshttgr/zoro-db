@@ -25,7 +25,7 @@ inline std::string getDataPath() {
         return std::string(env_path);
 
     // persistent storage path, default uses '/.storage'
-    return "/.storage"; 
+    return "/.zoro_storage"; 
 }
 
 } 
