@@ -183,7 +183,7 @@ curl -X POST http://localhost:6464/collections/:collection_name/points/search \
     }
   ],
   "status": "ok",
-  "time": 0.94741
+  "time": 0.000094741
 }
 ```
 
