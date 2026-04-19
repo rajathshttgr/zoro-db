@@ -18,7 +18,7 @@
 
 ## Overview
 
-**Zoro-DB** is a high-performance vector database designed for similarity search workloads. Built entirely from scratch in C++, it provides a RESTfull API for managing vector collections and executing fast approximate nearest neighbor (ANN) searches.
+**Zoro-DB** is a high-performance vector database designed for similarity search workloads. It provides a RESTfull API for managing vector collections and executing fast approximate nearest neighbor (ANN) searches.
 
 Zoro-DB is suitable for:
 
