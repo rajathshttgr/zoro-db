@@ -4,15 +4,22 @@ import (
 	"errors"
 	"regexp"
 	"strings"
-	"unicode"
 
 	"zoro/core"
 	"zoro/dto"
 )
 
 var collectionNameRegex = regexp.MustCompile(
-	`^[A-Za-z0-9](?:[A-Za-z0-9_-]*[A-Za-z0-9])?$`,
+	`^[A-Za-z0-9_-]{1,128}$`,
 )
+
+func isReservedName(name string) bool {
+	switch name {
+	case ".", "..":
+		return true
+	}
+	return false
+}
 
 func CreateCollection(
 	name string,
@@ -20,51 +27,24 @@ func CreateCollection(
 	distance string,
 ) error {
 
-	if dimension <= 0 || dimension > 20000 {
-		return errors.New("the vector size must be between 1 and 20,000")
-	}
+	name = strings.TrimSpace(name)
 
-	if name != strings.TrimSpace(name) {
-		return errors.New("collection name must not contain leading or trailing spaces")
-	}
-
-	if len(name) == 0 {
-		return errors.New("the collection name must not be empty")
-	}
-
-	if len(name) > 128 {
-		return errors.New("the collection name must not exceed 128 characters")
+	if name == "" {
+		return errors.New("collection name must not be empty")
 	}
 
 	if !collectionNameRegex.MatchString(name) {
 		return errors.New(
-			"invalid collection name: it must start and end with a letter or number, " +
-			"contain only letters, numbers, '_' or '-', and include at least one letter",
+			"invalid collection name: only letters, numbers, '_' and '-' are allowed (max 128 chars)",
 		)
 	}
 
-	// no consecutive '_' or '-'
-	for i := 1; i < len(name); i++ {
-		if (name[i] == '_' || name[i] == '-') &&
-			(name[i-1] == '_' || name[i-1] == '-') {
-			return errors.New(
-				"the collection name must not contain consecutive '_' or '-' characters",
-			)
-		}
+	if isReservedName(name) {
+		return errors.New("invalid collection name: reserved name")
 	}
 
-	hasLetter := false
-	for _, r := range name {
-		if unicode.IsLetter(r) {
-			hasLetter = true
-			break
-		}
-	}
-
-	if !hasLetter {
-		return errors.New(
-			"the collection name must contain at least one letter",
-		)
+	if dimension <= 0 || dimension > 20000 {
+		return errors.New("vector size must be between 1 and 20,000")
 	}
 
 	switch distance {
