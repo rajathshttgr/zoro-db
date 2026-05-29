@@ -39,9 +39,6 @@ GET /collections/docs/points/12?with_vector=true
 
 ## QUICK REFERENCE
 
-<details>
-  <summary>View details</summary>
-
 ### Collections
 
 | End Point                                   | Description             |
@@ -81,4 +78,3 @@ GET /collections/docs/points/12?with_vector=true
 | `GET` /health  | Health Check |
 | `GET` /version | Version Info |
 
-</details>
